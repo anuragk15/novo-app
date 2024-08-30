@@ -9,6 +9,12 @@ module.exports = {
   ],
   prefix: "",
   theme: {
+    extend: {
+      fontFamily: {
+        sans: 'Geist Variable',
+        mono: 'Geist Mono Variable'
+      },
+    },
     container: {
       center: true,
       padding: "2rem",
