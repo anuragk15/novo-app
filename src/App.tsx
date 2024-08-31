@@ -8,6 +8,7 @@ import { Toaster } from "@/components/ui/toaster";
 import "non.geist/mono";
 import SourceHome from "./pages/home/Source";
 import TemplatesHome from "./pages/home/Templates";
+import DocumentEditorScreen from "./pages/editor/document";
 
 const router = createBrowserRouter([
   {
@@ -43,9 +44,22 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "about",
-    element: <div>About</div>,
+    path: "/project/:id/team",
+    element: (
+      <div>
+        <TemplatesHome />
+      </div>
+    ),
   },
+  {
+    path: "/document/editor/:id",
+    element: (
+      <div>
+        <DocumentEditorScreen />
+      </div>
+    ),
+  },
+  
 ]);
 function App() {
   return (

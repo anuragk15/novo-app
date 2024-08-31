@@ -28,12 +28,12 @@ export function SourcesTable() {
   return (
     <Table>
       <TableBody>
-        {files.map((invoice) => (
-          <TableRow className=" cursor-pointer" key={invoice.name}>
-            <TableCell>{invoice.name}</TableCell>
-            <TableCell className="font-normal">{invoice.createdBy}</TableCell>
+        {files.map((item) => (
+          <TableRow className=" cursor-pointer" key={item.name}>
+            <TableCell>{item.name}</TableCell>
+            <TableCell className="font-normal">{item.createdBy}</TableCell>
             <TableCell className="font-light text-right">
-              {invoice.createdAt.toLocaleDateString()}
+              {item.createdAt.toLocaleDateString()}
             </TableCell>
             <TableCell>
               <DropdownMenu>

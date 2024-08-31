@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { EllipsisVertical } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
+import { useNavigate } from "react-router-dom";
 const files = [
   {
     name: "Marketing copy of Tap to pay",
@@ -42,12 +43,18 @@ const files = [
 
 export function FilesTable() {
   const { toast } = useToast();
-
+  const navigate = useNavigate();
   return (
     <Table>
       <TableBody>
         {files.map((invoice) => (
-          <TableRow className=" cursor-pointer" key={invoice.name}>
+          <TableRow
+            onClick={() => {
+              navigate("/document/editor/2");
+            }}
+            className=" cursor-pointer"
+            key={invoice.name}
+          >
             <TableCell>{invoice.name}</TableCell>
             <TableCell className="font-normal">{invoice.createdBy}</TableCell>
             <TableCell className="font-light text-right">
@@ -66,7 +73,8 @@ export function FilesTable() {
                     onClick={() => {
                       toast({
                         title: "✨  Link copied!",
-                        description: "You’ve got the magic link—now go inspire some readers!",
+                        description:
+                          "You’ve got the magic link—now go inspire some readers!",
                       });
                     }}
                   >

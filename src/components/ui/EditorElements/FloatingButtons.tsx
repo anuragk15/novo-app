@@ -39,7 +39,7 @@ export function FloatingButtons({ editor }: { editor: Editor }) {
         }}
       >
         <PopoverTrigger asChild>
-          <Button variant="outline">
+          <Button className="hover:bg-slate-100" variant="outline">
             <Wand size={18} />
           </Button>
         </PopoverTrigger>
@@ -58,7 +58,7 @@ export function FloatingButtons({ editor }: { editor: Editor }) {
         }}
       >
         <PopoverTrigger asChild>
-          <Button variant="outline">Headings</Button>
+          <Button className="hover:bg-slate-100" variant="outline">Headings</Button>
         </PopoverTrigger>
         <PopoverContent className="ml-2 w-48 p-2">
           <Item

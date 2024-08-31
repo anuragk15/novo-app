@@ -1,5 +1,49 @@
 /* Basic editor styles */
+
+.ProseMirror:focus {
+  outline: none !important;
+}
 .tiptap {
+
+  .heading-level-1::before {
+    content: 'h1';
+    position: absolute;
+    left: -45px; /* Adjust position as needed */
+    color: #c9c9c9; /* Set the color for the floating text */
+    font-size: 0.8em; /* Adjust the font size */
+    margin-right: 5px; /* Space between the text and heading */
+  }
+  .heading-level-2::before {
+    content: 'h2';
+    position: absolute;
+    left: -45px; /* Adjust position as needed */
+    color: #c9c9c9; /* Set the color for the floating text */
+    font-size: 0.8em; /* Adjust the font size */
+    margin-right: 5px; /* Space between the text and heading */
+  }
+  .heading-level-3::before {
+    content: 'h3';
+    position: absolute;
+    left: -45px; /* Adjust position as needed */
+    color: #c9c9c9; /* Set the color for the floating text */
+    font-size: 0.8em; /* Adjust the font size */
+    margin-right: 5px; /* Space between the text and heading */
+  }
+  .heading-level-4::before {
+    content: 'h4';
+    position: absolute;
+    left: -45px; /* Adjust position as needed */
+    color: #c9c9c9; /* Set the color for the floating text */
+    font-size: 0.8em; /* Adjust the font size */
+    margin-right: 5px; /* Space between the text and heading */
+  }
+  
+  /* Ensure that the heading itself is positioned relative for the absolute positioning to work */
+  .heading-level{
+    position: relative;
+  }
+
+  
   padding: 1rem;
   display: flex;
   flex-direction: column;
@@ -39,7 +83,7 @@
 
   h1,
   h2 {
-    margin-bottom: 1.5rem;
+    margin-bottom: 0.3rem;
   }
 
   h1 {

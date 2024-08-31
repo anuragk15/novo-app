@@ -12,7 +12,7 @@ export default function HomeScreen() {
       <SearchBar />
       <div className="flex flex-col gap-4 items-start border shadow-sm rounded-lg mr-2 p-8 min-h-[91vh] bg-white">
         <div className="flex w-full items-center justify-between">
-          <p className="text-2xl font-sans font-thin  ">Folders</p>
+          <p className="text-2xl font-sans font-extralight  ">Folders</p>
           <NewFolderItem />
         </div>
         <div className="flex gap-4  flex-wrap">
@@ -22,7 +22,7 @@ export default function HomeScreen() {
           <FolderItem />
         </div>
         <div className="flex w-full items-center  justify-between">
-          <p className="text-2xl font-sans font-thin ">Recent</p>
+          <p className="text-2xl font-sans font-extralight ">Recent</p>
         </div>
         <div className="flex flex-wrap gap-4">
           <RecentFileItem />
@@ -30,7 +30,7 @@ export default function HomeScreen() {
           <RecentFileItem />
         </div>
         <div className="flex w-full items-center  justify-between ">
-          <p className="text-2xl font-sans font-thin ">All files</p>
+          <p className="text-2xl font-sans font-extralight  ">All files</p>
           <Button className="flex gap-1 items-center" variant="outline"><Sparkles size={14} /> Create</Button>
         </div>
         <FilesTable />
