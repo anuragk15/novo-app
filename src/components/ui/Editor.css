@@ -4,9 +4,8 @@
   outline: none !important;
 }
 .tiptap {
-
   .heading-level-1::before {
-    content: 'h1';
+    content: "h1";
     position: absolute;
     left: -45px; /* Adjust position as needed */
     color: #c9c9c9; /* Set the color for the floating text */
@@ -14,7 +13,7 @@
     margin-right: 5px; /* Space between the text and heading */
   }
   .heading-level-2::before {
-    content: 'h2';
+    content: "h2";
     position: absolute;
     left: -45px; /* Adjust position as needed */
     color: #c9c9c9; /* Set the color for the floating text */
@@ -22,7 +21,7 @@
     margin-right: 5px; /* Space between the text and heading */
   }
   .heading-level-3::before {
-    content: 'h3';
+    content: "h3";
     position: absolute;
     left: -45px; /* Adjust position as needed */
     color: #c9c9c9; /* Set the color for the floating text */
@@ -30,20 +29,19 @@
     margin-right: 5px; /* Space between the text and heading */
   }
   .heading-level-4::before {
-    content: 'h4';
+    content: "h4";
     position: absolute;
     left: -45px; /* Adjust position as needed */
     color: #c9c9c9; /* Set the color for the floating text */
     font-size: 0.8em; /* Adjust the font size */
     margin-right: 5px; /* Space between the text and heading */
   }
-  
+
   /* Ensure that the heading itself is positioned relative for the absolute positioning to work */
-  .heading-level{
+  .heading-level {
     position: relative;
   }
 
-  
   padding: 1rem;
   display: flex;
   flex-direction: column;
@@ -137,10 +135,39 @@
     padding-left: 1rem;
     font-size: 1.2rem;
   }
-
+  :first-child {
+    margin-top: 0;
+  }
   hr {
     border-width: 1px;
     border-top: 1px solid var(--gray-2);
     margin: 2rem 0;
+  }
+  .is-empty {
+    position: relative;
+  }
+  .is-empty::before {
+    color: #767676;
+    content: attr(data-placeholder);
+    position: absolute;
+    left: 0;
+
+    top: 0;
+  }
+  .color {
+    white-space: nowrap;
+
+    &::before {
+      background-color: var(--color);
+      border: 1px solid rgba(128, 128, 128, 0.3);
+      border-radius: 2px;
+      content: " ";
+      display: inline-block;
+      height: 1em;
+      margin-bottom: 0.15em;
+      margin-right: 0.1em;
+      vertical-align: middle;
+      width: 1em;
+    }
   }
 }

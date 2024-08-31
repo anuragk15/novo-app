@@ -1,15 +1,109 @@
-import { BubbleMenu, useEditor, EditorContent } from "@tiptap/react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { BubbleMenu, EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import "./Editor.css";
+import Paragraph from "@tiptap/extension-paragraph";
+import Document from "@tiptap/extension-document";
 
-import UnderlineExt from "@tiptap/extension-underline";
 import { Color } from "@tiptap/extension-color";
 import TextStyle from "@tiptap/extension-text-style";
+import UnderlineExt from "@tiptap/extension-underline";
 import { Markdown } from "tiptap-markdown";
 import { ActionButtons } from "./EditorElements/ActionButtons";
+import Placeholder from '@tiptap/extension-placeholder'
 
 import Heading from "@tiptap/extension-heading";
+import Highlight from "@tiptap/extension-highlight";
+// import { useState } from "react";
 import { MenuBar } from "./EditorElements/BubbleMenu";
+import { ColorHighlighter } from "./EditorExtensions/ColorHighlighter";
+import { SmilieReplacer } from "./EditorExtensions/SmilieReplacer";
+
+export default function EditorFn() {
+  // const [showMenu, setShowMenu] = useState(false);
+  const editor = useEditor({
+    extensions: [
+      StarterKit,
+      UnderlineExt,
+      SmilieReplacer,
+      ColorHighlighter,
+      Paragraph,
+      Document.extend({
+        content: "heading block*",
+      }),
+      Placeholder.configure({
+        placeholder: ({ node }) => {
+          if (node.type.name === 'heading') {
+            return 'What’s the title?'
+          }
+
+          return 'Can you add some further context?'
+        },
+      }),
+      Highlight.configure({ multicolor: true }),
+      Heading.configure({
+        levels: [1, 2, 3], // Enable headings of level 1, 2, and 3
+      }).extend({
+        renderHTML({ node, HTMLAttributes }) {
+          // Custom HTML rendering to add the floating 'h1' text
+          const level = node.attrs.level;
+          const classes = `heading-level heading-level-${level}`;
+
+          return [
+            `h${level}`,
+            {
+              ...HTMLAttributes,
+              class: (HTMLAttributes.class || "") + ` ${classes}`,
+            },
+            0,
+          ];
+        },
+      }),
+      Color.configure({ types: [TextStyle.name] }),
+      TextStyle,
+      Markdown.configure({
+        html: true,
+        transformCopiedText: true, // Allow to copy markdown text from the editor
+        transformPastedText: true, // Allow to paste markdown text in the editor
+      }),
+    ],
+    content: mkdown,
+
+    // content: `<p>
+    //         This is an example of a Medium-like editor. Enter a new line and some ToggleGroupItems will appear.
+    //       </p>
+    //       <h1>Hello</h1>
+    //     `,
+  });
+
+  return (
+    <div className=" ">
+      <EditorContent
+        onSelectCapture={() => alert("seled")}
+        className="rounded-lg border min-h-[80vh] max-w-[1280px] mx-auto "
+        editor={editor}
+      />
+
+      <BubbleMenu
+        tippyOptions={
+          {
+            // onShown: () => {
+            //   editor.chain().focus().toggleHighlight({ color: "#b3d4ff" }).run();
+            // },
+            // onHide: () => {
+            //   editor.chain().toggleHighlight().run();
+            // },
+          }
+        }
+        className=" p-2 gap-2 flex"
+        editor={editor}
+      >
+        <MenuBar editor={editor} />
+      </BubbleMenu>
+      <ActionButtons editor={editor} />
+    </div>
+  );
+}
 
 const mkdown = `# Discover the Beauty of Japan: A Travel Guide
 
@@ -68,58 +162,3 @@ Traveling in Japan is a journey through time, from the ancient temples of Kyoto 
 
 Happy travels!
 `;
-
-export default function EditorFn() {
-  const editor = useEditor({
-    extensions: [
-      StarterKit,
-      UnderlineExt,
-      Heading.configure({
-        levels: [1, 2, 3], // Enable headings of level 1, 2, and 3
-      }).extend({
-        renderHTML({ node, HTMLAttributes }) {
-          // Custom HTML rendering to add the floating 'h1' text
-          const level = node.attrs.level;
-          const classes = `heading-level heading-level-${level}`;
-
-          return [
-            `h${level}`,
-            {
-              ...HTMLAttributes,
-              class: (HTMLAttributes.class || "") + ` ${classes}`,
-            },
-            0,
-          ];
-        },
-      }),
-      Color.configure({ types: [TextStyle.name] }),
-      TextStyle.configure(),
-      Markdown.configure({
-        html: true,
-        transformCopiedText: true, // Allow to copy markdown text from the editor
-        transformPastedText: true, // Allow to paste markdown text in the editor
-      }),
-    ],
-    content: mkdown,
-    // content: `<p>
-    //         This is an example of a Medium-like editor. Enter a new line and some ToggleGroupItems will appear.
-    //       </p>
-    //       <h1>Hello</h1>
-    //     `,
-  });
-
-  return (
-    <div className=" ">
-      <EditorContent
-        onSelectCapture={() => alert("seled")}
-        className="rounded-lg border min-h-[80vh] "
-        editor={editor}
-      />
-
-      <BubbleMenu className=" p-2 gap-2 flex" editor={editor}>
-        <MenuBar editor={editor} />
-      </BubbleMenu>
-      <ActionButtons editor={editor} />
-    </div>
-  );
-}

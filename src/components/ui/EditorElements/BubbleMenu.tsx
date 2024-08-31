@@ -12,6 +12,11 @@ import {
   Code,
   Expand,
   Handshake,
+  Heading,
+  Heading1,
+  Heading2,
+  Heading3,
+  Highlighter,
   Italic,
   Laugh,
   List,
@@ -43,12 +48,14 @@ import { Editor } from "@tiptap/core";
 export const MenuBar = ({ editor }: { editor: Editor }) => {
   const [showAi, setShowAi] = useState(false);
   const [showTones, setShowTones] = useState(false);
+
   useEffect(() => {
     setShowAi(false);
     return () => {
       setShowAi(false);
     };
   }, [editor]);
+
   if (!editor) {
     return null;
   }
@@ -101,7 +108,6 @@ export const MenuBar = ({ editor }: { editor: Editor }) => {
                 setShowAi((prev) => !prev);
                 // getSelectedText()
               }}
-              
               asChild
             >
               <ToggleGroupItem
@@ -197,6 +203,55 @@ export const MenuBar = ({ editor }: { editor: Editor }) => {
               )}
             </PopoverContent>
           </Popover>
+          <Popover>
+            <PopoverTrigger
+              onClick={() => {
+                setShowAi((prev) => !prev);
+                // getSelectedText()
+              }}
+              asChild
+            >
+              <ToggleGroupItem
+                value="wand"
+                data-state={"off"}
+                aria-label="Toggle bold"
+              >
+                <Heading className="h-4 w-4" color="black" />
+              </ToggleGroupItem>
+            </PopoverTrigger>
+            <PopoverContent className="w-15 bg-white rounded-xl border mt-2 p-2 mx-2">
+              <div className="flex flex-col  items-center gap-2">
+                <MenuItem
+                  onClick={() => {
+                    editor.chain().focus().toggleHeading({ level: 1 }).run();
+                  }}
+                >
+                  <Heading1 size={16} />
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    editor.chain().focus().toggleHeading({ level: 2 }).run();
+                  }}
+                >
+                  <Heading2 size={16} />
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    editor.chain().focus().toggleHeading({ level: 3 }).run();
+                  }}
+                >
+                  <Heading3 size={16} />
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    editor.chain().focus().setParagraph().run();
+                  }}
+                >
+                  P
+                </MenuItem>
+              </div>
+            </PopoverContent>
+          </Popover>
 
           <ToggleGroupItem
             value="bold"
@@ -238,6 +293,16 @@ export const MenuBar = ({ editor }: { editor: Editor }) => {
           >
             <Code size={18} color="black" />
           </ToggleGroupItem>
+
+          <ToggleGroupItem
+            value="highligher"
+            onClick={() => editor.chain().focus().toggleHighlight().run()}
+            disabled={!editor.can().chain().focus().toggleHighlight().run()}
+            data-state={editor.isActive("code") ? "on" : "off"}
+          >
+            <Highlighter size={18} color="black" />
+          </ToggleGroupItem>
+          <div className="h-5 border w-[1px] bg-slate-50 z-40"></div>
           {/* <ToggleGroupItem
           value="bold"
           onClick={() => editor.chain().focus().unsetAllMarks().run()}
@@ -272,7 +337,7 @@ export const MenuBar = ({ editor }: { editor: Editor }) => {
           >
             <Quote size={18} color="black" />
           </ToggleGroupItem>
-
+          <div className="h-5 border w-[1px] bg-slate-50 z-40"></div>
           <ToggleGroupItem
             value="undo"
             onClick={() => editor.chain().focus().undo().run()}
