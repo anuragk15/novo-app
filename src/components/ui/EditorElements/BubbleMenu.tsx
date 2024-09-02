@@ -79,7 +79,6 @@ export const MenuBar = ({ editor }: { editor: Editor }) => {
 
   //     return selectedText;
   //   };
-
   return (
     <div className="flex flex-col gap-2">
       {!showAi ? (
@@ -88,7 +87,16 @@ export const MenuBar = ({ editor }: { editor: Editor }) => {
           <Input
             onKeyDown={(e) => {
               if (e.code === "Enter") {
-                alert("Enter");
+                const { from, to } = editor.state.selection;
+                const selectedText = editor.state.doc.textBetween(
+                  from,
+                  to,
+                  " "
+                );
+                editor.commands.setAISuggestion({
+                  previousText: selectedText,
+                  newText: "This is a summary",
+                });
               }
             }}
             multiple

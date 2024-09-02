@@ -10,7 +10,9 @@ import TextStyle from "@tiptap/extension-text-style";
 import UnderlineExt from "@tiptap/extension-underline";
 import { Markdown } from "tiptap-markdown";
 import { ActionButtons } from "./EditorElements/ActionButtons";
-import Placeholder from '@tiptap/extension-placeholder'
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+//@ts-expect-error
+import Placeholder from "@tiptap/extension-placeholder";
 
 import Heading from "@tiptap/extension-heading";
 import Highlight from "@tiptap/extension-highlight";
@@ -18,7 +20,8 @@ import Highlight from "@tiptap/extension-highlight";
 import { MenuBar } from "./EditorElements/BubbleMenu";
 import { ColorHighlighter } from "./EditorExtensions/ColorHighlighter";
 import { SmilieReplacer } from "./EditorExtensions/SmilieReplacer";
-
+import { AiAcceptExtension } from "./EditorExtensions/AiAcceptExtension/Extension";
+import { SlashCommandExtension } from "./EditorExtensions/SlashCommand";
 export default function EditorFn() {
   // const [showMenu, setShowMenu] = useState(false);
   const editor = useEditor({
@@ -28,16 +31,30 @@ export default function EditorFn() {
       SmilieReplacer,
       ColorHighlighter,
       Paragraph,
+      AiAcceptExtension,
+      SlashCommandExtension.configure({
+        onSlashEnter: () => {
+          // Logic to show your input field
+          alert("Slash command activated!");
+          editor.chain().focus().setAISuggestion({
+            previousText: "This is a previous text",
+            newText: "this is a new text",
+          });
+
+          // You can use state management or any other method to show the input field
+        },
+      }),
+
       Document.extend({
         content: "heading block*",
       }),
       Placeholder.configure({
-        placeholder: ({ node }) => {
-          if (node.type.name === 'heading') {
-            return 'What’s the title?'
+        placeholder: ({ pos, node }) => {
+          if (pos == 0 && node.type.name === "heading") {
+            return "What’s the title?";
+          } else if (node.type.name === "paragraph") {
+            return "Hit enter again to trigger AI...";
           }
-
-          return 'Can you add some further context?'
         },
       }),
       Highlight.configure({ multicolor: true }),
@@ -85,6 +102,15 @@ export default function EditorFn() {
       />
 
       <BubbleMenu
+        shouldShow={({ state, from, to }) => {
+          const { doc, selection } = state;
+
+          const isEmpty =
+            selection.empty || doc.textBetween(from, to).length === 0;
+          if (isEmpty) return false;
+
+          return true;
+        }}
         tippyOptions={
           {
             // onShown: () => {
@@ -161,4 +187,6 @@ Japan's culture is rich and diverse, with a few customs that travelers should be
 Traveling in Japan is a journey through time, from the ancient temples of Kyoto to the high-tech streets of Tokyo. With its unique culture, delicious food, and stunning landscapes, Japan is a destination that promises to leave a lasting impression. So pack your bags, respect the local customs, and get ready to discover the Land of the Rising Sun!
 
 Happy travels!
+
+<accept-suggestion previousText="This is a previous text" newText="this is a new text"></accept-suggestion>
 `;
