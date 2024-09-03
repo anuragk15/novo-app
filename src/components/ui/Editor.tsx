@@ -8,10 +8,10 @@ import { MenuBar } from "./EditorElements/BubbleMenu";
 
 export default function EditorFn({ editor }: { editor: Editor }) {
   return (
-    <div className=" ">
+    <div className="bg-white ">
       <EditorContent
         onSelectCapture={() => alert("seled")}
-        className="rounded-lg border min-h-[80vh] max-w-[1280px] mx-auto "
+        className="rounded-lg border min-h-[80vh] max-w-[960px]  mx-auto "
         editor={editor}
       />
 

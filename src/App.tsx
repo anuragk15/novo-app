@@ -9,6 +9,7 @@ import "non.geist/mono";
 import SourceHome from "./pages/home/Source";
 import TemplatesHome from "./pages/home/Templates";
 import DocumentEditorScreen from "./pages/editor/document";
+import CreateDocument from "./pages/editor/create";
 
 const router = createBrowserRouter([
   {
@@ -51,6 +52,7 @@ const router = createBrowserRouter([
       </div>
     ),
   },
+
   {
     path: "/document/editor/:id",
     element: (
@@ -59,7 +61,6 @@ const router = createBrowserRouter([
       </div>
     ),
   },
-  
 ]);
 function App() {
   return (

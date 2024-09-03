@@ -5,11 +5,11 @@ export default function DocNavbar() {
   return (
     <div className=" flex justify-between items-center py-2 w-full max-w-[1280px] mx-auto">
       <ChevronLeftIcon />
-      
+
       <div className="flex items-center gap-2">
         <Button
-          variant="outline"
-          className=" font-mono flex gap-2 items-center"
+          variant="ghost"
+          className=" font-mono  border hover:bg-slate-200 flex gap-2 items-center"
         >
           <Share2 size={14} />
           Share

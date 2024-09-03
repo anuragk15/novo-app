@@ -7,7 +7,7 @@
   .heading-level-1::before {
     content: "h1";
     position: absolute;
-    left: -45px; /* Adjust position as needed */
+    right: -45px; /* Adjust position as needed */
     color: #c9c9c9; /* Set the color for the floating text */
     font-size: 0.8em; /* Adjust the font size */
     margin-right: 5px; /* Space between the text and heading */
@@ -15,7 +15,7 @@
   .heading-level-2::before {
     content: "h2";
     position: absolute;
-    left: -45px; /* Adjust position as needed */
+    right: -45px; /* Adjust position as needed */
     color: #c9c9c9; /* Set the color for the floating text */
     font-size: 0.8em; /* Adjust the font size */
     margin-right: 5px; /* Space between the text and heading */
@@ -23,7 +23,7 @@
   .heading-level-3::before {
     content: "h3";
     position: absolute;
-    left: -45px; /* Adjust position as needed */
+    right: -45px; /* Adjust position as needed */
     color: #c9c9c9; /* Set the color for the floating text */
     font-size: 0.8em; /* Adjust the font size */
     margin-right: 5px; /* Space between the text and heading */
@@ -31,7 +31,7 @@
   .heading-level-4::before {
     content: "h4";
     position: absolute;
-    left: -45px; /* Adjust position as needed */
+    right: -45px; /* Adjust position as needed */
     color: #c9c9c9; /* Set the color for the floating text */
     font-size: 0.8em; /* Adjust the font size */
     margin-right: 5px; /* Space between the text and heading */

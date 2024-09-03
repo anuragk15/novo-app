@@ -1,7 +1,7 @@
-import { Search } from "lucide-react";
-import { Input } from "../ui/input";
 import { cn } from "@/lib/utils";
-import { Button } from "../ui/button";
+import { Search } from "lucide-react";
+import { CreateNewDocumentPopup } from "../ui/createNewDocumentPopup";
+import { Input } from "../ui/input";
 
 export default function SearchBar() {
   return (
@@ -15,7 +15,7 @@ export default function SearchBar() {
           )}
         />
       </div>
-      <Button className=" font-mono">Start typing...</Button>
+      <CreateNewDocumentPopup />
     </div>
   );
 }

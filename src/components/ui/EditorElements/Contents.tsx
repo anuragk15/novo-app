@@ -3,7 +3,6 @@ import { Editor } from "@tiptap/core";
 import { useEffect, useState } from "react";
 
 export const ToCItem = ({ item, onItemClick }) => {
-  console.log("item", item);
   return (
     <div>
       <a
@@ -30,7 +29,7 @@ export const ToC = ({ editor }: { editor: Editor }) => {
   useEffect(() => {
     const headings = document.querySelectorAll("h1, h2, h3, h4, h5, h6");
     const classNames = [];
-    console.log(headings);
+
     headings.forEach((heading) => {
       classNames.push({
         tagName: heading.tagName.toLowerCase(),
@@ -39,7 +38,6 @@ export const ToC = ({ editor }: { editor: Editor }) => {
         class: heading.className,
       });
     });
-    console.log(classNames);
     setItems(classNames);
   }, [editor]);
   if (items.length === 0) {
@@ -51,7 +49,7 @@ export const ToC = ({ editor }: { editor: Editor }) => {
 
     if (editor) {
       const element = document.getElementsByClassName(id);
-      console.log("element", element);
+
       if (element?.length > 0) {
         element[0].scrollIntoView({ behavior: "smooth" });
       } else {
@@ -62,10 +60,12 @@ export const ToC = ({ editor }: { editor: Editor }) => {
   };
 
   return (
-    <>
-      {items.map((item, i) => (
-        <ToCItem onItemClick={onItemClick} key={i} item={item} />
-      ))}
-    </>
+    <div className="hidden md:block  top-0  max-h-fit  gap-3 max-w-[12rem]">
+      <div className="bg-white p-2 sticky top-3 space-y-4 border rounded-lg">
+        {items.map((item, i) => (
+          <ToCItem onItemClick={onItemClick} key={i} item={item} />
+        ))}
+      </div>
+    </div>
   );
 };
