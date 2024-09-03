@@ -5,6 +5,7 @@ export default function DocNavbar() {
   return (
     <div className=" flex justify-between items-center py-2 w-full max-w-[1280px] mx-auto">
       <ChevronLeftIcon />
+      
       <div className="flex items-center gap-2">
         <Button
           variant="outline"
