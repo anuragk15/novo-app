@@ -11,7 +11,6 @@ import { Plus, Search } from "lucide-react";
 import { useState } from "react";
 import TemplateCard from "./templateCard";
 import { cn } from "@/lib/utils";
-import SearchBar from "../home/search";
 import { Input } from "./input";
 
 export function CreateNewDocumentPopup() {
@@ -37,9 +36,9 @@ export function CreateNewDocumentPopup() {
             </DialogDescription>
           </DialogHeader>
           {option == "BLANK" ? (
-            <CreateFromScratch setOption={setOption} />
+            <CreateFromScratch />
           ) : option == "TEMPLATE" ? (
-            <SelectTemplate setOption={setOption} />
+            <SelectTemplate  />
           ) : (
             <ChooseOption setOption={setOption} />
           )}
@@ -107,7 +106,7 @@ const ChooseOption = ({ setOption }) => {
     </div>
   );
 };
-const CreateFromScratch = ({ setOption }) => {
+const CreateFromScratch = () => {
   return (
     <div>
       <div className=" font-mono"># Blank document</div>
@@ -116,7 +115,7 @@ const CreateFromScratch = ({ setOption }) => {
   );
 };
 
-const SelectTemplate = ({ setOption }) => {
+const SelectTemplate = () => {
   return (
     <div>
       <div className="flex justify-between gap-2 py-2 pr-2 items-center">

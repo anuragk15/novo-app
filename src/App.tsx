@@ -3,25 +3,52 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import DashboardHome from "./pages/home/Dashboard";
 import "non.geist";
 import { Toaster } from "@/components/ui/toaster";
+import { ClerkProvider } from "@clerk/clerk-react";
 
 // For Geist Mono
 import "non.geist/mono";
 import SourceHome from "./pages/home/Source";
 import TemplatesHome from "./pages/home/Templates";
 import DocumentEditorScreen from "./pages/editor/document";
-import CreateDocument from "./pages/editor/create";
+import SignIn from "./pages/auth/signIn";
+import SignUpPage from "./pages/auth/signUp";
+import AuthLayout from "./layouts/auth";
+
+const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
+
+if (!PUBLISHABLE_KEY) {
+  throw new Error("Missing Publishable Key");
+}
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    element: <AuthLayout />,
+    errorElement: <div>Not Found</div>,
+    children: [
+      {
+        path: "/",
+        element: <div>Home</div>,
+      },
+    ],
+  },
+  {
+    path: "/sign-in",
     element: (
       <div>
-        <DashboardHome />
+        <SignIn />
       </div>
     ),
   },
   {
-    path: "/project/:id/home",
+    path: "/sign-up",
+    element: (
+      <div>
+        <SignUpPage />
+      </div>
+    ),
+  },
+  {
+    path: "/project/:id",
     element: (
       <div>
         <DashboardHome />
@@ -64,12 +91,10 @@ const router = createBrowserRouter([
 ]);
 function App() {
   return (
-    <>
-      <div>
-        <Toaster />
-        <RouterProvider router={router} />
-      </div>
-    </>
+    <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
+      <Toaster />
+      <RouterProvider router={router} />
+    </ClerkProvider>
   );
 }
 
