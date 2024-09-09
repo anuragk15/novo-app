@@ -9,6 +9,7 @@ import { Editor } from "@tiptap/core";
 import { useState } from "react";
 import { ToggleGroup, ToggleGroupItem } from "../toggle-group";
 import {
+  Heading,
   List,
   ListOrdered,
   Quote,
@@ -16,14 +17,13 @@ import {
   Ruler,
   Sparkles,
   Undo,
-
   X,
 } from "lucide-react";
 import { Separator } from "../separator";
 
 export function ActionButtons({ editor }: { editor: Editor }) {
   const [isOpen, setIsOpen] = useState(false);
-  
+
   const [showAi, setShowAi] = useState(false);
 
   function Item({ action, label }: { action: () => void; label: string }) {
@@ -35,7 +35,7 @@ export function ActionButtons({ editor }: { editor: Editor }) {
             action();
           }, 400);
         }}
-        className="w-full cursor-pointer text-white rounded-sm hover:bg-gray-700 p-2"
+        className="w-full text-sm cursor-pointer text-white rounded-sm hover:bg-gray-700 p-2"
       >
         {label}
       </div>
@@ -63,8 +63,6 @@ export function ActionButtons({ editor }: { editor: Editor }) {
   return (
     <div className="  sticky pb-2 pt-2 mx-auto  bottom-0 max-w-fit items-center justify-center">
       <div className="flex rounded-lg mb-2 justify-center border-slate-900 border  bg-slate-800 ">
-       
-
         <Popover
           open={isOpen}
           onOpenChange={(e) => {
@@ -76,21 +74,25 @@ export function ActionButtons({ editor }: { editor: Editor }) {
               variant="outline"
               className="bg-slate-800 border-none  hover:text-white text-white hover:bg-slate-900"
             >
-              Headings
+              <Heading size={18} />
             </Button>
           </PopoverTrigger>
           <PopoverContent className="ml-2 w-48 p-2 bg-slate-800">
             <Item
               action={() => editor.chain().toggleHeading({ level: 1 }).run()}
-              label="Title"
+              label="H1"
             />
             <Item
               action={() => editor.chain().toggleHeading({ level: 2 }).run()}
-              label="Subtitle"
+              label="H2"
+            />
+                <Item
+              action={() => editor.chain().toggleHeading({ level: 3 }).run()}
+              label="H3"
             />
             <Item
-              action={() => editor.chain().toggleHeading({ level: 3 }).run()}
-              label="Notes"
+              action={() => editor.chain().focus().setParagraph().run()}
+              label="Paragraph"
             />
           </PopoverContent>
         </Popover>
@@ -103,7 +105,6 @@ export function ActionButtons({ editor }: { editor: Editor }) {
             value="bulletList"
             className="hover:bg-slate-900 data-[state=on]:bg-slate-800"
             onClick={() => editor.chain().focus().toggleBulletList().run()}
-         
           >
             <List size={18} color="white" />
           </ToggleGroupItem>
@@ -111,7 +112,6 @@ export function ActionButtons({ editor }: { editor: Editor }) {
             value="orderedList "
             className="hover:bg-slate-900 data-[state=on]:bg-slate-800"
             onClick={() => editor.chain().focus().toggleOrderedList().run()}
-           
           >
             <ListOrdered size={18} color="white" />
           </ToggleGroupItem>
@@ -120,7 +120,6 @@ export function ActionButtons({ editor }: { editor: Editor }) {
             value="blockQuote"
             className="hover:bg-slate-900 data-[state=on]:bg-slate-800"
             onClick={() => editor.chain().focus().toggleBlockquote().run()}
-            
           >
             <Quote size={18} color="white" />
           </ToggleGroupItem>

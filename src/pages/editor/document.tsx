@@ -31,7 +31,7 @@ export default function DocumentEditorScreen() {
   return (
     <div className=" bg-slate-50">
       <div className=" flex flex-col  md:px-2">
-        <DocNavbar />
+        <DocNavbar editor={editor} />
 
         <div className="flex gap-2 max-w-[1280px] mx-auto">
           <ToC editor={editor} />

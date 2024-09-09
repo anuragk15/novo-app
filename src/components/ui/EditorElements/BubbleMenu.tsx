@@ -29,6 +29,7 @@ import {
   SpellCheck,
   StrikethroughIcon,
   Underline,
+  UnderlineIcon,
   Undo,
   Wand,
 } from "lucide-react";
@@ -285,18 +286,10 @@ export const MenuBar = ({ editor }: { editor: Editor }) => {
           >
             <Underline className="h-4 w-4" color="black" />
           </ToggleGroupItem>
-          <ToggleGroupItem
-            value="strike"
-            onClick={() => editor.chain().focus().toggleStrike().run()}
-            disabled={!editor.can().chain().focus().toggleStrike().run()}
-            data-state={editor.isActive("strike") ? "on" : "off"}
-          >
-            <StrikethroughIcon size={18} color="black" />
-          </ToggleGroupItem>
+
           <ToggleGroupItem
             value="code"
             onClick={() => editor.chain().focus().toggleCode().run()}
-            disabled={!editor.can().chain().focus().toggleCode().run()}
             data-state={editor.isActive("code") ? "on" : "off"}
           >
             <Code size={18} color="black" />
@@ -310,6 +303,7 @@ export const MenuBar = ({ editor }: { editor: Editor }) => {
           >
             <Highlighter size={18} color="black" />
           </ToggleGroupItem>
+
           <div className="h-5 border w-[1px] bg-slate-50 z-40"></div>
           {/* <ToggleGroupItem
           value="bold"
