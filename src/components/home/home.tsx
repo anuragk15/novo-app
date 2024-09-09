@@ -4,7 +4,8 @@ import RecentFileItem from "../ui/recentFileItem";
 import NewFolderItem from "./ui/newFolder";
 import { FilesTable } from "./ui/filesTable";
 import { Button } from "../ui/button";
-import {  Sparkles } from "lucide-react";
+import { Sparkles } from "lucide-react";
+import { axiosClient } from "@/lib/axios";
 
 export default function HomeScreen() {
   return (
@@ -31,7 +32,23 @@ export default function HomeScreen() {
         </div>
         <div className="flex w-full items-center  justify-between ">
           <p className="text-2xl font-sans font-extralight  ">All files</p>
-          <Button className="flex gap-1 items-center" variant="outline"><Sparkles size={14} /> Create</Button>
+          <Button
+            onClick={async () => {
+              const res = await axiosClient.get(
+                "http://localhost:3000/sources",
+                {
+                  params: {
+                    projectId: "2423",
+                  },
+                }
+              );
+              console.log(res);
+            }}
+            className="flex gap-1 items-center"
+            variant="outline"
+          >
+            <Sparkles size={14} /> Create
+          </Button>
         </div>
         <FilesTable />
       </div>

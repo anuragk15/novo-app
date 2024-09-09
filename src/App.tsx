@@ -1,6 +1,6 @@
 import "./App.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import DashboardHome from "./pages/home/Dashboard";
+import DashboardHome from "./pages/home/dashboard";
 import "non.geist";
 import { Toaster } from "@/components/ui/toaster";
 import { ClerkProvider } from "@clerk/clerk-react";
@@ -8,7 +8,7 @@ import { ClerkProvider } from "@clerk/clerk-react";
 // For Geist Mono
 import "non.geist/mono";
 import SourceHome from "./pages/home/Source";
-import TemplatesHome from "./pages/home/Templates";
+import TemplatesHome from "./pages/home/template";
 import DocumentEditorScreen from "./pages/editor/document";
 import SignIn from "./pages/auth/signIn";
 import SignUpPage from "./pages/auth/signUp";

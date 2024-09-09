@@ -13,7 +13,7 @@ export default function AuthLayout() {
     if (isLoaded && !userId) {
       navigate("/sign-in");
     }
-  }, [isLoaded]);
+  }, [isLoaded, navigate, userId]);
 
   if (!isLoaded)
     return (
