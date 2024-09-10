@@ -12,7 +12,7 @@ module.exports = {
     extend: {
       fontFamily: {
         sans: 'Geist Variable',
-        mono: 'Geist Mono Variable'
+        mono: 'Geist Mono Variable',
       },
     },
     container: {

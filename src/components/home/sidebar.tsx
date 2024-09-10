@@ -16,12 +16,12 @@ export default function Sidebar() {
         </div>
         <div className="flex flex-col gap-2 p-2">
           <Link
-            to="/project/2/home"
+            to="/project/2"
             className={cn(
               "hover:bg-slate-200 flex items-center gap-2 p-2 font-sans font-light rounded-md",
               {
                 "bg-slate-200 font-normal":
-                  pathname.split("/").at(-1) === "home",
+                  pathname.split("/").at(-1) === "2",
               }
             )}
           >

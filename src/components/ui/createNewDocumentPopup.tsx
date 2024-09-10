@@ -27,7 +27,12 @@ export function CreateNewDocumentPopup() {
       <DialogTrigger asChild>
         <Button className=" font-mono">Start typing...</Button>
       </DialogTrigger>
-      <DialogContent className="md:max-w-[80vw] flex flex-col justify-between min-h-[80vh]">
+      <DialogContent
+        className={cn(
+          "md:max-w-[55vw] flex flex-col justify-between min-h-[60vh]",
+          option == "TEMPLATE" && "md:max-w-[75vw]"
+        )}
+      >
         <div className="flex flex-col gap-2 flex-1">
           <DialogHeader>
             <DialogTitle>Create new document</DialogTitle>
@@ -38,7 +43,7 @@ export function CreateNewDocumentPopup() {
           {option == "BLANK" ? (
             <CreateFromScratch />
           ) : option == "TEMPLATE" ? (
-            <SelectTemplate  />
+            <SelectTemplate />
           ) : (
             <ChooseOption setOption={setOption} />
           )}
@@ -55,7 +60,7 @@ const ChooseOption = ({ setOption }) => {
       <div className="flex  md:flex-row  flex-col gap-4 flex-1 items-center w-full h-full justify-center">
         <div
           className={cn(
-            "group cursor-pointer hover:border-slate-700 hover:border-solid  md:min-h-80 md:w-[25vw] p-2 md:p-10 rounded-xl border-dashed border-2 flex gap-4 flex-col justify-center ",
+            "group cursor-pointer hover:border-slate-700 hover:border-solid  md:min-h-60 md:w-[20vw] p-2 md:p-10 rounded-xl border-dashed border-2 flex gap-4 flex-col justify-center ",
             selected == "BLANK" && "border-slate-800 border-solid"
           )}
           onClick={() => setSelected("BLANK")}
@@ -76,7 +81,7 @@ const ChooseOption = ({ setOption }) => {
         </div>
         <div
           className={cn(
-            "group cursor-pointer hover:border-slate-700 hover:border-solid  md:min-h-80 md:w-[25vw] p-2 md:p-10 rounded-xl border-dashed border-2 flex gap-4 flex-col justify-center ",
+            "group cursor-pointer hover:border-slate-700 hover:border-solid  md:min-h-60 md:w-[20vw] p-2 md:p-10 rounded-xl border-dashed border-2 flex gap-4 flex-col justify-center ",
             selected == "TEMPLATE" && "border-slate-800 border-solid"
           )}
           onClick={() => setSelected("TEMPLATE")}
@@ -128,7 +133,6 @@ const SelectTemplate = () => {
             )}
           />
         </div>
-        
       </div>
       <div className="grid gap-y-2 grid-cols-2 md:grid-cols-3 py-4 overflow-scroll h-[65vh]">
         <TemplateCard index={1} />

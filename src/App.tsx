@@ -7,12 +7,13 @@ import { ClerkProvider } from "@clerk/clerk-react";
 
 // For Geist Mono
 import "non.geist/mono";
-import SourceHome from "./pages/home/Source";
+import SourceHome from "./pages/home/source";
 import TemplatesHome from "./pages/home/template";
 import DocumentEditorScreen from "./pages/editor/document";
 import SignIn from "./pages/auth/signIn";
 import SignUpPage from "./pages/auth/signUp";
 import AuthLayout from "./layouts/auth";
+import ProjectsScreen from "./pages/home/projects";
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
@@ -27,7 +28,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <div>Home</div>,
+        element: <ProjectsScreen />,
       },
     ],
   },
