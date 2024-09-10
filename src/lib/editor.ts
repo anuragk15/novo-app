@@ -3,13 +3,13 @@ import Document from "@tiptap/extension-document";
 import Paragraph from "@tiptap/extension-paragraph";
 import StarterKit from "@tiptap/starter-kit";
 import { nanoid } from "nanoid";
-
+import Link from "@tiptap/extension-link";
+import TextAlign from "@tiptap/extension-text-align";
 import { Color } from "@tiptap/extension-color";
 import TextStyle from "@tiptap/extension-text-style";
 import UnderlineExt from "@tiptap/extension-underline";
 import { Markdown } from "tiptap-markdown";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-//@ts-expect-error
 import Placeholder from "@tiptap/extension-placeholder";
 
 import Heading from "@tiptap/extension-heading";
@@ -35,9 +35,17 @@ export const myExtensions = [
       if (pos == 0 && node.type.name === "heading") {
         return "What’s the title?";
       } else if (node.type.name === "paragraph") {
-        return "Hit enter again to trigger AI...";
+        return "Write here...";
       }
     },
+  }),
+  TextAlign.configure({
+    types: ["heading", "paragraph"],
+  }),
+  Link.configure({
+    openOnClick: false,
+    autolink: true,
+    defaultProtocol: "https",
   }),
   Highlight.configure({ multicolor: true }),
   Heading.configure({

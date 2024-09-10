@@ -3,7 +3,6 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -17,8 +16,8 @@ export function SettingsPopup() {
   const { toast } = useToast();
   return (
     <Dialog>
-      <DialogTrigger asChild>
-        <Settings size={20} />
+      <DialogTrigger className=" cursor-pointer" asChild>
+        <Settings size={18} />
       </DialogTrigger>
       <DialogContent className="md:max-w-[50vw] flex flex-col justify-between min-h-[70vh]">
         <div className="space-y-2">
@@ -70,7 +69,12 @@ export function SettingsPopup() {
           </div>
         </div>
         <div className=" flex justify-between ">
-          <Button variant='ghost' className="hover:bg-red-100 hover:text-red-500 text-red-600" >Delete</Button>
+          <Button
+            variant="ghost"
+            className="hover:bg-red-100 hover:text-red-500 text-red-600"
+          >
+            Delete
+          </Button>
           <Button type="submit">Save changes</Button>
         </div>
       </DialogContent>

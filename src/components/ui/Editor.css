@@ -78,7 +78,10 @@
 
     text-wrap: pretty;
   }
-
+  a {
+    text-decoration: underline;
+    color: rgb(0, 88, 196);
+  }
   h1,
   h2 {
     margin-bottom: 0.3rem;
@@ -145,7 +148,6 @@
   }
   .is-empty {
     position: relative;
-   
   }
   .is-empty::before {
     color: #767676;

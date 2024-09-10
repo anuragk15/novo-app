@@ -25,17 +25,16 @@ export default function EditorFn({ editor }: { editor: Editor }) {
 
           return true;
         }}
-        tippyOptions={
-          {
-            // onShown: () => {
-            //   editor.chain().focus().toggleHighlight({ color: "#b3d4ff" }).run();
-            // },
-            // onHide: () => {
-            //   editor.chain().toggleHighlight().run();
-            // },
-          }
-        }
-        className=" p-2 gap-2 flex"
+        tippyOptions={{
+          onShown: () => {},
+          onClickOutside: () => {
+            // console.log("clicked outside");
+          },
+          onHide: () => {
+            // console.log("hidden");
+          },
+        }}
+        className=" p-2 gap-2 flex  relative flex-col"
         editor={editor}
       >
         <MenuBar editor={editor} />

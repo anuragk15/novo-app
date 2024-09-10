@@ -1,4 +1,10 @@
-import { ToggleGroup, ToggleGroupItem } from "../toggle-group";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import {
   Annoyed,
   ArrowLeft,
@@ -12,31 +18,24 @@ import {
   Code,
   Expand,
   Handshake,
-  Heading,
-  Heading1,
-  Heading2,
-  Heading3,
   Highlighter,
   Italic,
   Laugh,
-  List,
-  ListOrdered,
+  Link,
+  Link2,
   Microscope,
-  Quote,
-  Redo,
   Scissors,
   Sparkles,
   SpellCheck,
-  StrikethroughIcon,
   Underline,
-  UnderlineIcon,
-  Undo,
   Wand,
 } from "lucide-react";
+import { ToggleGroup, ToggleGroupItem } from "../toggle-group";
 
 import { useEffect, useState } from "react";
 import { Input } from "../input";
 
+import { cn } from "@/lib/utils";
 import { Label } from "@radix-ui/react-label";
 import {
   Popover,
@@ -49,7 +48,8 @@ import { Editor } from "@tiptap/core";
 export const MenuBar = ({ editor }: { editor: Editor }) => {
   const [showAi, setShowAi] = useState(false);
   const [showTones, setShowTones] = useState(false);
-
+  const [link, setLink] = useState("");
+  const [showLink, setShowLink] = useState(false);
   useEffect(() => {
     setShowAi(false);
     return () => {
@@ -81,36 +81,48 @@ export const MenuBar = ({ editor }: { editor: Editor }) => {
   //     return selectedText;
   //   };
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2 ">
       {!showAi ? (
-        <div className="flex px-2 border shadow-lg items-center rounded-lg justify-center bg-white  ">
+        <div className="flex px-2  border shadow-lg items-center rounded-lg justify-center bg-white ">
           <Sparkles size={18} className="text-slate-800" />
           <Input
             onKeyDown={(e) => {
               if (e.code === "Enter") {
-                const { from, to } = editor.state.selection;
-                const selectedText = editor.state.doc.textBetween(
-                  from,
-                  to,
-                  " "
-                );
+                const { from } = editor.state.selection;
+
+                const { state, dispatch } = editor.view;
+
+               //const selectedText = state.doc.textBetween(from, to, " ");
+                const paragraphNode = state.doc.nodeAt(from);
+
+                if (paragraphNode) {
+                  // Find the start and end of the paragraph
+                  const paragraphStart = state.selection.$anchor.start();
+                  const paragraphEnd = state.selection.$anchor.end();
+                  console.log(paragraphStart, paragraphEnd);
+
+                  // Use a transaction to delete the paragraph
+                  dispatch(
+                    state.tr.delete(paragraphStart - 1, paragraphEnd + 1)
+                  );
+                }
                 editor.commands.setAISuggestion({
-                  previousText: selectedText,
+                  previousText: paragraphNode.text,
                   newText: "This is a summary",
                 });
               }
             }}
             multiple
-            placeholder="Highlight the pros & focus on the main points"
-            className=" shadow-none border-none  bg-transparent focus-visible:ring-none focus-visible:ring-offset-0 focus-visible:ring-transparent text-black "
+            placeholder="Mention tap to pay feature here..."
+            className=" shadow-none border-none   bg-transparent focus-visible:ring-none focus-visible:ring-offset-0 focus-visible:ring-transparent text-black "
           />
           <div className="bg-slate-900 cursor-pointer opacity-40 rounded-full p-1">
             <ArrowUp size={18} color="white" />
           </div>
         </div>
       ) : null}
-      <div className="control-group border bg-white shadow-xl border-slate-200 rounded-lg">
-        <ToggleGroup type="multiple" className="button-group">
+      <div className="control-group border bg-white shadow-xl border-slate-200 rounded-lg flex flex-wrap  ">
+        <ToggleGroup type="multiple" className="button-group flex flex-wrap">
           <Popover>
             <PopoverTrigger
               onClick={() => {
@@ -212,55 +224,6 @@ export const MenuBar = ({ editor }: { editor: Editor }) => {
               )}
             </PopoverContent>
           </Popover>
-          <Popover>
-            <PopoverTrigger
-              onClick={() => {
-                setShowAi((prev) => !prev);
-                // getSelectedText()
-              }}
-              asChild
-            >
-              <ToggleGroupItem
-                value="wand"
-                data-state={"off"}
-                aria-label="Toggle bold"
-              >
-                <Heading className="h-4 w-4" color="black" />
-              </ToggleGroupItem>
-            </PopoverTrigger>
-            <PopoverContent className="w-15 bg-white rounded-xl border mt-2 p-2 mx-2">
-              <div className="flex flex-col  items-center gap-2">
-                <MenuItem
-                  onClick={() => {
-                    editor.chain().focus().toggleHeading({ level: 1 }).run();
-                  }}
-                >
-                  <Heading1 size={16} />
-                </MenuItem>
-                <MenuItem
-                  onClick={() => {
-                    editor.chain().focus().toggleHeading({ level: 2 }).run();
-                  }}
-                >
-                  <Heading2 size={16} />
-                </MenuItem>
-                <MenuItem
-                  onClick={() => {
-                    editor.chain().focus().toggleHeading({ level: 3 }).run();
-                  }}
-                >
-                  <Heading3 size={16} />
-                </MenuItem>
-                <MenuItem
-                  onClick={() => {
-                    editor.chain().focus().setParagraph().run();
-                  }}
-                >
-                  P
-                </MenuItem>
-              </div>
-            </PopoverContent>
-          </Popover>
 
           <ToggleGroupItem
             value="bold"
@@ -287,6 +250,82 @@ export const MenuBar = ({ editor }: { editor: Editor }) => {
             <Underline className="h-4 w-4" color="black" />
           </ToggleGroupItem>
 
+          <Dialog
+            onOpenChange={(e) => {
+              if (e == false) {
+                if (link === null) {
+                  return;
+                }
+
+                // empty
+                if (link === "") {
+                  editor
+                    .chain()
+                    .focus()
+
+                    .unsetLink()
+                    .run();
+                } else {
+                  editor
+                    .chain()
+                    .focus()
+
+                    .setLink({ href: link })
+                    .run();
+                }
+              }
+              setShowLink(e);
+            }}
+            open={showLink}
+          >
+            <DialogTrigger asChild>
+              <ToggleGroupItem
+                data-state={editor.isActive("link") ? "on" : "off"}
+                value="underline"
+                onClick={() => {
+                  const previousUrl = editor.getAttributes("link").href;
+                  setLink(previousUrl || "");
+                  setShowLink(true);
+                }}
+                aria-label="Toggle underline"
+              >
+                <Link className="h-4 w-4" color="black" />
+              </ToggleGroupItem>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[425px]">
+              <DialogHeader>
+                <DialogTitle>Add link</DialogTitle>
+              </DialogHeader>
+              <div className="flex gap-2 items-center border px-2 rounded-xl">
+                <Link2 />
+                <Input
+                  id="link"
+                  className={cn(
+                    "border-none bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 font-sans "
+                  )}
+                  type="url"
+                  onKeyDown={(e) => {
+                    if (e.code == "Enter") {
+                      if (link === null) {
+                        return;
+                      }
+
+                      // empty
+                      if (link === "") {
+                        editor.chain().focus().unsetLink().run();
+                      } else {
+                        editor.chain().focus().setLink({ href: link }).run();
+                      }
+                      setShowLink(false);
+                    }
+                  }}
+                  onChange={(e) => setLink(e.target.value)}
+                  value={link}
+                  placeholder="https://google.com/search?...."
+                />
+              </div>
+            </DialogContent>
+          </Dialog>
           <ToggleGroupItem
             value="code"
             onClick={() => editor.chain().focus().toggleCode().run()}
@@ -302,59 +341,6 @@ export const MenuBar = ({ editor }: { editor: Editor }) => {
             data-state={editor.isActive("code") ? "on" : "off"}
           >
             <Highlighter size={18} color="black" />
-          </ToggleGroupItem>
-
-          <div className="h-5 border w-[1px] bg-slate-50 z-40"></div>
-          {/* <ToggleGroupItem
-          value="bold"
-          onClick={() => editor.chain().focus().unsetAllMarks().run()}
-        >
-          Clear marks
-        </ToggleGroupItem>
-        <ToggleGroupItem
-          value="bold"
-          onClick={() => editor.chain().focus().clearNodes().run()}
-        >
-          Clear nodes
-        </ToggleGroupItem> */}
-          <ToggleGroupItem
-            value="bulletList"
-            onClick={() => editor.chain().focus().toggleBulletList().run()}
-            data-state={editor.isActive("bulletList") ? "on" : "off"}
-          >
-            <List size={18} color="black" />
-          </ToggleGroupItem>
-          <ToggleGroupItem
-            value="orderedList"
-            onClick={() => editor.chain().focus().toggleOrderedList().run()}
-            data-state={editor.isActive("orderedList") ? "on" : "off"}
-          >
-            <ListOrdered size={18} color="black" />
-          </ToggleGroupItem>
-
-          <ToggleGroupItem
-            value="blockQuote"
-            onClick={() => editor.chain().focus().toggleBlockquote().run()}
-            data-state={editor.isActive("blockquote") ? "on" : "off"}
-          >
-            <Quote size={18} color="black" />
-          </ToggleGroupItem>
-          <div className="h-5 border w-[1px] bg-slate-50 z-40"></div>
-          <ToggleGroupItem
-            value="undo"
-            onClick={() => editor.chain().focus().undo().run()}
-            disabled={!editor.can().chain().focus().undo().run()}
-            data-state={"off"}
-          >
-            <Undo size={18} color="black" />
-          </ToggleGroupItem>
-          <ToggleGroupItem
-            value="redo"
-            onClick={() => editor.chain().focus().redo().run()}
-            disabled={!editor.can().chain().focus().redo().run()}
-            data-state={"off"}
-          >
-            <Redo size={18} color="black" />
           </ToggleGroupItem>
         </ToggleGroup>
       </div>

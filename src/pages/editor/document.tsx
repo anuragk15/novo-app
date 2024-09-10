@@ -1,9 +1,9 @@
 import EditorFn from "@/components/ui/editor";
 import { ToC } from "@/components/ui/EditorElements/Contents";
 import DocNavbar from "@/components/ui/EditorElements/Navbar";
-import { SlashCommandExtension } from "@/components/ui/EditorExtensions/SlashCommand";
 import { myExtensions } from "@/lib/editor";
 import { useEditor } from "@tiptap/react";
+
 // import { Spinner } from "@/components/ui/spinner";
 
 // const MemorizedToC = memo(ToC);
@@ -12,18 +12,18 @@ export default function DocumentEditorScreen() {
   const editor = useEditor({
     extensions: [
       ...myExtensions,
-      SlashCommandExtension.configure({
-        onSlashEnter: () => {
-          // Logic to show your input field
-          alert("Slash command activated!");
-          editor.chain().focus().setAISuggestion({
-            previousText: "This is a previous text",
-            newText: "this is a new text",
-          });
-
-          // You can use state management or any other method to show the input field
-        },
-      }),
+      // SlashCommandExtension.configure({
+      //   onSlashEnter: () => {
+      //     // Logic to show your input field
+      //     // alert("Slash command activated!");
+      //     const { from, to } = editor.state.selection;
+      //     console.log(from, to);
+      //     editor.chain().focus().setAISuggestion({
+      //       previousText: "This is a previous text",
+      //       newText: "this is a new text",
+      //     });
+      //   },
+      // }),
     ],
     content: mkdown,
   });

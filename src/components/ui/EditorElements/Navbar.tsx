@@ -9,9 +9,8 @@ export default function DocNavbar({ editor }: { editor: Editor }) {
       <ChevronLeftIcon />
 
       <div className="flex items-center gap-2">
-        <div className="  p-3  cursor-pointer rounded-lg  hover:bg-slate-100 flex gap-2 items-center">
           <SettingsPopup />
-        </div>
+      
         <div className="  p-3  cursor-pointer rounded-lg  hover:bg-slate-100 flex gap-2 items-center">
           <Share2 size={16} />
         </div>

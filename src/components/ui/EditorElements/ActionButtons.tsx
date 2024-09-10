@@ -6,9 +6,14 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Editor } from "@tiptap/core";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { ToggleGroup, ToggleGroupItem } from "../toggle-group";
 import {
+  AlignCenter,
+  AlignLeft,
+  AlignRight,
+  ArrowLeft,
+  ArrowUp,
   Heading,
   List,
   ListOrdered,
@@ -20,12 +25,25 @@ import {
   X,
 } from "lucide-react";
 import { Separator } from "../separator";
+import { Input } from "../input";
+import { motion, MotionConfig } from "framer-motion";
+import { useClickOutside } from "@/hooks/useClickOutside";
 
+const transition = {
+  type: "spring",
+  bounce: 0.1,
+  duration: 0.2,
+};
 export function ActionButtons({ editor }: { editor: Editor }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const [showAi, setShowAi] = useState(false);
+  const [isAiOpen, setIsAiOpen] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
 
+  useClickOutside(containerRef, () => {
+    setIsOpen(false);
+  });
   function Item({ action, label }: { action: () => void; label: string }) {
     return (
       <div
@@ -42,27 +60,35 @@ export function ActionButtons({ editor }: { editor: Editor }) {
     );
   }
 
-  if (showAi) {
+  if (isAiOpen) {
     return (
-      <div className="  max-w-fit items-center justify-center">
-        <div className="flex items-center rounded-lg mb-2 justify-center border-white border  ">
-          <Button
-            onClick={() => setShowAi(false)}
-            className="  text-white hover:text-slate-200 border-none border-r-1 border-r-white"
-          >
-            <X size={18} color="white" />
+      <div className="flex my-auto sticky pb-2  space-y-2 mx-auto  bottom-0 max-w-fit items-center justify-center">
+        <div className="bg-slate-800 flex items-center border gap-2  pr-4 rounded-lg">
+          <Button className="m-0 bg-slate-800" onClick={() => setIsAiOpen(false)}>
+            <ArrowLeft className="h-5 w-5" />
           </Button>
 
-          <Button className=" items-center gap-2 flex text-white hover:text-slate-200 border-none border-r-1 border-r-white">
-            <Sparkles size={14} /> <p>Generate</p>
-          </Button>
+          <Input
+            placeholder="Ask Novo to write for you..."
+            className=" shadow-none border-none  md:min-w-[30vw]  bg-transparent focus-visible:ring-none focus-visible:ring-offset-0 focus-visible:ring-transparent text-white "
+          />
+          <div className="bg-slate-600 cursor-pointer  rounded-full p-1">
+            <ArrowUp size={18} color="white" />
+          </div>
         </div>
       </div>
     );
   }
   return (
-    <div className="  sticky pb-2 pt-2 mx-auto  bottom-0 max-w-fit items-center justify-center">
+    <div className="  sticky pb-2 pt-2 space-y-2 mx-auto  bottom-0 max-w-fit items-center justify-center">
       <div className="flex rounded-lg mb-2 justify-center border-slate-900 border  bg-slate-800 ">
+        <div
+          className="hover:bg-slate-900 my-auto items-center p-2 cursor-pointer data-[state=on]:bg-slate-800"
+          data-state="off"
+          onClick={() => setIsAiOpen(true)}
+        >
+          <Sparkles size={18} color="white" />
+        </div>
         <Popover
           open={isOpen}
           onOpenChange={(e) => {
@@ -72,7 +98,7 @@ export function ActionButtons({ editor }: { editor: Editor }) {
           <PopoverTrigger asChild>
             <Button
               variant="outline"
-              className="bg-slate-800 border-none  hover:text-white text-white hover:bg-slate-900"
+              className="bg-slate-800 my-auto border-none  hover:text-white text-white hover:bg-slate-900"
             >
               <Heading size={18} />
             </Button>
@@ -86,7 +112,7 @@ export function ActionButtons({ editor }: { editor: Editor }) {
               action={() => editor.chain().toggleHeading({ level: 2 }).run()}
               label="H2"
             />
-                <Item
+            <Item
               action={() => editor.chain().toggleHeading({ level: 3 }).run()}
               label="H3"
             />
@@ -130,6 +156,31 @@ export function ActionButtons({ editor }: { editor: Editor }) {
             onClick={() => editor.chain().focus().setHorizontalRule().run()}
           >
             <Ruler size={18} color="white" />
+          </ToggleGroupItem>
+          <div className="h-full py-2">
+            <Separator orientation="vertical" className=" bg-slate-500" />
+          </div>
+
+          <ToggleGroupItem
+            className="hover:bg-slate-900 data-[state=on]:bg-slate-800"
+            value="left"
+            onClick={() => editor.chain().focus().setTextAlign("left").run()}
+          >
+            <AlignLeft size={18} color="white" />
+          </ToggleGroupItem>
+          <ToggleGroupItem
+            className="hover:bg-slate-900 data-[state=on]:bg-slate-800"
+            value="center"
+            onClick={() => editor.chain().focus().setTextAlign("center").run()}
+          >
+            <AlignCenter size={18} color="white" />
+          </ToggleGroupItem>
+          <ToggleGroupItem
+            value="right"
+            className="hover:bg-slate-900 data-[state=on]:bg-slate-800"
+            onClick={() => editor.chain().focus().setTextAlign("right").run()}
+          >
+            <AlignRight size={18} color="white" />
           </ToggleGroupItem>
           <div className="h-full py-2">
             <Separator orientation="vertical" className=" bg-slate-500" />
