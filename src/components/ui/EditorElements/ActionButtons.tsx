@@ -22,22 +22,14 @@ import {
   Ruler,
   Sparkles,
   Undo,
-  X,
 } from "lucide-react";
 import { Separator } from "../separator";
 import { Input } from "../input";
-import { motion, MotionConfig } from "framer-motion";
 import { useClickOutside } from "@/hooks/useClickOutside";
 
-const transition = {
-  type: "spring",
-  bounce: 0.1,
-  duration: 0.2,
-};
 export function ActionButtons({ editor }: { editor: Editor }) {
   const [isOpen, setIsOpen] = useState(false);
 
-  const [showAi, setShowAi] = useState(false);
   const [isAiOpen, setIsAiOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -64,7 +56,10 @@ export function ActionButtons({ editor }: { editor: Editor }) {
     return (
       <div className="flex my-auto sticky pb-2  space-y-2 mx-auto  bottom-0 max-w-fit items-center justify-center">
         <div className="bg-slate-800 flex items-center border gap-2  pr-4 rounded-lg">
-          <Button className="m-0 bg-slate-800" onClick={() => setIsAiOpen(false)}>
+          <Button
+            className="m-0 bg-slate-800"
+            onClick={() => setIsAiOpen(false)}
+          >
             <ArrowLeft className="h-5 w-5" />
           </Button>
 
