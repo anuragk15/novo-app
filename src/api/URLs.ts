@@ -37,6 +37,7 @@ export const URLs = {
   PROJECT_ACCEPT_INVITE: "/projects/invite/accept​",
   PROJECT_UPDATE: "/projects/update​​",
   PROJECTS_ADD_TAG: "/documents/add/tag",
+  PROJECTS_REMOVE_COLLAB: "/projects/remove/collaborator​",
 
   // DOCUMENTS
   DOCUMENTS_GET: "/documents",
