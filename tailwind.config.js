@@ -9,10 +9,14 @@ module.exports = {
   ],
   prefix: "",
   theme: {
+    fontFamily: {
+      brand: 'Pacifico',
+      sans: ["Open Sans", "sans-serif"],
+    },
     extend: {
       fontFamily: {
-        sans: 'Geist Variable',
-        mono: 'Geist Mono Variable',
+        sans: ["Open Sans", "sans-serif"],
+        mono: 'Geist Mono Variable'
       },
     },
     container: {

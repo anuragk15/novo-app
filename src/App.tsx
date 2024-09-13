@@ -30,6 +30,48 @@ const router = createBrowserRouter([
         path: "/",
         element: <ProjectsScreen />,
       },
+
+      {
+        path: "/project/:id",
+        element: (
+          <div>
+            <DashboardHome />
+          </div>
+        ),
+      },
+      {
+        path: "/project/:id/sources",
+        element: (
+          <div>
+            <SourceHome />
+          </div>
+        ),
+      },
+      {
+        path: "/project/:id/templates",
+        element: (
+          <div>
+            <TemplatesHome />
+          </div>
+        ),
+      },
+      {
+        path: "/project/:id/team",
+        element: (
+          <div>
+            <TemplatesHome />
+          </div>
+        ),
+      },
+
+      {
+        path: "/document/editor/:id",
+        element: (
+          <div>
+            <DocumentEditorScreen />
+          </div>
+        ),
+      },
     ],
   },
   {
@@ -45,47 +87,6 @@ const router = createBrowserRouter([
     element: (
       <div>
         <SignUpPage />
-      </div>
-    ),
-  },
-  {
-    path: "/project/:id",
-    element: (
-      <div>
-        <DashboardHome />
-      </div>
-    ),
-  },
-  {
-    path: "/project/:id/sources",
-    element: (
-      <div>
-        <SourceHome />
-      </div>
-    ),
-  },
-  {
-    path: "/project/:id/templates",
-    element: (
-      <div>
-        <TemplatesHome />
-      </div>
-    ),
-  },
-  {
-    path: "/project/:id/team",
-    element: (
-      <div>
-        <TemplatesHome />
-      </div>
-    ),
-  },
-
-  {
-    path: "/document/editor/:id",
-    element: (
-      <div>
-        <DocumentEditorScreen />
       </div>
     ),
   },

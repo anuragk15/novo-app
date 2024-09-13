@@ -1,5 +1,5 @@
 import ProjectCard from "@/components/ui/projectCard";
-import { LogOut, Plus, Search, Settings } from "lucide-react";
+import { Lightbulb, LogOut, Plus, Search, Settings } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,35 +8,46 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+import OnboardingWrapper from "@/wrappers/onboarding";
+import { OnboardingOverviewContent } from "@/components/onboarding.tsx/overview";
+import { useSearchParams } from "react-router-dom";
 
 export default function ProjectsScreen() {
   return (
-    <div className="bg-slate-50 min-h-screen ">
-      <div className=" space-y-10">
-        <div className="bg-white shadow-sm py-2 border-b">
-          <div className=" max-w-[1280px] mx-auto">
-            <Navbar />
+    <OnboardingWrapper
+      component={<OnboardingOverviewContent />}
+      showCloseButton={false}
+    >
+      <div className="bg-slate-50 min-h-screen ">
+        <div className=" space-y-10">
+          <div className="bg-white shadow-sm py-2 border-b">
+            <div className=" max-w-[1280px] mx-auto">
+              <Navbar />
+            </div>
           </div>
-        </div>
 
-        <div className="space-y-4 max-w-[1280px] mx-auto">
-          <h2 className="text-2xl font-sans">Your projects</h2>
-          <div className="flex gap-4 ">
-            <ProjectCard name="Project 1" id="1" createdOn={new Date()} />
-            <ProjectCard name="Anurag" id="2" createdOn={new Date()} />
-            <div className="group  py-4 px-4 bg-white flex flex-col justify-center items-center gap-4 rounded-lg hover:bg-slate-100 cursor-pointer border min-w-[20vw]">
-              <div className=" p-4 border group-hover:border-black rounded-full border-dashed">
-                <Plus className=" text-slate-500 group-hover:text-black" />
+          <div className="space-y-4 max-w-[1280px] mx-auto">
+            <h2 className="text-2xl font-sans">Your projects</h2>
+            <div className="flex gap-4 ">
+              <ProjectCard name="Project 1" id="1" createdOn={new Date()} />
+              <ProjectCard name="Anurag" id="2" createdOn={new Date()} />
+              <div className="group  py-4 px-4 bg-white flex flex-col justify-center items-center gap-4 rounded-lg hover:bg-slate-100 cursor-pointer border min-w-[20vw]">
+                <div className=" p-4 border group-hover:border-black rounded-full border-dashed">
+                  <Plus className=" text-slate-500 group-hover:text-black" />
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </OnboardingWrapper>
   );
 }
 
 const Navbar = () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [searchParams, setSearchParams] = useSearchParams();
+
   return (
     <div className="py-2 px-2 flex justify-between items-center">
       <h1
@@ -49,7 +60,7 @@ const Navbar = () => {
       </h1>
       <div className="flex gap-5 items-center">
         <div className=" flex gap-2 px-2 items-center bg-slate-100 rounded-xl">
-          <Search color="gray"/>
+          <Search color="gray" />
           <Input
             placeholder="Search projects..."
             className={cn(
@@ -65,6 +76,15 @@ const Navbar = () => {
             />
           </DropdownMenuTrigger>
           <DropdownMenuContent className=" mr-2">
+            <DropdownMenuItem
+              onClick={() => {
+                setSearchParams({ onboarding: "true" });
+              }}
+              className="cursor-pointer flex items-center gap-2"
+            >
+              <Lightbulb size={14} />
+              <p>Quick intro</p>
+            </DropdownMenuItem>
             <DropdownMenuItem className="cursor-pointer flex items-center gap-2">
               <Settings size={14} />
               <p>Settings</p>
