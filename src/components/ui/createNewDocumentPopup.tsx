@@ -17,6 +17,7 @@ import { getTemplates } from "@/api/functions/templates";
 import { Spinner } from "./spinner";
 import { useDebounce } from "@/hooks/useDebounce";
 import DynamicForm from "./formTemplate";
+import { useParams } from "react-router-dom";
 
 export function CreateNewDocumentPopup({ trigger }: { trigger?: JSX.Element }) {
   const [option, setOption] = useState<null | "TEMPLATE" | "BLANK">(null);
@@ -133,15 +134,15 @@ const CreateFromScratch = () => {
 };
 
 const SelectTemplate = ({ toggleHeader }) => {
+  const { projectId } = useParams();
   const [searchQuery, setSearchQuery] = useState("");
   const debouncedInputValue = useDebounce(searchQuery, 500); // 500ms debounce delay
   const { data, isLoading } = useQuery({
     queryKey: ["get", "templates"],
     queryFn: async () => {
-      const res = await getTemplates();
+      const res = await getTemplates({ projectId });
       return res?.data;
     },
-    staleTime: Infinity,
   });
   const [selectedTemplate, setSelectedTemplate] = useState(null);
   const [templates, setTemplates] = useState(data);
@@ -162,10 +163,29 @@ const SelectTemplate = ({ toggleHeader }) => {
     } else if (debouncedInputValue === "") {
       setTemplates(data);
     }
-  }, [debouncedInputValue]);
+  }, [debouncedInputValue, data]);
+  useEffect(() => {
+    if (isLoading) return;
+    if (data && data?.length > 0) {
+      const t = [...data];
+      t.sort((a, b) => {
+        if (a.bookmarkId && !b.bookmarkId) {
+          return -1;
+        } else if (!a.bookmarkId && b.bookmarkId) {
+          return 1;
+        } else {
+          return 0;
+        }
+      });
+
+      setTemplates(t);
+    }
+  }, [data, isLoading]);
+
   if (selectedTemplate)
     return (
       <DynamicForm
+        templateId={selectedTemplate?.id}
         formFields={selectedTemplate?.fields?.data || []}
         name={selectedTemplate?.name}
         onBack={() => {
@@ -197,10 +217,12 @@ const SelectTemplate = ({ toggleHeader }) => {
             ? templates?.map((item, i) => {
                 return (
                   <TemplateCard
+                    key={i}
                     setSelectedTemplate={(d) => {
                       toggleHeader(false);
                       setSelectedTemplate(d);
                     }}
+                    bookmarkId={item.bookmarkId}
                     index={i + 1}
                     id={item.id}
                     tags={item.tags}

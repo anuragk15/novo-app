@@ -1,5 +1,8 @@
+import { addBookmark, deleteBookmark } from "@/api/functions/templates";
 import { cn } from "@/lib/utils";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Bookmark } from "lucide-react";
+import { useParams } from "react-router-dom";
 
 export default function TemplateCard({
   index,
@@ -8,8 +11,20 @@ export default function TemplateCard({
   tags,
   id,
   fields,
+  bookmarkId,
   setSelectedTemplate,
 }) {
+  const { projectId } = useParams();
+  const { mutateAsync } = useMutation({
+    mutationKey: ["create", "bookmark"],
+    mutationFn: addBookmark,
+  });
+
+  const { mutateAsync: deleteBookmarkFn } = useMutation({
+    mutationKey: ["delete", "bookmark"],
+    mutationFn: deleteBookmark,
+  });
+  const client = useQueryClient();
   const Tag = ({ text }) => {
     return (
       <p className="px-2 font-mono py-0 rounded-lg text-xs lg:text-sm text-slate-600 shadow-sm bg-slate-200">
@@ -19,13 +34,23 @@ export default function TemplateCard({
   };
   return (
     <div className="relative h-full ">
-      <div className="p-2 bg-slate-100 rounded-full absolute top-2 right-2 z-50">
+      <div
+        onClick={() => {
+          if (bookmarkId == null) {
+            mutateAsync({ templateId: id, projectId }).then(() => {
+              client.invalidateQueries({ queryKey: ["get", "templates"] });
+            });
+          } else {
+            deleteBookmarkFn({ bookmarkId }).then(() => {
+              client.invalidateQueries({ queryKey: ["get", "templates"] });
+            });
+          }
+        }}
+        className="p-2 bg-slate-100 rounded-full absolute top-2 right-2 z-50"
+      >
         <Bookmark
           className=" cursor-pointer "
-          onClick={() => {
-            console.log(id);
-            console.log(fields);
-          }}
+          fill={bookmarkId ? "black" : "none"}
           size={18}
         />
       </div>

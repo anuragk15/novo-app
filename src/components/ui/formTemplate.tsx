@@ -2,9 +2,22 @@ import React, { useState } from "react";
 import { Input } from "./input";
 import { Button } from "./button";
 import { ChevronLeft } from "lucide-react";
+import { useMutation } from "@tanstack/react-query";
+import { promptsGenerateWithTemplate } from "@/api/functions/prompts";
+import { Spinner } from "./spinner";
+import { useNavigate, useParams } from "react-router-dom";
+import { useToast } from "./use-toast";
 
-const DynamicForm = ({ formFields, name, onBack }) => {
+const DynamicForm = ({ formFields, name, templateId, onBack }) => {
+  const { toast } = useToast();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({});
+  const { projectId } = useParams();
+  const [documentName, setDocumentName] = useState("");
+  const { mutateAsync, isPending } = useMutation({
+    mutationKey: ["create", "document"],
+    mutationFn: promptsGenerateWithTemplate,
+  });
   // Handle form input change
   const handleChange = (e, title) => {
     setFormData({
@@ -16,10 +29,47 @@ const DynamicForm = ({ formFields, name, onBack }) => {
   // Handle form submit
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Form Data:", formData);
+    // console.log({
+    //   formData,
+    //   templateId,
+    //   projectId,
+    //   documentName,
+    // });
+    toast({
+      title: "Novo is creating your document, give us a second...",
+    });
+    mutateAsync({
+      fields: formData,
+      templateId,
+      projectId,
+      title: documentName,
+    })
+      .then((res) => {
+        toast({
+          title: "Document created!",
+        });
+        if (res.documentId) {
+          navigate(`/document/editor/${projectId}/${res.documentId}`);
+        }
+      })
+      .catch((e) => {
+        toast({
+          title: "An error occurred",
+          description: e?.message,
+          variant: "destructive",
+        });
+      });
+
     // Add validation or submit logic here
   };
-
+  //   console.log(isPending);
+  if (isPending) {
+    return (
+      <div>
+        <Spinner />
+      </div>
+    );
+  }
   return (
     <div>
       <div
@@ -44,7 +94,21 @@ const DynamicForm = ({ formFields, name, onBack }) => {
         </p>
       </div>
       <form onSubmit={handleSubmit}>
-        <div className="flex flex-col gap-4 overflow-scroll px-2  h-[60vh]">
+        <div className="flex flex-col gap-4 pt-2 overflow-scroll px-2  h-[60vh]">
+          <div className="form-group space-y-2">
+            <label className=" font-sans font-medium ">
+              Name of the document*
+            </label>
+            <Input
+              type="text"
+              placeholder={"Launch plan of the new product"}
+              value={documentName}
+              onChange={(e) => setDocumentName(e.target.value)}
+              required={true}
+              maxLength={120}
+              className="form-control"
+            />
+          </div>
           {formFields.map((field, index) => (
             <div key={index} className="form-group space-y-2">
               <label className=" font-sans font-medium ">
@@ -53,6 +117,7 @@ const DynamicForm = ({ formFields, name, onBack }) => {
               </label>
               <Input
                 type="text"
+                maxLength={320}
                 placeholder={field.placeholder}
                 value={formData[field.title] || ""}
                 onChange={(e) => handleChange(e, field.title)}

@@ -11,6 +11,23 @@ export const getDocuments = async ({ projectId }: { projectId: string }) => {
   return response.data;
 };
 
+export const getDocumentById = async ({
+  projectId,
+  documentId,
+}: {
+  projectId: string;
+  documentId: string;
+}) => {
+  const response = await axiosClient.get(URLs.DOCUMENTS_GET_BY_ID, {
+    params: {
+      projectId,
+      documentId,
+    },
+  });
+
+  return response.data;
+};
+
 export const createDocument = async ({
   documentId,
   content,
@@ -119,6 +136,19 @@ export const addDocumentTag = async ({
   return response.data;
 };
 
+export const getDocumentTags = async ({ projectId }: { projectId: string }) => {
+  const response = await axiosClient
+    .get(URLs.PROJECTS_GET_TAGS, {
+      params: {
+        projectId,
+      },
+    })
+    .catch((error) => {
+      throw error;
+    });
+  return response.data;
+};
+
 export const addTagToDocument = async ({
   documentId,
   projectId,
@@ -133,6 +163,29 @@ export const addTagToDocument = async ({
       documentId,
       projectId,
       tagId,
+    })
+    .catch((error) => {
+      throw error;
+    });
+  return response.data;
+};
+
+export const removeTagFromDocument = async ({
+  projectId,
+  tagId,
+  documentId,
+}: {
+  projectId: string;
+  tagId: string;
+  documentId: string;
+}) => {
+  const response = await axiosClient
+    .delete(URLs.DOCUMENT_REMOVE_TAG, {
+      data: {
+        projectId,
+        tagId,
+        documentId,
+      },
     })
     .catch((error) => {
       throw error;

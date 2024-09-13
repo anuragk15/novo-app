@@ -7,14 +7,14 @@ export const SlashCommandExtension = Extension.create({
     return {
       // Listen for the slash key on a new line
       Enter: ({ editor }) => {
-        console.log(editor.isActive("paragraph"));
+        // console.log(editor.isActive("paragraph"));
         if (!editor.isActive("paragraph")) {
           return false;
         }
         const { state } = editor;
-        console.log(editor);
+        //  console.log(editor);
         const { $from, empty } = state.selection;
-        console.log(empty);
+        //  console.log(empty);
         if (!empty) return false;
 
         // Check if the current line starts with a slash

@@ -1,94 +1,166 @@
-import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
+import { addDocumentTag, getDocumentTags } from "@/api/functions/documents";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { EllipsisVertical } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { useToast } from "@/components/ui/use-toast";
-import { useNavigate } from "react-router-dom";
-const files = [
-  {
-    name: "Marketing copy of Tap to pay",
-    createdAt: new Date(),
-    createdBy: "John Doe",
-  },
-  {
-    name: "PRD of Tap to pay",
-    createdAt: new Date(),
-    createdBy: "John Doe",
-  },
-  {
-    name: "Validation documentation",
-    createdAt: new Date(),
-    createdBy: "John Doe",
-  },
-  {
-    name: "Marketing copy of Tap to pay",
-    createdAt: new Date(),
-    createdBy: "John Doe",
-  },
-  {
-    name: "PRD of Tap to pay",
-    createdAt: new Date(),
-    createdBy: "John Doe",
-  },
-  {
-    name: "Validation documentation",
-    createdAt: new Date(),
-    createdBy: "John Doe",
-  },
-];
+import { formatDate } from "@/lib/utils";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { EllipsisVertical, Tags } from "lucide-react";
+import { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import TagsDropdown from "./tags";
 
-export function FilesTable() {
+export function FilesTable({ files }) {
   const { toast } = useToast();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const [isOpen, setIsOpen] = useState(false);
+  const [tagName, setTagName] = useState("");
+  const { projectId } = useParams();
+  const { data: tags, isLoading } = useQuery({
+    queryKey: ["get", "tags"],
+    queryFn: async () => {
+      const res = await getDocumentTags({ projectId });
+      return res?.data;
+    },
+  });
+  const { mutateAsync: createNewTagFn } = useMutation({
+    mutationKey: ["add", "tag"],
+    mutationFn: async (tag: string) => {
+      const res = await addDocumentTag({ projectId, tag });
+      return res?.data;
+    },
+  });
   return (
-    <Table>
-      <TableBody>
-        {files.map((invoice,id) => (
-          <TableRow
-            onClick={() => {
-              navigate("/document/editor/2");
-            }}
-            className=" cursor-pointer"
-            key={id}
-          >
-            <TableCell>{invoice.name}</TableCell>
-            <TableCell className="font-normal">{invoice.createdBy}</TableCell>
-            <TableCell className="font-light text-right">
-              Edited{" "}
-              {invoice.createdAt.toLocaleDateString() +
-                " " +
-                invoice.createdAt.toLocaleTimeString()}
-            </TableCell>
-            <TableCell>
-              <DropdownMenu>
-                <DropdownMenuTrigger className="p-2">
-                  <EllipsisVertical size={16} />
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuItem
-                    onClick={() => {
-                      toast({
-                        title: "✨  Link copied!",
-                        description:
-                          "You’ve got the magic link—now go inspire some readers!",
-                      });
-                    }}
-                  >
-                    Share
-                  </DropdownMenuItem>
-                  <DropdownMenuItem className="text-red-600">
-                    Delete
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </TableCell>
+    <>
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
+        <DialogContent className="space-y-4">
+          <DialogHeader>
+            <DialogTitle>Add new tag</DialogTitle>
+            <DialogDescription className="space-y-2">
+              <Label title="Tag name" />
+              <Input
+                value={tagName}
+                onChange={(e) => setTagName(e.target.value)}
+                className="text-black"
+                placeholder="Marketing"
+              />
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex gap-2 justify-end">
+            <Button
+              onClick={() => {
+                setIsOpen(false);
+              }}
+              variant="ghost"
+            >
+              Close
+            </Button>
+            <Button
+              onClick={() => {
+                createNewTagFn(tagName);
+                toast({
+                  title: "✨ Tag added!",
+                  description: "You’ve added a new tag to your project.",
+                });
+                queryClient.invalidateQueries({ queryKey: ["get", "tags"] });
+                setIsOpen(false);
+              }}
+            >
+              Save
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+      <Table>
+        <TableHeader className="">
+          <TableRow className="">
+            <TableHead className="">Name</TableHead>
+            <TableHead className="flex gap-2 items-center">
+              Tags <Tags size={16} />{" "}
+            </TableHead>
+            <TableHead className="text-right">Last edited</TableHead>
           </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+        </TableHeader>
+        <TableBody>
+          {files.map((invoice, index) => (
+            <TableRow
+              className=" cursor-pointer border-b border-slate-200  hover:bg-slate-100"
+              key={index}
+            >
+              <TableCell
+                onClick={() => {
+                  navigate("/document/editor/" + projectId + "/" + invoice.id);
+                }}
+              >
+                {invoice.title}
+              </TableCell>
+              <TableCell className="font-normal">
+                {isLoading ? (
+                  <div>Loading tags...</div>
+                ) : (
+                  <TagsDropdown
+                    projectId={projectId}
+                    addNewTag={setIsOpen}
+                    tags={tags}
+                    documentId={invoice.id}
+                  />
+                )}
+              </TableCell>
+              <TableCell className="font-light text-right">
+                {formatDate(new Date(invoice.updatedAt))}
+              </TableCell>
+              <TableCell>
+                <DropdownMenu>
+                  <DropdownMenuTrigger className="p-2">
+                    <EllipsisVertical size={16} />
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuItem
+                      onClick={() => {
+                        navigator.clipboard.writeText(
+                          `${window.location.origin}/document/editor/${projectId}/${invoice.id}`
+                        );
+                        toast({
+                          title: "✨  Link copied!",
+                          description:
+                            "You’ve got the magic link—now go inspire some readers!",
+                        });
+                      }}
+                    >
+                      Share
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className="text-red-600">
+                      Delete
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </>
   );
 }

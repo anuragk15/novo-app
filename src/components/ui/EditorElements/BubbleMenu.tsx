@@ -99,7 +99,7 @@ export const MenuBar = ({ editor }: { editor: Editor }) => {
                   // Find the start and end of the paragraph
                   const paragraphStart = state.selection.$anchor.start();
                   const paragraphEnd = state.selection.$anchor.end();
-                  console.log(paragraphStart, paragraphEnd);
+                //  console.log(paragraphStart, paragraphEnd);
 
                   // Use a transaction to delete the paragraph
                   dispatch(

@@ -12,7 +12,7 @@ export const URLs = {
   PROMPTS_EXPAND: "/prompts/expand",
   PROMPTS_CHANGE_TONE: "/prompts/change-tone​",
   PROMPTS_CUSTOM_PROMPT: "/prompts/custom-prompt​",
-  PROMPTS_GENERATE_WITH_TEMPLATE: "/prompts/generate-with-template​",
+  PROMPTS_GENERATE_WITH_TEMPLATE: "/prompts/generate-with-template",
   PROMPTS_GENERATE_TEMPLATE: "/prompts/generate-template​",
 
   //Sources
@@ -25,7 +25,9 @@ export const URLs = {
   TEMPLATES_GET: "/templates",
   TEMPLATES_GET_BOOKMARKS: "/templates/bookmarks",
   TEMPLATES_GET_USER_GENERATED: "/templates/user-generated",
-  TEMPLATES_ADD_BOOKMARK: "/templates/add/bookmark​",
+  TEMPLATES_ADD_BOOKMARK: "/templates/add/bookmark",
+  TEMPLATES_DELETE_BOOKMARK: "/templates/remove/bookmark",
+
   TEMPLATES_ADD_USER_GENERATED: "/templates/add/user-template",
 
   //Projects
@@ -37,12 +39,16 @@ export const URLs = {
   PROJECT_ACCEPT_INVITE: "/projects/invite/accept​",
   PROJECT_UPDATE: "/projects/update​​",
   PROJECTS_ADD_TAG: "/documents/add/tag",
+  PROJECTS_GET_TAGS: "/documents/tags",
   PROJECTS_REMOVE_COLLAB: "/projects/remove/collaborator​",
 
   // DOCUMENTS
   DOCUMENTS_GET: "/documents",
+  DOCUMENTS_GET_BY_ID: "/documents/id",
+
   DOCUMENTS_UPDATE: "/documents/update",
   DOCUMENTS_DELETE: "/documents",
   DOCUMENTS_SEARCH: "/documents/search",
-  DOCUMENT_ATTACH_TAG: "/document/tag/document​",
+  DOCUMENT_ATTACH_TAG: '/documents/tag/document',
+  DOCUMENT_REMOVE_TAG: "/document/remove/document-tag",
 };

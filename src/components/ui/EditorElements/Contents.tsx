@@ -5,8 +5,9 @@ import { useEffect, useState } from "react";
 
 export const ToCItem = ({ item, onItemClick }) => {
   return (
-    <div>
+    <div className="cursor-pointer group">
       <a
+        className="text-slate-600 group-hover:text-black text-sm leading-3"
         href={`#${item.id}`}
         onClick={(e) => onItemClick(e, item.class)}
         data-item-index={item.itemIndex}
@@ -28,6 +29,7 @@ export const ToCEmptyState = () => {
 export const ToC = ({ editor }: { editor: Editor }) => {
   const [items, setItems] = useState([]);
   const [show, setShow] = useState(true);
+  const val = editor?.getText();
   useEffect(() => {
     const headings = document.querySelectorAll("h1, h2, h3, h4, h5, h6");
     const classNames = [];
@@ -41,7 +43,7 @@ export const ToC = ({ editor }: { editor: Editor }) => {
       });
     });
     setItems(classNames);
-  }, [editor]);
+  }, [val]);
   if (items.length === 0) {
     return <ToCEmptyState />;
   }
@@ -60,6 +62,10 @@ export const ToC = ({ editor }: { editor: Editor }) => {
       return;
     }
   };
+
+  if (items?.length < 2) {
+    return null;
+  }
   if (!show) {
     return (
       <div className="hidden md:block  top-0  max-h-fit  gap-3 max-w-[12rem]">
@@ -74,6 +80,7 @@ export const ToC = ({ editor }: { editor: Editor }) => {
       </div>
     );
   }
+
   return (
     <div className="hidden md:block  top-0  max-h-fit  gap-3 max-w-[12rem]">
       <div className="bg-white p-2 sticky top-3 space-y-4 border rounded-lg">
@@ -84,9 +91,11 @@ export const ToC = ({ editor }: { editor: Editor }) => {
           <p className=" text-slate-600 text-sm">Contents</p>
           <PanelLeftCloseIcon className=" text-slate-700" size={18} />
         </div>
-        {items.map((item, i) => (
-          <ToCItem onItemClick={onItemClick} key={i} item={item} />
-        ))}
+        <div className=" space-y-2">
+          {items.map((item, i) => (
+            <ToCItem onItemClick={onItemClick} key={i} item={item} />
+          ))}
+        </div>
       </div>
     </div>
   );

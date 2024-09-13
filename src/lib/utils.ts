@@ -42,3 +42,32 @@ export function generateColorsFromInitial(str: string) {
   // Return the corresponding background and text colors or default colors
   return colorMap[initial] || { background: "#FFFFFF", text: "#000000" }; // Default to white bg, black text if letter is not found
 }
+
+export function formatDate(date: Date) {
+  const now = new Date();
+
+  const isSameDay = (d1, d2) =>
+    d1.getFullYear() === d2.getFullYear() &&
+    d1.getMonth() === d2.getMonth() &&
+    d1.getDate() === d2.getDate();
+
+  const isYesterday = (d1, d2) => {
+    const yesterday = new Date(d2);
+    yesterday.setDate(d2.getDate() - 1);
+    return isSameDay(d1, yesterday);
+  };
+
+  const timeString = date.toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
+  if (isSameDay(date, now)) {
+    return timeString; // If it's today, return the time
+  } else if (isYesterday(date, now)) {
+    return `Yesterday at ${timeString}`; // If it's yesterday, return "Yesterday at" and the time
+  } else {
+    const dateString = date.toLocaleDateString(); // For dates older than yesterday, return the full date and time
+    return `${dateString} at ${timeString}`;
+  }
+}

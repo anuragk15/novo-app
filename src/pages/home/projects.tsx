@@ -26,7 +26,7 @@ export default function ProjectsScreen() {
       return res?.data;
     },
   });
-  console.log(projects);
+ // console.log(projects);
   if (isLoading) {
     return <LoadingState />;
   }

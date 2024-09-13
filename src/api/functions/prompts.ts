@@ -55,7 +55,6 @@ export const promptsSimplify = async ({
   return response.data;
 };
 
-
 export const promptsExpand = async ({
   projectId,
   content,
@@ -73,7 +72,6 @@ export const promptsExpand = async ({
     });
   return response.data;
 };
-
 
 export const promptsChangeTone = async ({
   projectId,
@@ -93,7 +91,6 @@ export const promptsChangeTone = async ({
   return response.data;
 };
 
-
 export const promptsCustomPrompt = async ({
   projectId,
   content,
@@ -112,26 +109,29 @@ export const promptsCustomPrompt = async ({
   return response.data;
 };
 
-
 export const promptsGenerateWithTemplate = async ({
   projectId,
-  content,
+  title,
+  templateId,
+  fields,
 }: {
   projectId: string;
-  content: string;
+  title: string;
+  templateId: string;
+  fields: unknown;
 }) => {
   const response = await axiosClient
     .post(URLs.PROMPTS_GENERATE_WITH_TEMPLATE, {
       projectId,
-      content,
+      title,
+      templateId,
+      fields,
     })
     .catch((error) => {
       throw error;
     });
   return response.data;
 };
-
-
 
 export const promptsGenerateTemplate = async ({
   projectId,

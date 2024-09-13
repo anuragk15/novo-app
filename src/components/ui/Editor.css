@@ -54,7 +54,7 @@
   ul,
   ol {
     padding: 0 1rem;
-    margin: 1.25rem 1rem 1.25rem 0.4rem;
+    margin: 1.25rem 1rem 0rem 0.4rem;
 
     list-style: decimal;
 
@@ -144,7 +144,7 @@
   hr {
     border-width: 1px;
     border-top: 1px solid var(--gray-2);
-    margin: 2rem 0;
+    margin: 0rem 0;
   }
   .is-empty {
     position: relative;

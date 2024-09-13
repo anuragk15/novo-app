@@ -23,7 +23,7 @@ export default function CreateAccountScreen() {
     } else {
       mutateAsync().then((user) => {
         setUser(user);
-        navigation("/");
+        navigation("/onboarding=true");
       });
     }
   }, [error]);

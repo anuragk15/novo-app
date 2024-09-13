@@ -55,7 +55,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/project/:id/templates",
+        path: "/project/:projectId/templates",
         element: (
           <div>
             <TemplatesHome />
@@ -63,7 +63,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/project/:id/team",
+        path: "/project/:projectId/team",
         element: (
           <div>
             <TemplatesHome />
