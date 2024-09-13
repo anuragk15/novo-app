@@ -11,9 +11,11 @@ export default function ProjectCard({
   name,
   id,
   createdOn,
+  role,
 }: {
   name: string;
   id: string;
+  role: string;
   createdOn: Date;
 }) {
   const { background, text } = generateColorsFromInitial(name);
@@ -52,7 +54,7 @@ export default function ProjectCard({
         <div className=" ">
           <div className="text-xs text-gray-500">Role</div>
 
-          <div className="text-xs font-sans">Admin</div>
+          <div className="text-xs font-sans">{role}</div>
         </div>
 
         <div className=" ">

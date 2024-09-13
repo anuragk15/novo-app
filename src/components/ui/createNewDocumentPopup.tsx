@@ -8,14 +8,19 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Plus, Search } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TemplateCard from "./templateCard";
 import { cn } from "@/lib/utils";
 import { Input } from "./input";
+import { useQuery } from "@tanstack/react-query";
+import { getTemplates } from "@/api/functions/templates";
+import { Spinner } from "./spinner";
+import { useDebounce } from "@/hooks/useDebounce";
+import DynamicForm from "./formTemplate";
 
-export function CreateNewDocumentPopup() {
+export function CreateNewDocumentPopup({ trigger }: { trigger?: JSX.Element }) {
   const [option, setOption] = useState<null | "TEMPLATE" | "BLANK">(null);
-
+  const [showTitle, setShowTitle] = useState(true);
   return (
     <Dialog
       onOpenChange={(e) => {
@@ -25,7 +30,11 @@ export function CreateNewDocumentPopup() {
       }}
     >
       <DialogTrigger asChild>
-        <Button className=" font-mono">Start typing...</Button>
+        {trigger ? (
+          trigger
+        ) : (
+          <Button className=" font-mono">Start typing...</Button>
+        )}
       </DialogTrigger>
       <DialogContent
         className={cn(
@@ -34,16 +43,19 @@ export function CreateNewDocumentPopup() {
         )}
       >
         <div className="flex flex-col gap-2 flex-1">
-          <DialogHeader>
-            <DialogTitle>Create new document</DialogTitle>
-            <DialogDescription>
-              Choose from a variety of document templates or start from scratch.
-            </DialogDescription>
-          </DialogHeader>
+          {showTitle && (
+            <DialogHeader>
+              <DialogTitle>Create new document</DialogTitle>
+              <DialogDescription>
+                Choose from a variety of document templates or start from
+                scratch.
+              </DialogDescription>
+            </DialogHeader>
+          )}
           {option == "BLANK" ? (
             <CreateFromScratch />
           ) : option == "TEMPLATE" ? (
-            <SelectTemplate />
+            <SelectTemplate toggleHeader={(e: boolean) => setShowTitle(e)} />
           ) : (
             <ChooseOption setOption={setOption} />
           )}
@@ -120,13 +132,56 @@ const CreateFromScratch = () => {
   );
 };
 
-const SelectTemplate = () => {
+const SelectTemplate = ({ toggleHeader }) => {
+  const [searchQuery, setSearchQuery] = useState("");
+  const debouncedInputValue = useDebounce(searchQuery, 500); // 500ms debounce delay
+  const { data, isLoading } = useQuery({
+    queryKey: ["get", "templates"],
+    queryFn: async () => {
+      const res = await getTemplates();
+      return res?.data;
+    },
+    staleTime: Infinity,
+  });
+  const [selectedTemplate, setSelectedTemplate] = useState(null);
+  const [templates, setTemplates] = useState(data);
+  useEffect(() => {
+    if (debouncedInputValue) {
+      setTemplates(
+        data?.filter(
+          (item) =>
+            item.name
+              .toLowerCase()
+              .includes(debouncedInputValue.toLowerCase()) ||
+            item.tags
+              .join(" ")
+              .toLowerCase()
+              .includes(debouncedInputValue.toLowerCase())
+        )
+      );
+    } else if (debouncedInputValue === "") {
+      setTemplates(data);
+    }
+  }, [debouncedInputValue]);
+  if (selectedTemplate)
+    return (
+      <DynamicForm
+        formFields={selectedTemplate?.fields?.data || []}
+        name={selectedTemplate?.name}
+        onBack={() => {
+          toggleHeader(true);
+          setSelectedTemplate(null);
+        }}
+      />
+    );
   return (
     <div>
       <div className="flex justify-between gap-2 py-2 pr-2 items-center">
         <div className="flex border shadow-sm w-full items-center bg-white px-2 rounded-lg">
           <Search className="mr-2 h-4 w-4 shrink-0 opacity-90" />
           <Input
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search templates..."
             className={cn(
               "border-none bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 font-sans "
@@ -134,20 +189,30 @@ const SelectTemplate = () => {
           />
         </div>
       </div>
-      <div className="grid gap-y-2 grid-cols-2 md:grid-cols-3 py-4 overflow-scroll h-[65vh]">
-        <TemplateCard index={1} />
-        <TemplateCard index={2} />
-        <TemplateCard index={3} />
-        <TemplateCard index={4} />
-        <TemplateCard index={5} />
-        <TemplateCard index={6} />
-        <TemplateCard index={4} />
-        <TemplateCard index={5} />
-        <TemplateCard index={6} />
-        <TemplateCard index={4} />
-        <TemplateCard index={5} />
-        <TemplateCard index={6} />
-      </div>
+      {isLoading ? (
+        <Spinner />
+      ) : (
+        <div className="grid gap-y-2 grid-cols-2 md:grid-cols-3 py-4 overflow-scroll h-[65vh]">
+          {data?.length > 0
+            ? templates?.map((item, i) => {
+                return (
+                  <TemplateCard
+                    setSelectedTemplate={(d) => {
+                      toggleHeader(false);
+                      setSelectedTemplate(d);
+                    }}
+                    index={i + 1}
+                    id={item.id}
+                    tags={item.tags}
+                    fields={item.fields}
+                    name={item.name}
+                    description={item.description}
+                  />
+                );
+              })
+            : null}
+        </div>
+      )}
     </div>
   );
 };

@@ -47,13 +47,13 @@ export function FilesTable() {
   return (
     <Table>
       <TableBody>
-        {files.map((invoice) => (
+        {files.map((invoice,id) => (
           <TableRow
             onClick={() => {
               navigate("/document/editor/2");
             }}
             className=" cursor-pointer"
-            key={invoice.name}
+            key={id}
           >
             <TableCell>{invoice.name}</TableCell>
             <TableCell className="font-normal">{invoice.createdBy}</TableCell>

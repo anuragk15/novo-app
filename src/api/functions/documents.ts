@@ -2,15 +2,12 @@ import { axiosClient } from "@/lib/axios";
 import { URLs } from "../URLs";
 
 export const getDocuments = async ({ projectId }: { projectId: string }) => {
-  const response = await axiosClient
-    .get(URLs.DOCUMENTS_GET, {
-      params: {
-        projectId,
-      },
-    })
-    .catch((error) => {
-      throw error;
-    });
+  const response = await axiosClient.get(URLs.DOCUMENTS_GET, {
+    params: {
+      projectId,
+    },
+  });
+
   return response.data;
 };
 

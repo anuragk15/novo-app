@@ -1,19 +1,21 @@
-import "./App.css";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import DashboardHome from "./pages/home/dashboard";
-import "non.geist";
 import { Toaster } from "@/components/ui/toaster";
 import { ClerkProvider } from "@clerk/clerk-react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import "non.geist";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import "./App.css";
+import DashboardHome from "./pages/home/dashboard";
 
 // For Geist Mono
 import "non.geist/mono";
-import SourceHome from "./pages/home/source";
-import TemplatesHome from "./pages/home/template";
-import DocumentEditorScreen from "./pages/editor/document";
+import AuthLayout from "./layouts/auth";
 import SignIn from "./pages/auth/signIn";
 import SignUpPage from "./pages/auth/signUp";
-import AuthLayout from "./layouts/auth";
+import DocumentEditorScreen from "./pages/editor/document";
 import ProjectsScreen from "./pages/home/projects";
+import SourceHome from "./pages/home/source";
+import TemplatesHome from "./pages/home/template";
+import CreateAccountScreen from "./pages/auth/createAccount";
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
@@ -30,17 +32,22 @@ const router = createBrowserRouter([
         path: "/",
         element: <ProjectsScreen />,
       },
+      {
+        path: "/create-account",
+        element: <CreateAccountScreen />,
+      },
 
       {
-        path: "/project/:id",
+        path: "/project/:projectId",
         element: (
           <div>
             <DashboardHome />
           </div>
         ),
       },
+
       {
-        path: "/project/:id/sources",
+        path: "/project/:projectId/sources",
         element: (
           <div>
             <SourceHome />
@@ -65,7 +72,7 @@ const router = createBrowserRouter([
       },
 
       {
-        path: "/document/editor/:id",
+        path: "/document/editor/:projectId/:id",
         element: (
           <div>
             <DocumentEditorScreen />
@@ -91,11 +98,15 @@ const router = createBrowserRouter([
     ),
   },
 ]);
+const queryClient = new QueryClient();
+
 function App() {
   return (
     <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
-      <Toaster />
-      <RouterProvider router={router} />
+      <QueryClientProvider client={queryClient}>
+        <Toaster />
+        <RouterProvider router={router} />
+      </QueryClientProvider>
     </ClerkProvider>
   );
 }
