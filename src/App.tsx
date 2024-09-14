@@ -9,13 +9,16 @@ import DashboardHome from "./pages/home/dashboard";
 // For Geist Mono
 import "non.geist/mono";
 import AuthLayout from "./layouts/auth";
+import CreateAccountScreen from "./pages/auth/createAccount";
 import SignIn from "./pages/auth/signIn";
 import SignUpPage from "./pages/auth/signUp";
 import DocumentEditorScreen from "./pages/editor/document";
 import ProjectsScreen from "./pages/home/projects";
 import SourceHome from "./pages/home/source";
 import TemplatesHome from "./pages/home/template";
-import CreateAccountScreen from "./pages/auth/createAccount";
+import ErrorScreen from "./pages/misc/Error";
+import TeamsScreen from "./pages/home/teams";
+import SettingsOverviewScreen from "./pages/home/settings/overview";
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
@@ -26,7 +29,7 @@ if (!PUBLISHABLE_KEY) {
 const router = createBrowserRouter([
   {
     element: <AuthLayout />,
-    errorElement: <div>Not Found</div>,
+    errorElement: <ErrorScreen />,
     children: [
       {
         path: "/",
@@ -66,11 +69,18 @@ const router = createBrowserRouter([
         path: "/project/:projectId/team",
         element: (
           <div>
-            <TemplatesHome />
+            <TeamsScreen />
           </div>
         ),
       },
-
+      {
+        path: "/project/:projectId/settings",
+        element: (
+          <div>
+            <SettingsOverviewScreen />
+          </div>
+        ),
+      },
       {
         path: "/document/editor/:projectId/:id",
         element: (

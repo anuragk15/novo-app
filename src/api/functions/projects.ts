@@ -21,6 +21,18 @@ export const deleteProject = async ({ projectId }: { projectId: string }) => {
   return response.data;
 };
 
+export const getProjectById = async ({ projectId }: { projectId: string }) => {
+  const response = await axiosClient
+    .get(URLs.PROJECT_BY_ID, {
+      params: {
+        projectId,
+      },
+    })
+    .catch((error) => {
+      throw error;
+    });
+  return response.data;
+}
 export const getProjectCollaborators = async ({
   projectId,
 }: {

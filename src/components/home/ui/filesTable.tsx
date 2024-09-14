@@ -104,61 +104,66 @@ export function FilesTable({ files }) {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {files.map((invoice, index) => (
-            <TableRow
-              className=" cursor-pointer border-b border-slate-200  hover:bg-slate-100"
-              key={index}
-            >
-              <TableCell
-                onClick={() => {
-                  navigate("/document/editor/" + projectId + "/" + invoice.id);
-                }}
+          {files.map((singleDocument, index) => {
+            return (
+              <TableRow
+                className=" cursor-pointer border-b border-slate-200  hover:bg-slate-100"
+                key={index}
               >
-                {invoice.title}
-              </TableCell>
-              <TableCell className="font-normal">
-                {isLoading ? (
-                  <div>Loading tags...</div>
-                ) : (
-                  <TagsDropdown
-                    projectId={projectId}
-                    addNewTag={setIsOpen}
-                    tags={tags}
-                    documentId={invoice.id}
-                  />
-                )}
-              </TableCell>
-              <TableCell className="font-light text-right">
-                {formatDate(new Date(invoice.updatedAt))}
-              </TableCell>
-              <TableCell>
-                <DropdownMenu>
-                  <DropdownMenuTrigger className="p-2">
-                    <EllipsisVertical size={16} />
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent>
-                    <DropdownMenuItem
-                      onClick={() => {
-                        navigator.clipboard.writeText(
-                          `${window.location.origin}/document/editor/${projectId}/${invoice.id}`
-                        );
-                        toast({
-                          title: "✨  Link copied!",
-                          description:
-                            "You’ve got the magic link—now go inspire some readers!",
-                        });
-                      }}
-                    >
-                      Share
-                    </DropdownMenuItem>
-                    <DropdownMenuItem className="text-red-600">
-                      Delete
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </TableCell>
-            </TableRow>
-          ))}
+                <TableCell
+                  onClick={() => {
+                    navigate(
+                      "/document/editor/" + projectId + "/" + singleDocument.id
+                    );
+                  }}
+                >
+                  {singleDocument.title}
+                </TableCell>
+                <TableCell className="font-normal">
+                  {isLoading ? (
+                    <div>Loading tags...</div>
+                  ) : (
+                    <TagsDropdown
+                      projectId={projectId}
+                      addNewTag={setIsOpen}
+                      tags={tags}
+                      appliedTags={singleDocument.tags}
+                      documentId={singleDocument.id}
+                    />
+                  )}
+                </TableCell>
+                <TableCell className="font-light text-right">
+                  {formatDate(new Date(singleDocument.updatedAt))}
+                </TableCell>
+                <TableCell>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger className="p-2">
+                      <EllipsisVertical size={16} />
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      <DropdownMenuItem
+                        onClick={() => {
+                          navigator.clipboard.writeText(
+                            `${window.location.origin}/document/editor/${projectId}/${singleDocument.id}`
+                          );
+                          toast({
+                            title: "✨  Link copied!",
+                            description:
+                              "You’ve got the magic link—now go inspire some readers!",
+                          });
+                        }}
+                      >
+                        Share
+                      </DropdownMenuItem>
+                      <DropdownMenuItem className="text-red-600">
+                        Delete
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </TableCell>
+              </TableRow>
+            );
+          })}
         </TableBody>
       </Table>
     </>

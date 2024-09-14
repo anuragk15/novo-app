@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Bookmark } from "lucide-react";
 import { useParams } from "react-router-dom";
+import { useToast } from "./use-toast";
 
 export default function TemplateCard({
   index,
@@ -19,6 +20,7 @@ export default function TemplateCard({
     mutationKey: ["create", "bookmark"],
     mutationFn: addBookmark,
   });
+  const { toast } = useToast();
 
   const { mutateAsync: deleteBookmarkFn } = useMutation({
     mutationKey: ["delete", "bookmark"],
@@ -38,11 +40,25 @@ export default function TemplateCard({
         onClick={() => {
           if (bookmarkId == null) {
             mutateAsync({ templateId: id, projectId }).then(() => {
+              toast({
+                title: "📌 Bookmark added!",
+                description: "You’ve bookmarked this template.",
+              });
               client.invalidateQueries({ queryKey: ["get", "templates"] });
+              client.invalidateQueries({
+                queryKey: ["get", "bookmarked", "templates"],
+              });
             });
           } else {
+            toast({
+              title: "📌 Bookmark removed!",
+              description: "You’ve removed this template from bookmarks.",
+            });
             deleteBookmarkFn({ bookmarkId }).then(() => {
               client.invalidateQueries({ queryKey: ["get", "templates"] });
+              client.invalidateQueries({
+                queryKey: ["get", "bookmarked", "templates"],
+              });
             });
           }
         }}
@@ -57,8 +73,6 @@ export default function TemplateCard({
 
       <div
         onClick={() => {
-          console.log(id);
-          console.log(fields);
           setSelectedTemplate({ id, fields, name, description });
         }}
         className={cn(

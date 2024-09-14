@@ -10,11 +10,10 @@ export const URLs = {
   PROMPTS_FIX_GRAMMAR: "/prompts/fix-grammar",
   PROMPTS_SIMPLIFY: "/prompts/simplify",
   PROMPTS_EXPAND: "/prompts/expand",
-  PROMPTS_CHANGE_TONE: "/prompts/change-tone​",
-  PROMPTS_CUSTOM_PROMPT: "/prompts/custom-prompt​",
+  PROMPTS_CHANGE_TONE: "/prompts/change-tone",
+  PROMPTS_CUSTOM_PROMPT: "/prompts/custom-prompt",
   PROMPTS_GENERATE_WITH_TEMPLATE: "/prompts/generate-with-template",
-  PROMPTS_GENERATE_TEMPLATE: "/prompts/generate-template​",
-
+  PROMPTS_GENERATE_TEMPLATE: "/prompts/generate-template",
   //Sources
   SOURCES_GET: "/sources",
   SOURCES_ADD: "/sources/add",
@@ -33,14 +32,15 @@ export const URLs = {
   //Projects
   PROJECTS_GET: "/projects",
   PROJECTS_DELETE: "/projects",
-  PROJECTS_COLLABS: "/projects/collaborators​",
-  PROJECTS_INVITE_COLLAB: "/projects/invite/collaborator​",
-  PROJECTS_COLLAB_CHANGE_ACCESS: "/projects/change/collaborator/access​",
-  PROJECT_ACCEPT_INVITE: "/projects/invite/accept​",
-  PROJECT_UPDATE: "/projects/update​​",
+  PROJECTS_COLLABS: "/projects/collaborators",
+  PROJECT_BY_ID: "/projects/id",
+  PROJECTS_INVITE_COLLAB: "/projects/invite/collaborator",
+  PROJECTS_COLLAB_CHANGE_ACCESS: "/projects/change/collaborator/access",
+  PROJECT_ACCEPT_INVITE: "/projects/invite/accept",
+  PROJECT_UPDATE: "/projects/update",
   PROJECTS_ADD_TAG: "/documents/add/tag",
   PROJECTS_GET_TAGS: "/documents/tags",
-  PROJECTS_REMOVE_COLLAB: "/projects/remove/collaborator​",
+  PROJECTS_REMOVE_COLLAB: "/projects/remove/collaborator",
 
   // DOCUMENTS
   DOCUMENTS_GET: "/documents",
@@ -49,6 +49,6 @@ export const URLs = {
   DOCUMENTS_UPDATE: "/documents/update",
   DOCUMENTS_DELETE: "/documents",
   DOCUMENTS_SEARCH: "/documents/search",
-  DOCUMENT_ATTACH_TAG: '/documents/tag/document',
-  DOCUMENT_REMOVE_TAG: "/document/remove/document-tag",
+  DOCUMENT_ATTACH_TAG: "/documents/tag/document",
+  DOCUMENT_REMOVE_TAG: "/documents/remove/document-tag",
 };

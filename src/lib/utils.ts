@@ -5,6 +5,21 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+export function daysBetweenDates(date1: Date, date2: Date) {
+  // Parse the dates
+  const firstDate = new Date(date1);
+  const secondDate = new Date(date2);
+
+  // Calculate the difference in time (in milliseconds)
+  //@ts-ignore
+  const timeDifference = Math.abs(secondDate - firstDate);
+
+  // Convert the difference from milliseconds to days
+  const daysDifference = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+
+  return daysDifference;
+}
+
 export function generateColorsFromInitial(str: string) {
   // Define a map for each letter with a background and corresponding text color
   const colorMap = {

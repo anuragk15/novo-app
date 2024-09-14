@@ -1,15 +1,15 @@
-import { BadgeInfo, Info } from "lucide-react";
-import { Button } from "../ui/button";
-import SourceSearch from "./ui/sourceSearch";
-import { SourcesTable } from "./ui/sourcesTable";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { BadgeInfo } from "lucide-react";
+import { Button } from "../ui/button";
+import SourceSearch from "./ui/sourceSearch";
+import { SourcesTable } from "./ui/sourcesTable";
 
-export default function SourcesScreen() {
+export default function SourcesScreen({ data }) {
   return (
     <div className=" flex-col w-[85vw] pl-2 pb-2 overflow-scroll h-screen bg-slate-100">
       <SourceSearch />
@@ -20,14 +20,15 @@ export default function SourcesScreen() {
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger>
-                  <BadgeInfo  size={16}/>
+                  <BadgeInfo size={16} />
                 </TooltipTrigger>
                 <TooltipContent className="md:max-w-[60vw]">
                   <p className="text-slate-500">
                     By uploading your unique sources, you provide the AI with
                     the specific context it needs to deliver smarter, more
                     personalized suggestions, fine-tuned to your individual
-                    needs. You can add website or Youtube links, and even upload files!
+                    needs. You can add website or Youtube links, and even upload
+                    files!
                   </p>
                 </TooltipContent>
               </Tooltip>
@@ -35,8 +36,20 @@ export default function SourcesScreen() {
           </div>
           <Button className="font-mono">Add source</Button>
         </div>
-
-        <SourcesTable />
+        {data?.length > 0 ? (
+          <SourcesTable sources={data} />
+        ) : (
+          <div className="flex h-[70vh] w-full flex-col  justify-center items-center ">
+            <img
+              src={"/EmptyState.svg"}
+              style={{
+                width: "15rem",
+                height: "15rem",
+              }}
+            />
+            <p className=" text-center font-sans text-2xl">No sources found</p>
+          </div>
+        )}
       </div>
     </div>
   );

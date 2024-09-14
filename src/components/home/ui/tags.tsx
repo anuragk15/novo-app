@@ -24,10 +24,12 @@ export default function TagsDropdown({
   addNewTag,
   documentId,
   projectId,
+  appliedTags,
   tags,
 }) {
-  const [selectedItems, setSelectedItems] = React.useState<any>([]);
-
+  const [selectedItems, setSelectedItems] = React.useState<any>(
+    appliedTags ?? []
+  );
   const handleItemToggle = async (itemId: string) => {
     const itemsArray = [...selectedItems];
     const itemIndex = itemsArray.findIndex((item) => item.id === itemId);

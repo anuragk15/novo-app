@@ -70,10 +70,10 @@ const ChooseOption = ({ setOption }) => {
   const [selected, setSelected] = useState<"BLANK" | "TEMPLATE" | null>(null);
   return (
     <div className="flex gap-4 flex-col flex-1 items-center w-full h-full justify-center">
-      <div className="flex  md:flex-row  flex-col gap-4 flex-1 items-center w-full h-full justify-center">
+      <div className="flex  md:flex-row   flex-col gap-4 flex-1 items-center w-full h-full justify-center">
         <div
           className={cn(
-            "group cursor-pointer hover:border-slate-700 hover:border-solid  md:min-h-60 md:w-[20vw] p-2 md:p-10 rounded-xl border-dashed border-2 flex gap-4 flex-col justify-center ",
+            "group cursor-pointer w-full hover:bg-slate-50 hover:border-solid h-full  flex-1  md:min-h-60 md:w-[20vw] p-2 md:p-10 rounded-xl border-dashed border-2 flex gap-4 flex-col justify-center ",
             selected == "BLANK" && "border-slate-800 border-solid"
           )}
           onClick={() => setSelected("BLANK")}
@@ -94,7 +94,7 @@ const ChooseOption = ({ setOption }) => {
         </div>
         <div
           className={cn(
-            "group cursor-pointer hover:border-slate-700 hover:border-solid  md:min-h-60 md:w-[20vw] p-2 md:p-10 rounded-xl border-dashed border-2 flex gap-4 flex-col justify-center ",
+            "group cursor-pointer w-full hover:bg-slate-50  hover:border-solid h-full flex-1   md:min-h-60 md:w-[20vw] p-2 md:p-10 rounded-xl border-dashed border-2 flex gap-4 flex-col justify-center ",
             selected == "TEMPLATE" && "border-slate-800 border-solid"
           )}
           onClick={() => setSelected("TEMPLATE")}

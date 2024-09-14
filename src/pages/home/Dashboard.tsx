@@ -15,19 +15,17 @@ export default function DashboardHome() {
     },
   });
 
-  console.log(data);
-  if (isLoading) {
-    return (
-      <div className="flex flex-col w-[85vw] justify-center  pl-2 pb-2 overflow-scroll h-screen bg-white">
-        <Spinner />
-      </div>
-    );
-  }
   return (
     <div className="flex  bg-slate-100">
       <Sidebar projectId={projectId} />
 
-      <HomeScreen data={data} />
+      {isLoading ? (
+        <div className="flex flex-col w-[85vw] justify-center  pl-2 pb-2 overflow-scroll h-screen bg-white">
+          <Spinner />
+        </div>
+      ) : (
+        <HomeScreen data={data} />
+      )}
     </div>
   );
 }

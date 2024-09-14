@@ -25,6 +25,7 @@ export default function ProjectsScreen() {
       // const res = await getProjects();
       return res?.data;
     },
+    staleTime: Infinity,
   });
  // console.log(projects);
   if (isLoading) {
