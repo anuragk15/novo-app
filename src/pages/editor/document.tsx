@@ -10,14 +10,14 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { useEditor } from "@tiptap/react";
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
-
-// import { Spinner } from "@/components/ui/spinner";
-
-// const MemorizedToC = memo(ToC);
+import Image from "@tiptap/extension-image";
+import { Plugin } from "@tiptap/pm/state";
+import { SlashCommandExtension } from "@/components/ui/EditorExtensions/SlashCommand";
 
 export default function DocumentEditorScreen() {
   const { projectId, id } = useParams();
   const { toast } = useToast();
+  const [docTitle, setTitle] = useState("");
   const { data, isLoading, error, isError } = useQuery({
     queryKey: ["get", "document", id],
     queryFn: async () => {
@@ -59,19 +59,42 @@ export default function DocumentEditorScreen() {
   const editor = useEditor({
     extensions: [
       ...myExtensions,
-      // SlashCommandExtension.configure({
-      //   onSlashEnter: () => {
-      //     // Logic to show your input field
-      //     // alert("Slash command activated!");
-      //     const { from, to } = editor.state.selection;
-      //     console.log(from, to);
-      //     editor.chain().focus().setAISuggestion({
-      //       previousText: "This is a previous text",
-      //       newText: "this is a new text",
-      //     });
-      //   },
-      // }),
+      Image.extend({
+        addProseMirrorPlugins() {
+          const plugin = new Plugin({
+            props: {
+              handleDOMEvents: {
+                paste(view, event) {
+                  const url = event.clipboardData.getData("text/plain");
+                  const isImage =
+                    /(https?:\/\/.*\.(?:png|jpg|jpeg|gif|bmp|webp)(\?.*)?$)/i.test(
+                      url
+                    );
+
+                  if (isImage) {
+                    editor.chain().focus().setImage({ src: url }).run();
+                  }
+                },
+              },
+            },
+          });
+          return [plugin];
+        },
+      }),
+      SlashCommandExtension.configure({
+        onSlashEnter: () => {
+          // Logic to show your input field
+          alert("Slash command activated!");
+          const { from, to } = editor.state.selection;
+          console.log(from, to);
+          editor.chain().focus().setAISuggestion({
+            previousText: "This is a previous text",
+            newText: "this is a new text",
+          });
+        },
+      }),
     ],
+
     onUpdate: ({ editor }) => {
       setIsDirty(true);
 
@@ -85,7 +108,13 @@ export default function DocumentEditorScreen() {
         }
         if (title !== "") {
           setIsDirty(false);
+          if (title != docTitle) setTitle(title);
           mutateAsync({ content: editor.getHTML(), title });
+        } else {
+          toast({
+            title: "Title is required",
+            description: "Please add a title to save the document",
+          });
         }
       }, 1500);
     },
@@ -128,18 +157,18 @@ export default function DocumentEditorScreen() {
     //console.log(data);
     if (data) {
       editor.commands.setContent(data?.content?.content);
+      setTitle(data?.content?.title);
     }
   }, [data, editor]);
 
   if (isLoading) {
     return <LoadingState />;
   }
-
   return (
     <div className=" bg-slate-50">
       <div className=" flex flex-col  md:px-2">
         <div className="p-0 z-[10000]  ">
-          <DocNavbar saving={isPending} editor={editor} />
+          <DocNavbar name={docTitle} saving={isPending} editor={editor} />
         </div>
 
         <div className="flex gap-2 max-w-[1280px]  mx-auto">

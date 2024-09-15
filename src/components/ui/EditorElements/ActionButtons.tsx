@@ -15,6 +15,7 @@ import {
   ArrowLeft,
   ArrowUp,
   Heading,
+  Image,
   List,
   ListOrdered,
   Quote,
@@ -26,16 +27,25 @@ import {
 import { Separator } from "../separator";
 import { Input } from "../input";
 import { useClickOutside } from "@/hooks/useClickOutside";
+import { useToast } from "../use-toast";
+import { uploadImageToServer } from "@/api/functions/assets";
 
-export function ActionButtons({ editor }: { editor: Editor }) {
+export function ActionButtons({
+  editor,
+  projectId,
+}: {
+  editor: Editor;
+  projectId: string;
+}) {
   const [isOpen, setIsOpen] = useState(false);
-
+  const imageInputRef = useRef<HTMLInputElement>(null);
   const [isAiOpen, setIsAiOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
-
+  const { toast } = useToast();
   useClickOutside(containerRef, () => {
     setIsOpen(false);
   });
+
   function Item({ action, label }: { action: () => void; label: string }) {
     return (
       <div
@@ -143,6 +153,60 @@ export function ActionButtons({ editor }: { editor: Editor }) {
             onClick={() => editor.chain().focus().toggleBlockquote().run()}
           >
             <Quote size={18} color="white" />
+          </ToggleGroupItem>
+          <ToggleGroupItem
+            value="blockQuote"
+            className="hover:bg-slate-900 data-[state=on]:bg-slate-800"
+            onClick={() => {
+              imageInputRef.current?.click();
+            }}
+          >
+            <Image size={18} color="white" />
+            <input
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (!file) return;
+                if (file.size > 1024 * 1024 * 10) {
+                  toast({
+                    title: "Image too large",
+                    description: "Please upload an image less than 10mb",
+                    variant: "destructive",
+                  });
+                  return;
+                }
+                const reader = new FileReader();
+                reader.onload = async (e) => {
+                  const url = e.target?.result;
+                  // get position of the editor here
+                  // const { state } = editor;
+                  // const { from } = state;
+                  editor
+                    .chain()
+                    .focus()
+                    .setImage({ src: url as string })
+                    .run();
+
+                  await uploadImageToServer({
+                    projectId,
+                    file: file,
+                  }).then((r) => {
+                    if (r?.data?.url) {
+                      editor
+                        .chain()
+                        .focus()
+                        .setImage({ src: r.data.url })
+                        .run();
+                    }
+                  });
+                };
+
+                reader.readAsDataURL(file);
+              }}
+              ref={imageInputRef}
+              className="hidden"
+              type="file"
+              accept="image/*"
+            />
           </ToggleGroupItem>
           <ToggleGroupItem
             className="hover:bg-slate-900 data-[state=on]:bg-slate-800"

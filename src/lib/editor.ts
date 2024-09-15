@@ -18,6 +18,7 @@ import Highlight from "@tiptap/extension-highlight";
 import { AiAcceptExtension } from "@/components/ui/EditorExtensions/AiAcceptExtension/Extension";
 import { ColorHighlighter } from "@/components/ui/EditorExtensions/ColorHighlighter";
 import { SmilieReplacer } from "@/components/ui/EditorExtensions/SmilieReplacer";
+import ImageResizer from "tiptap-extension-resize-image";
 
 export const myExtensions = [
   StarterKit,
@@ -26,7 +27,7 @@ export const myExtensions = [
   ColorHighlighter,
   Paragraph,
   AiAcceptExtension,
-
+  ImageResizer,
   Document.extend({
     content: "heading block*",
   }),
@@ -39,6 +40,7 @@ export const myExtensions = [
       }
     },
   }),
+
   TextAlign.configure({
     types: ["heading", "paragraph"],
   }),

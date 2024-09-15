@@ -131,7 +131,10 @@
       padding: 0;
     }
   }
-
+  img {
+    object-fit:scale-down;
+    max-width: fit-content;
+  }
   blockquote {
     border-left: 3px solid rgb(232, 232, 232);
     margin: 1.5rem 0;

@@ -44,13 +44,13 @@ export default function HomeScreen({ data }) {
             <p className="text-2xl font-sans font-extralight ">Recent</p>
           </div>
         ) : null}
-        {data?.length > 4 ? (
+        {/* {data?.length > 4 ? (
           <div className="flex flex-wrap gap-4">
             <RecentFileItem />
             <RecentFileItem />
             <RecentFileItem />
           </div>
-        ) : null}
+        ) : null} */}
         <div className="flex w-full items-center  justify-between ">
           <p className="text-2xl font-sans font-extralight">All files</p>
           <CreateNewDocumentPopup

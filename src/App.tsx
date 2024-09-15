@@ -14,11 +14,11 @@ import SignIn from "./pages/auth/signIn";
 import SignUpPage from "./pages/auth/signUp";
 import DocumentEditorScreen from "./pages/editor/document";
 import ProjectsScreen from "./pages/home/projects";
+import SettingsOverviewScreen from "./pages/home/settings/overview";
 import SourceHome from "./pages/home/source";
+import TeamsScreen from "./pages/home/teams";
 import TemplatesHome from "./pages/home/template";
 import ErrorScreen from "./pages/misc/Error";
-import TeamsScreen from "./pages/home/teams";
-import SettingsOverviewScreen from "./pages/home/settings/overview";
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
@@ -81,6 +81,7 @@ const router = createBrowserRouter([
           </div>
         ),
       },
+
       {
         path: "/document/editor/:projectId/:id",
         element: (
@@ -91,6 +92,7 @@ const router = createBrowserRouter([
       },
     ],
   },
+
   {
     path: "/sign-in",
     element: (

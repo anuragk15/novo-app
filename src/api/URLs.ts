@@ -51,4 +51,5 @@ export const URLs = {
   DOCUMENTS_SEARCH: "/documents/search",
   DOCUMENT_ATTACH_TAG: "/documents/tag/document",
   DOCUMENT_REMOVE_TAG: "/documents/remove/document-tag",
+  ASSETS_UPLOAD: "/assets/upload",
 };

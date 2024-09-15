@@ -5,8 +5,10 @@ import "./Editor.css";
 import { ActionButtons } from "./EditorElements/ActionButtons";
 
 import { MenuBar } from "./EditorElements/BubbleMenu";
+import { useParams } from "react-router-dom";
 
 export default function EditorFn({ editor }: { editor: Editor }) {
+  const {projectId} = useParams();
   return (
     <div className="bg-white ">
       <EditorContent
@@ -39,7 +41,7 @@ export default function EditorFn({ editor }: { editor: Editor }) {
       >
         <MenuBar editor={editor} />
       </BubbleMenu>
-      <ActionButtons editor={editor} />
+      <ActionButtons editor={editor} projectId={projectId} />
     </div>
   );
 }
