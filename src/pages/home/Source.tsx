@@ -14,7 +14,6 @@ export default function SourceHome() {
       return res?.data;
     },
   });
-
   return (
     <div className="flex  bg-slate-100">
       <Sidebar projectId={projectId} />

@@ -32,7 +32,7 @@ export const getProjectById = async ({ projectId }: { projectId: string }) => {
       throw error;
     });
   return response.data;
-}
+};
 export const getProjectCollaborators = async ({
   projectId,
 }: {
@@ -126,20 +126,14 @@ export const acceptInvite = async ({ inviteId }: { inviteId: string }) => {
 export const updateProject = async ({
   projectId,
   name,
-  description,
-  tags,
 }: {
   projectId: string;
   name: string;
-  description: string;
-  tags: string;
 }) => {
   const response = await axiosClient
     .post(URLs.PROJECT_UPDATE, {
       projectId,
       name,
-      description,
-      tags,
     })
     .catch((error) => {
       throw error;

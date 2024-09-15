@@ -30,11 +30,13 @@ import { EllipsisVertical, Tags } from "lucide-react";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import TagsDropdown from "./tags";
+import { ConfirmDelete } from "@/components/ui/confirmDelete";
 
 export function FilesTable({ files }) {
   const { toast } = useToast();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const [showDelete, setShowDelete] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [tagName, setTagName] = useState("");
   const { projectId } = useParams();
@@ -52,8 +54,17 @@ export function FilesTable({ files }) {
       return res?.data;
     },
   });
+
   return (
     <>
+      <ConfirmDelete
+        setOpen={setShowDelete}
+        open={showDelete}
+        message={
+          "This action cannot be undone. This will delete the document permanently."
+        }
+        onConfirm={() => {}}
+      />
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogContent className="space-y-4">
           <DialogHeader>
@@ -155,7 +166,12 @@ export function FilesTable({ files }) {
                       >
                         Share
                       </DropdownMenuItem>
-                      <DropdownMenuItem className="text-red-600">
+                      <DropdownMenuItem
+                        onClick={() => {
+                          setShowDelete(true);
+                        }}
+                        className="text-red-600"
+                      >
                         Delete
                       </DropdownMenuItem>
                     </DropdownMenuContent>

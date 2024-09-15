@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -11,13 +12,32 @@ export function daysBetweenDates(date1: Date, date2: Date) {
   const secondDate = new Date(date2);
 
   // Calculate the difference in time (in milliseconds)
-  //@ts-ignore
+  //@ts-expect-error
   const timeDifference = Math.abs(secondDate - firstDate);
 
   // Convert the difference from milliseconds to days
   const daysDifference = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
 
   return daysDifference;
+}
+export function isFileNameOrUrl(inputString:string) {
+  // Regular expression to check if the string is a URL
+  const urlPattern = new RegExp(
+    "^(https?:\\/\\/)?" + // protocol (http or https)
+      "((([a-zA-Z0-9$_.+!*'(),-]+)@)?([a-zA-Z0-9.-]+)\\.([a-zA-Z]{2,}))" + // domain name and extension
+      "(\\/[-a-zA-Z0-9@:%_+.~#?&//=]*)?$" // path and query string
+  );
+
+  // Regular expression to check if the string is a file name
+  const filePattern = /^[a-zA-Z0-9-_]+\.(md|json|txt|docx|pdf|jpg|png|gif)$/i;
+
+  if (urlPattern.test(inputString)) {
+    return "URL";
+  } else if (filePattern.test(inputString)) {
+    return "File";
+  } else {
+    return "Neither";
+  }
 }
 
 export function generateColorsFromInitial(str: string) {

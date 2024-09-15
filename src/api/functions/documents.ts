@@ -24,7 +24,7 @@ export const getDocumentById = async ({
       documentId,
     },
   });
-
+  //console.log(response);
   return response.data;
 };
 

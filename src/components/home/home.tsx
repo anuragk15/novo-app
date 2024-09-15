@@ -53,25 +53,15 @@ export default function HomeScreen({ data }) {
         ) : null}
         <div className="flex w-full items-center  justify-between ">
           <p className="text-2xl font-sans font-extralight">All files</p>
-          <Button
-            onClick={async () => {
-              // const res = await axiosClient.get(
-              //   "http://localhost:3000/sources",
-              //   {
-              //     params: {
-              //       projectId: "2423",
-              //     },
-              //   }
-              // );
-              // console.log(res);
-            }}
-            className="flex gap-1 items-center"
-            variant="outline"
-          >
-            <Sparkles size={14} /> Create
-          </Button>
+          <CreateNewDocumentPopup
+            trigger={
+              <Button className="flex gap-1 items-center" variant="outline">
+                <Sparkles size={14} /> Create
+              </Button>
+            }
+          />
         </div>
-        <FilesTable files={data}/>
+        <FilesTable files={data} />
       </div>
     </div>
   );

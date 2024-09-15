@@ -6,6 +6,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { generateColorsFromInitial } from "@/lib/utils";
 import { EllipsisVertical, FolderClosed } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export default function ProjectCard({
   name,
@@ -18,6 +19,7 @@ export default function ProjectCard({
   role: string;
   createdOn: Date;
 }) {
+  const navigate = useNavigate();
   const { background, text } = generateColorsFromInitial(name);
   return (
     <a
@@ -36,11 +38,28 @@ export default function ProjectCard({
             <EllipsisVertical size={20} />
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuItem className="cursor-pointer">
+            <DropdownMenuItem
+              onClick={() => {
+                navigate(`/project/${id}/settings`);
+              }}
+              className="cursor-pointer"
+            >
               Settings
             </DropdownMenuItem>
-            <DropdownMenuItem className="cursor-pointer">Team</DropdownMenuItem>
-            <DropdownMenuItem className="cursor-pointer">
+            <DropdownMenuItem
+              onClick={() => {
+                navigate(`/project/${id}/team`);
+              }}
+              className="cursor-pointer"
+            >
+              Team
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => {
+                navigate(`/project/${id}/settings/billing`);
+              }}
+              className="cursor-pointer"
+            >
               Subscription
             </DropdownMenuItem>
             <DropdownMenuItem className="text-red-500 cursor-pointer focus:bg-red-200 focus:text-red-600">

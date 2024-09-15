@@ -1,15 +1,51 @@
-import { Clipboard } from "lucide-react";
-import { useToast } from "../ui/use-toast";
-import { Separator } from "../ui/separator";
 import { daysBetweenDates } from "@/lib/utils";
+import { Clipboard } from "lucide-react";
+import { Input } from "../ui/input";
+import { Separator } from "../ui/separator";
+import { useToast } from "../ui/use-toast";
+import { useState } from "react";
+import { Button } from "../ui/button";
+import { updateProject } from "@/api/functions/projects";
 
 export default function SettingsOverview({ data }) {
   const { toast } = useToast();
-
+  const [projectName, setProjectName] = useState(data?.project.name);
   const endDate = data?.usage?.endDate
     ? new Date(data?.usage?.endDate)
     : new Date();
-
+  async function updateName() {
+    if (projectName == data?.project?.name) return;
+    if (projectName == "") {
+      toast({
+        title: "Project name cannot be empty",
+        description: "Please enter a valid project name",
+        variant: "destructive",
+      });
+      return;
+    }
+    toast({
+      title: "Updating project name",
+      description: "Please wait while we update project name",
+    });
+    await updateProject({
+      projectId: data.project.id,
+      name: projectName,
+    }).then((r) => {
+      console.log(r);
+      if (r?.data) {
+        toast({
+          title: "Project name updated",
+          description: "Project name updated successfully",
+        });
+      } else {
+        toast({
+          title: "Failed to update project name",
+          description: "Failed to update project name",
+          variant: "destructive",
+        });
+      }
+    });
+  }
   return (
     <div className="flex justify-center flex-col w-[85vw]  pl-2 pb-2 overflow-scroll h-screen bg-slate-100">
       <div className="flex flex-col gap-4 items-start border shadow-sm rounded-lg mr-2 p-8 min-h-[98vh]  bg-white">
@@ -23,13 +59,16 @@ export default function SettingsOverview({ data }) {
             <div className="flex flex-col gap-4 max-w-fit ">
               <div className="flex flex-col gap-2">
                 <label className="text-slate-500">Project name</label>
-                <p className="text-lg p-2 bg-slate-100  border rounded-lg">
-                  {data.project.name}
-                </p>
+                <Input
+                  placeholder="Internal docs"
+                  value={projectName}
+                  onChange={(e) => setProjectName(e.target.value)}
+                  className="text-lg p-2 bg-slate-100  border rounded-lg"
+                />
               </div>
               <div className="flex flex-col gap-2">
                 <label className="text-slate-500">Project ID</label>
-                <p className="text-lg p-2 flex items-center text-slate-600 bg-slate-100 border rounded-lg">
+                <p className="text-md p-2 flex items-center text-slate-600 bg-slate-100 border rounded-lg">
                   {data.project.id}
                   <div
                     onClick={() => {
@@ -47,10 +86,19 @@ export default function SettingsOverview({ data }) {
               </div>
               <div className="flex flex-col gap-2">
                 <label className="text-slate-500 ">Created at</label>
-                <p className="text-lg p-2 bg-slate-100 text-slate-600 border rounded-lg">
+                <p className="text-md p-2 bg-slate-100 text-slate-600 border rounded-lg">
                   {new Date(data.project.createdAt).toDateString()} at{" "}
                   {new Date(data.project.createdAt).toLocaleTimeString()}
                 </p>
+              </div>
+              <div className="">
+                <Button
+                  onClick={updateName}
+                  disabled={projectName == data?.project?.name}
+                  variant="outline"
+                >
+                  Update
+                </Button>
               </div>
             </div>
             <Separator />
