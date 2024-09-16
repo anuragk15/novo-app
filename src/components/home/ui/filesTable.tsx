@@ -115,7 +115,7 @@ export function FilesTable({ files }) {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {files.map((singleDocument, index) => {
+          {files && files?.length> 0 && files?.map((singleDocument, index) => {
             return (
               <TableRow
                 className=" cursor-pointer border-b border-slate-200  hover:bg-slate-100"

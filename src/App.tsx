@@ -114,7 +114,7 @@ const queryClient = new QueryClient();
 
 function App() {
   return (
-    <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
+    <ClerkProvider signUpForceRedirectUrl="/create-account" publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
       <QueryClientProvider client={queryClient}>
         <Toaster />
         <RouterProvider router={router} />

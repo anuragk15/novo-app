@@ -8,13 +8,14 @@ import { useNavigate } from "react-router-dom";
 export default function CreateAccountScreen() {
   const { user, setUser } = useUserStore();
   const navigation = useNavigate();
-  const { mutateAsync, error } = useMutation({
+  const { mutateAsync } = useMutation({
     mutationKey: ["create", "account"],
     async mutationFn() {
       const user = await createUser();
       return user.data;
     },
   });
+  console.log("Create account page");
 
   useEffect(() => {
     if (user) {
@@ -23,17 +24,15 @@ export default function CreateAccountScreen() {
     } else {
       mutateAsync().then((user) => {
         setUser(user);
-        navigation("/onboarding=true");
+        navigation("/?onboarding=true");
       });
     }
-  }, [error]);
+  }, [user]);
 
-  if (error) {
-    navigation("/load-account");
-  }
   return (
-    <div className="flex h-screen justify-center items-center">
+    <div className="flex flex-col h-screen justify-center items-center">
       <Spinner size="large" />
+      <h1 className=" text-2xl text-center">Creating your account...</h1>
     </div>
   );
 }

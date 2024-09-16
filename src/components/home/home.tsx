@@ -1,12 +1,11 @@
 import { Plus, Sparkles } from "lucide-react";
 import { Button } from "../ui/button";
 import { CreateNewDocumentPopup } from "../ui/createNewDocumentPopup";
-import RecentFileItem from "../ui/recentFileItem";
 import SearchBar from "./search";
 import { FilesTable } from "./ui/filesTable";
 
 export default function HomeScreen({ data }) {
-  /// console.log(data);
+ console.log(data);
 
   if (data?.length === 0) {
     return (
@@ -39,11 +38,11 @@ export default function HomeScreen({ data }) {
     <div className=" flex-col w-[85vw] pl-2 pb-2 overflow-scroll h-screen bg-slate-100">
       <SearchBar />
       <div className="flex flex-col gap-4 items-start border shadow-sm rounded-lg mr-2 p-8 min-h-[91vh] bg-white">
-        {data?.length > 4 ? (
+        {/* {data?.length > 4 ? (
           <div className="flex w-full items-center  justify-between">
             <p className="text-2xl font-sans font-extralight ">Recent</p>
           </div>
-        ) : null}
+        ) : null} */}
         {/* {data?.length > 4 ? (
           <div className="flex flex-wrap gap-4">
             <RecentFileItem />
@@ -61,6 +60,7 @@ export default function HomeScreen({ data }) {
             }
           />
         </div>
+
         <FilesTable files={data} />
       </div>
     </div>

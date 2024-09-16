@@ -1,5 +1,7 @@
 import { getProjects } from "@/api/functions/projects";
+import CreateProjectPopup from "@/components/home/ui/createProject";
 import { OnboardingOverviewContent } from "@/components/onboarding/overview";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,10 +17,15 @@ import OnboardingWrapper from "@/wrappers/onboarding";
 import { useClerk } from "@clerk/clerk-react";
 import { useQuery } from "@tanstack/react-query";
 import { Lightbulb, LogOut, Plus, Search, Settings, User } from "lucide-react";
+import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 
 export default function ProjectsScreen() {
-  const { data: projects, isLoading } = useQuery({
+  const {
+    data: projects,
+    isLoading,
+    error,
+  } = useQuery({
     queryKey: ["get", "projects"],
     queryFn: async () => {
       const res = await getProjects();
@@ -27,10 +34,19 @@ export default function ProjectsScreen() {
     },
     staleTime: Infinity,
   });
- // console.log(projects);
+  useEffect(() => {
+    console.log(error);
+    if (error) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      //@ts-ignore
+      throw new Error(error?.response?.data?.message || "An error occurred");
+    }
+  }, [error, projects, isLoading]);
+  // console.log(projects);
   if (isLoading) {
     return <LoadingState />;
   }
+
   return (
     <OnboardingWrapper
       component={<OnboardingOverviewContent />}
@@ -45,9 +61,23 @@ export default function ProjectsScreen() {
           </div>
 
           <div className=" px-5 md:px-10 space-y-4 max-w-[1280px] mx-auto">
-            <h2 className="text-2xl font-sans">Your projects</h2>
+            <div className=" items-center flex justify-between">
+              <h2 className="text-2xl font-sans">Your projects</h2>
+              {projects?.length != 0 && (
+                <CreateProjectPopup
+                  projects={projects}
+                  trigger={
+                    <Button className="flex gap-1">
+                      <Plus size={18} />
+                      <p>New project</p>
+                    </Button>
+                  }
+                />
+              )}
+            </div>
             <div className="flex gap-4 w-full">
-              {projects?.length > 0 &&
+              {projects &&
+                projects?.length > 0 &&
                 projects.map((project) => (
                   <ProjectCard
                     role={
@@ -72,17 +102,22 @@ export default function ProjectsScreen() {
                 </div>
               </div> */}
             </div>
-            {projects.length == 0 && (
+            {projects?.length == 0 && (
               <div className="flex h-full  min-h-[60vh] justify-center items-center ">
-                <div className=" space-y-4 border cursor-pointer p-20 group justify-center flex flex-col items-center hover:border-black rounded-xl border-dashed">
-                  <Plus
-                    size={64}
-                    className=" text-slate-700 group-hover:text-black"
-                  />
-                  <h1 className=" text-2xl font-sans">
-                    Create your first project
-                  </h1>
-                </div>
+                <CreateProjectPopup
+                  projects={projects}
+                  trigger={
+                    <div className=" space-y-4 border cursor-pointer p-20 group justify-center flex flex-col items-center hover:border-black rounded-xl border-dashed">
+                      <Plus
+                        size={64}
+                        className=" text-slate-700 group-hover:text-black"
+                      />
+                      <h1 className=" text-2xl font-sans">
+                        Create your first project
+                      </h1>
+                    </div>
+                  }
+                />
               </div>
             )}
           </div>

@@ -20,7 +20,9 @@ export function daysBetweenDates(date1: Date, date2: Date) {
 
   return daysDifference;
 }
-export function isFileNameOrUrl(inputString:string) {
+
+
+export function isFileNameOrUrl(inputString: string) {
   // Regular expression to check if the string is a URL
   const urlPattern = new RegExp(
     "^(https?:\\/\\/)?" + // protocol (http or https)

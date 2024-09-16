@@ -30,7 +30,7 @@ export default function AuthLayout() {
 
   React.useEffect(() => {
     if (isLoading) return;
-    console.log(data);
+    // console.log(data);
     if (data) {
       setUser(data?.data);
     }
