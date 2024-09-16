@@ -11,18 +11,32 @@ import {
 
 export function ConfirmDelete({ message, onConfirm, open = false, setOpen }) {
   return (
-    <AlertDialog open={open} onOpenChange={setOpen}>
+    <AlertDialog
+      open={open}
+      onOpenChange={(e) => {
+        if (e) {
+          setOpen(e);
+        } else {
+          setOpen(null);
+        }
+      }}
+    >
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
           <AlertDialogDescription>{message}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel onClick={() => setOpen(false)}>
+          <AlertDialogCancel
+            className="border-none bg-transparent"
+            onClick={() => {
+              setOpen(null);
+            }}
+          >
             Cancel
           </AlertDialogCancel>
           <AlertDialogAction
-            className="bg-red-500 hover:bg-red-700"
+            className="bg-transparent border  hover:text-white text-black hover:bg-red-600"
             onClick={() => onConfirm()}
           >
             Confirm

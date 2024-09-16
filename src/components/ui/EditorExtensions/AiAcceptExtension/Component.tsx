@@ -2,6 +2,9 @@
 import { NodeViewWrapper } from "@tiptap/react";
 import { Button } from "../../button";
 import { WandSparkles } from "lucide-react";
+import MarkdownPreview from "@uiw/react-markdown-preview";
+import { Spinner } from "../../spinner";
+
 export default function Component(props) {
   function acceptSuggestion(accepted: boolean) {
     if (accepted) {
@@ -24,13 +27,23 @@ export default function Component(props) {
     <NodeViewWrapper className="">
       <div className="content space-y-2">
         {props.node.attrs.previousText && (
-          <p className="bg-red-100 px-2 rounded-lg border border-red-200">
-            {props.node.attrs.previousText}
+          <p className="bg-red-50 px-2 text-black rounded-lg border border-red-200">
+            <MarkdownPreview
+              source={props.node.attrs.previousText}
+              style={{ padding: 16, background: "transparent", color: "black" }}
+            />
           </p>
         )}
-        {props.node.attrs.newText && (
-          <p className="bg-green-100 px-2 rounded-lg border border-green-200">
-            {props.node.attrs.newText}
+        {props.node.attrs.newText && props.node.attrs?.newText == "Loading" ? (
+          <p className="bg-green-50 px-2 text-center text-black rounded-lg border border-green-200">
+            <Spinner size="small" />
+          </p>
+        ) : (
+          <p className="bg-green-50 px-2 text-black rounded-lg border border-green-200">
+            <MarkdownPreview
+              source={props.node.attrs.newText}
+              style={{ padding: 16, background: "transparent", color: "black" }}
+            />
           </p>
         )}
         <div className="flex w-full  justify-end">

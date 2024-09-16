@@ -17,15 +17,13 @@ import OnboardingWrapper from "@/wrappers/onboarding";
 import { useClerk } from "@clerk/clerk-react";
 import { useQuery } from "@tanstack/react-query";
 import { Lightbulb, LogOut, Plus, Search, Settings, User } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
 export default function ProjectsScreen() {
-  const {
-    data: projects,
-    isLoading,
-    error,
-  } = useQuery({
+  const [name, setName] = useState("");
+  const [projects, setProjects] = useState([]);
+  const { data, isLoading, error } = useQuery({
     queryKey: ["get", "projects"],
     queryFn: async () => {
       const res = await getProjects();
@@ -35,8 +33,23 @@ export default function ProjectsScreen() {
     staleTime: Infinity,
   });
   useEffect(() => {
-    console.log(error);
+    if (data?.length > 0) {
+      if (name == "") {
+        setProjects(data);
+        return;
+      } else {
+        const filtered = data.filter((project) => {
+          return project.projects.name
+            .toLowerCase()
+            .includes(name.toLowerCase());
+        });
+        setProjects(filtered);
+      }
+    }
+  }, [name, data]);
+  useEffect(() => {
     if (error) {
+      console.log(error);
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       //@ts-ignore
       throw new Error(error?.response?.data?.message || "An error occurred");
@@ -56,12 +69,12 @@ export default function ProjectsScreen() {
         <div className=" space-y-10">
           <div className="bg-white shadow-sm py-2 border-b">
             <div className=" max-w-[1280px] mx-auto">
-              <Navbar />
+              <Navbar name={name} setName={setName} />
             </div>
           </div>
 
           <div className=" px-5 md:px-10 space-y-4 max-w-[1280px] mx-auto">
-            <div className=" items-center flex justify-between">
+            <div className=" flex sm:flex-row flex-col-reverse  items-center justify-between">
               <h2 className="text-2xl font-sans">Your projects</h2>
               {projects?.length != 0 && (
                 <CreateProjectPopup
@@ -75,7 +88,7 @@ export default function ProjectsScreen() {
                 />
               )}
             </div>
-            <div className="flex gap-4 w-full">
+            <div className="flex justify-center md:justify-start flex-wrap gap-4 w-full">
               {projects &&
                 projects?.length > 0 &&
                 projects.map((project) => (
@@ -127,7 +140,7 @@ export default function ProjectsScreen() {
   );
 }
 
-const Navbar = () => {
+const Navbar = ({ name, setName }) => {
   const { signOut } = useClerk();
   const { user } = useUserStore();
 
@@ -148,6 +161,8 @@ const Navbar = () => {
         <div className=" flex gap-2 px-2 items-center bg-slate-100 rounded-xl">
           <Search color="gray" />
           <Input
+            name={name}
+            onChange={(e) => setName(e.target.value)}
             placeholder="Search projects..."
             className={cn(
               "border-none bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 font-sans "
@@ -159,7 +174,7 @@ const Navbar = () => {
             {user?.photo ? (
               <img
                 src={user?.photo}
-                className="w-12  rounded-full"
+                className="w-10 rounded-full"
                 alt="User profile"
               />
             ) : (

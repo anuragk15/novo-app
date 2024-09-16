@@ -43,12 +43,20 @@ import {
   PopoverTrigger,
 } from "@radix-ui/react-popover";
 import { Editor } from "@tiptap/core";
+import { promptsCustomPrompt, runPrompts } from "@/api/functions/prompts";
 
 // define your extension array
-export const MenuBar = ({ editor }: { editor: Editor }) => {
+export const MenuBar = ({
+  editor,
+  projectId,
+}: {
+  editor: Editor;
+  projectId: string;
+}) => {
   const [showAi, setShowAi] = useState(false);
   const [showTones, setShowTones] = useState(false);
   const [link, setLink] = useState("");
+  const [customPrompt, setCustomPrompt] = useState("");
   const [showLink, setShowLink] = useState(false);
   useEffect(() => {
     setShowAi(false);
@@ -61,55 +69,79 @@ export const MenuBar = ({ editor }: { editor: Editor }) => {
     return null;
   }
 
-  //   const getSelectedText = () => {
-  //     if (!editor) {
-  //       return "";
-  //     }
+  async function runCustomPrompt({
+    content,
+    prompt,
+  }: {
+    content: string;
+    prompt: string;
+  }) {
+    const result = await runPrompts({
+      type: "custom-prompt",
+      projectId,
+      content,
+      customUserPrompt: prompt,
+    });
 
-  //     const { from, to } = editor.state.selection;
-  //     const selectedText = editor.state.doc.textBetween(from, to, " ");
-  //     console.log(selectedText);
-  //     // Insert the text "Hello" at the selected position
-  //     editor
-  //       .chain()
-  //       .focus() // Ensure the editor is focused
-  //       .insertContent("Hello", {
-  //         updateSelection: true,
-  //       })
-  //       .run();
+    console.log(result);
+    if (result?.content) setCustomPrompt("");
+    editor
+      .chain()
+      .focus()
+      .setAISuggestion({
+        previousText: content,
+        newText: result?.content || "",
+      });
+  }
 
-  //     return selectedText;
-  //   };
   return (
     <div className="flex flex-col gap-2 ">
       {!showAi ? (
         <div className="flex px-2  border shadow-lg items-center rounded-lg justify-center bg-white ">
           <Sparkles size={18} className="text-slate-800" />
           <Input
+            value={customPrompt}
+            onChange={(e) => setCustomPrompt(e.target.value)}
             onKeyDown={(e) => {
               if (e.code === "Enter") {
-                const { from } = editor.state.selection;
+                const { from, to } = editor.state.selection;
 
                 const { state, dispatch } = editor.view;
 
-               //const selectedText = state.doc.textBetween(from, to, " ");
+                //const selectedText = state.doc.textBetween(from, to, " ");
                 const paragraphNode = state.doc.nodeAt(from);
 
                 if (paragraphNode) {
                   // Find the start and end of the paragraph
                   const paragraphStart = state.selection.$anchor.start();
                   const paragraphEnd = state.selection.$anchor.end();
-                //  console.log(paragraphStart, paragraphEnd);
+                  //  console.log(paragraphStart, paragraphEnd);
 
                   // Use a transaction to delete the paragraph
-                  dispatch(
-                    state.tr.delete(paragraphStart - 1, paragraphEnd + 1)
-                  );
+
+                  const selectedText = state.doc.textBetween(from, to, " ");
+
+                  const content =
+                    selectedText?.length > paragraphNode.text?.length
+                      ? selectedText
+                      : paragraphNode.text;
+                  runCustomPrompt({
+                    content: content,
+                    prompt: customPrompt,
+                  });
+                  if (selectedText?.length > paragraphNode.text?.length) {
+                    // Delete the selected text
+                  } else {
+                    dispatch(
+                      state.tr.delete(paragraphStart - 1, paragraphEnd + 1)
+                    );
+                  }
                 }
-                editor.commands.setAISuggestion({
-                  previousText: paragraphNode.text,
-                  newText: "This is a summary",
-                });
+
+                // editor.commands.setAISuggestion({
+                //   previousText: paragraphNode.text,
+                //   newText: "This is a summary",
+                // });
               }
             }}
             multiple

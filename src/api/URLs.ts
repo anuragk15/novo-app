@@ -31,7 +31,7 @@ export const URLs = {
 
   //Projects
   PROJECTS_GET: "/projects",
-  PROJECTS_DELETE: "/projects",
+  PROJECTS_DELETE: "/projects/id",
   PROJECTS_COLLABS: "/projects/collaborators",
   PROJECT_BY_ID: "/projects/id",
   PROJECTS_INVITE_COLLAB: "/projects/invite/collaborator",
@@ -47,7 +47,7 @@ export const URLs = {
   DOCUMENTS_GET_BY_ID: "/documents/id",
 
   DOCUMENTS_UPDATE: "/documents/update",
-  DOCUMENTS_DELETE: "/documents",
+  DOCUMENTS_DELETE: "/documents/id",
   DOCUMENTS_SEARCH: "/documents/search",
   DOCUMENT_ATTACH_TAG: "/documents/tag/document",
   DOCUMENT_REMOVE_TAG: "/documents/remove/document-tag",

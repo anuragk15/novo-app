@@ -10,10 +10,10 @@ import { useParams } from "react-router-dom";
 export default function EditorFn({ editor }: { editor: Editor }) {
   const {projectId} = useParams();
   return (
-    <div className="bg-white ">
+    <div className=" ">
       <EditorContent
         onSelectCapture={() => alert("seled")}
-        className="rounded-lg border min-h-[80vh] max-w-[960px]  mx-auto "
+        className="rounded-lg bg-white border min-h-[80vh] max-w-[960px]  mx-auto "
         editor={editor}
       />
 
@@ -39,7 +39,7 @@ export default function EditorFn({ editor }: { editor: Editor }) {
         className=" p-2 gap-2 flex  relative flex-col"
         editor={editor}
       >
-        <MenuBar editor={editor} />
+        <MenuBar editor={editor} projectId={projectId}  />
       </BubbleMenu>
       <ActionButtons editor={editor} projectId={projectId} />
     </div>

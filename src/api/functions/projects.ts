@@ -5,20 +5,20 @@ export const getProjects = async () => {
   const response = await axiosClient.get(URLs.PROJECTS_GET).catch((error) => {
     throw error;
   });
-  return response.data;
+  return response?.data;
 };
 
 export const deleteProject = async ({ projectId }: { projectId: string }) => {
   const response = await axiosClient
     .delete(URLs.PROJECTS_DELETE, {
-      params: {
+      data: {
         projectId,
       },
     })
     .catch((error) => {
       throw error;
     });
-  return response.data;
+  return response?.data;
 };
 
 export const getProjectById = async ({ projectId }: { projectId: string }) => {
@@ -31,7 +31,7 @@ export const getProjectById = async ({ projectId }: { projectId: string }) => {
     .catch((error) => {
       throw error;
     });
-  return response.data;
+  return response?.data;
 };
 export const getProjectCollaborators = async ({
   projectId,
@@ -47,7 +47,7 @@ export const getProjectCollaborators = async ({
     .catch((error) => {
       throw error;
     });
-  return response.data;
+  return response?.data;
 };
 
 export const inviteCollaborator = async ({
@@ -68,7 +68,7 @@ export const inviteCollaborator = async ({
     .catch((error) => {
       throw error;
     });
-  return response.data;
+  return response?.data;
 };
 
 export const removeCollaborator = async ({
@@ -88,7 +88,7 @@ export const removeCollaborator = async ({
     .catch((error) => {
       throw error;
     });
-  return response.data;
+  return response?.data;
 };
 
 export const changeCollaboratorAccess = async ({
@@ -109,7 +109,7 @@ export const changeCollaboratorAccess = async ({
     .catch((error) => {
       throw error;
     });
-  return response.data;
+  return response?.data;
 };
 
 export const acceptInvite = async ({ inviteId }: { inviteId: string }) => {
@@ -120,7 +120,7 @@ export const acceptInvite = async ({ inviteId }: { inviteId: string }) => {
     .catch((error) => {
       throw error;
     });
-  return response.data;
+  return response?.data;
 };
 
 export const updateProject = async ({
@@ -138,5 +138,5 @@ export const updateProject = async ({
     .catch((error) => {
       throw error;
     });
-  return response.data;
+  return response?.data;
 };

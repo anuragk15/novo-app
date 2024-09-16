@@ -8,7 +8,7 @@ export const getDocuments = async ({ projectId }: { projectId: string }) => {
     },
   });
 
-  return response.data;
+  return response?.data;
 };
 
 export const getDocumentById = async ({
@@ -25,7 +25,7 @@ export const getDocumentById = async ({
     },
   });
   //console.log(response);
-  return response.data;
+  return response?.data;
 };
 
 export const createDocument = async ({
@@ -50,7 +50,7 @@ export const createDocument = async ({
     .catch((error) => {
       throw error;
     });
-  return response.data;
+  return response?.data;
 };
 
 export const updateDocument = async ({
@@ -75,7 +75,7 @@ export const updateDocument = async ({
     .catch((error) => {
       throw error;
     });
-  return response.data;
+  return response?.data;
 };
 
 export const deleteDocument = async ({
@@ -87,7 +87,7 @@ export const deleteDocument = async ({
 }) => {
   const response = await axiosClient
     .delete(URLs.DOCUMENTS_DELETE, {
-      params: {
+      data: {
         projectId,
         documentId,
       },
@@ -95,7 +95,7 @@ export const deleteDocument = async ({
     .catch((error) => {
       throw error;
     });
-  return response.data;
+  return response?.data;
 };
 
 export const searchDocuments = async ({
@@ -115,7 +115,7 @@ export const searchDocuments = async ({
     .catch((error) => {
       throw error;
     });
-  return response.data;
+  return response?.data;
 };
 
 export const addDocumentTag = async ({
@@ -133,7 +133,7 @@ export const addDocumentTag = async ({
     .catch((error) => {
       throw error;
     });
-  return response.data;
+  return response?.data;
 };
 
 export const getDocumentTags = async ({ projectId }: { projectId: string }) => {
@@ -146,7 +146,7 @@ export const getDocumentTags = async ({ projectId }: { projectId: string }) => {
     .catch((error) => {
       throw error;
     });
-  return response.data;
+  return response?.data;
 };
 
 export const addTagToDocument = async ({
@@ -167,7 +167,7 @@ export const addTagToDocument = async ({
     .catch((error) => {
       throw error;
     });
-  return response.data;
+  return response?.data;
 };
 
 export const removeTagFromDocument = async ({
@@ -190,5 +190,5 @@ export const removeTagFromDocument = async ({
     .catch((error) => {
       throw error;
     });
-  return response.data;
+  return response?.data;
 };

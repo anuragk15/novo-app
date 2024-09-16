@@ -1,3 +1,4 @@
+import { deleteProject } from "@/api/functions/projects";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -5,8 +6,24 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { generateColorsFromInitial } from "@/lib/utils";
+import {
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogTitle,
+} from "@radix-ui/react-alert-dialog";
+import { useQueryClient } from "@tanstack/react-query";
 import { EllipsisVertical, FolderClosed } from "lucide-react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader
+} from "./alert-dialog";
+import { Button } from "./button";
+import { useToast } from "./use-toast";
 
 export default function ProjectCard({
   name,
@@ -19,13 +36,51 @@ export default function ProjectCard({
   role: string;
   createdOn: Date;
 }) {
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
   const navigate = useNavigate();
+  const [confirmDelete, setConfirmDelete] = useState(false);
   const { background, text } = generateColorsFromInitial(name);
   return (
     <a
       href={"/project/" + id}
-      className="group hover:shadow-sm  py-4 px-4 bg-white flex flex-col gap-4 rounded-lg hover:bg-slate-50 cursor-pointer border min-w-[20vw]"
+      className="group w-full md:w-fit hover:shadow-sm  py-4 px-4 bg-white flex flex-col gap-4 rounded-lg hover:bg-slate-50 cursor-pointer border min-w-[20vw]"
     >
+      <AlertDialog open={confirmDelete} onOpenChange={setConfirmDelete}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. We will cancel your subscription and
+              remove all data related to this project from our server.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>
+              <Button variant="ghost">
+                Cancel
+              </Button>
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={async () => {
+                await deleteProject({ projectId: id }).then(() => {
+                  toast({
+                    title: "Project deleted successfully",
+                    variant: "destructive",
+                  });
+                  queryClient.invalidateQueries({
+                    queryKey: ["get", "projects"],
+                  });
+                });
+              }}
+            >
+              <Button className="bg-red-500 mx-2 hover:bg-red-700">
+                Continue
+              </Button>
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
       <div className="flex justify-between items-start">
         <div
           style={{ backgroundColor: background }}
@@ -62,7 +117,12 @@ export default function ProjectCard({
             >
               Subscription
             </DropdownMenuItem>
-            <DropdownMenuItem className="text-red-500 cursor-pointer focus:bg-red-200 focus:text-red-600">
+            <DropdownMenuItem
+              onClick={async () => {
+                setConfirmDelete(true);
+              }}
+              className="text-red-500 cursor-pointer focus:bg-red-200 focus:text-red-600"
+            >
               Delete
             </DropdownMenuItem>
           </DropdownMenuContent>

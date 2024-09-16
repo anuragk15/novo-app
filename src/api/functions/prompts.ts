@@ -76,14 +76,17 @@ export const promptsExpand = async ({
 export const promptsChangeTone = async ({
   projectId,
   content,
+  tone,
 }: {
   projectId: string;
+  tone: string;
   content: string;
 }) => {
   const response = await axiosClient
     .post(URLs.PROMPTS_CHANGE_TONE, {
       projectId,
       content,
+      tone,
     })
     .catch((error) => {
       throw error;
@@ -94,14 +97,17 @@ export const promptsChangeTone = async ({
 export const promptsCustomPrompt = async ({
   projectId,
   content,
+  prompt,
 }: {
   projectId: string;
   content: string;
+  prompt: string;
 }) => {
   const response = await axiosClient
     .post(URLs.PROMPTS_CUSTOM_PROMPT, {
       projectId,
       content,
+      prompt,
     })
     .catch((error) => {
       throw error;
@@ -149,4 +155,56 @@ export const promptsGenerateTemplate = async ({
       throw error;
     });
   return response.data;
+};
+
+export const runPrompts = async ({
+  content,
+  tone,
+  type,
+  customUserPrompt,
+  projectId,
+}: {
+  type:
+    | "summarise"
+    | "fix-grammar"
+    | "simplify"
+    | "expand"
+    | "change-tone"
+    | "custom-prompt"
+    | "generate-with-template"
+    | "generate-template";
+  content: string;
+  tone?: string;
+  projectId: string;
+  customUserPrompt?: string;
+}) => {
+  switch (type) {
+    case "summarise":
+      return promptsSummarise({ projectId, content });
+    case "fix-grammar":
+      return promptsFixGrammar({ projectId, content });
+    case "simplify":
+      return promptsSimplify({ projectId, content });
+    case "expand":
+      return promptsExpand({ projectId, content });
+    case "change-tone":
+      return promptsChangeTone({ projectId, content, tone });
+    case "custom-prompt":
+      return promptsCustomPrompt({
+        projectId,
+        content,
+        prompt: customUserPrompt,
+      });
+    case "generate-with-template":
+      return promptsGenerateWithTemplate({
+        projectId,
+        title: "Untitled",
+        templateId: customUserPrompt,
+        fields: {},
+      });
+    case "generate-template":
+      return promptsGenerateTemplate({ projectId, content });
+    default:
+      throw new Error("Invalid prompt type");
+  }
 };

@@ -12,7 +12,6 @@ import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import Image from "@tiptap/extension-image";
 import { Plugin } from "@tiptap/pm/state";
-import { SlashCommandExtension } from "@/components/ui/EditorExtensions/SlashCommand";
 
 export default function DocumentEditorScreen() {
   const { projectId, id } = useParams();
@@ -81,18 +80,18 @@ export default function DocumentEditorScreen() {
           return [plugin];
         },
       }),
-      SlashCommandExtension.configure({
-        onSlashEnter: () => {
-          // Logic to show your input field
-          alert("Slash command activated!");
-          const { from, to } = editor.state.selection;
-          console.log(from, to);
-          editor.chain().focus().setAISuggestion({
-            previousText: "This is a previous text",
-            newText: "this is a new text",
-          });
-        },
-      }),
+      // SlashCommandExtension.configure({
+      //   onSlashEnter: () => {
+      //     // Logic to show your input field
+      //     alert("Slash command activated!");
+      //     const { from, to } = editor.state.selection;
+      //     console.log(from, to);
+      //     editor.chain().focus().setAISuggestion({
+      //       previousText: "This is a previous text",
+      //       newText: "this is a new text",
+      //     });
+      //   },
+      // }),
     ],
 
     onUpdate: ({ editor }) => {

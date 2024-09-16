@@ -34,14 +34,14 @@ export default function Sidebar({ projectId }) {
     <div className="flex flex-col w-[15vw] h-screen">
       <div className=" h-[100vh] flex flex-col justify-between ">
         <div>
-          <div className="pt-1">
+          <div className="pt-1 pl-3">
             {isLoading ? (
               <div className="p-4">Loading...</div>
             ) : (
               <div>
                 <div
                   onClick={() => navigate("/")}
-                  className="flex items-center hover:bg-slate-100 py-2 cursor-pointer rounded-lg px-1"
+                  className="flex items-center hover:bg-slate-100 py-2 cursor-pointer rounded-lg"
                 >
                   <ChevronLeft size={16} />
                   <p className="text-sm">Back</p>

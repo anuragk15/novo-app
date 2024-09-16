@@ -55,7 +55,6 @@ export const AiAcceptExtension = Node.create({
       setAISuggestion:
         (attributes) =>
         ({ editor }: { editor: Editor }) => {
-          editor.chain().focus().deleteCurrentNode().run();
           editor
             .chain()
             .focus()
