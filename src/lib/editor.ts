@@ -19,6 +19,7 @@ import { AiAcceptExtension } from "@/components/ui/EditorExtensions/AiAcceptExte
 import { ColorHighlighter } from "@/components/ui/EditorExtensions/ColorHighlighter";
 import { SmilieReplacer } from "@/components/ui/EditorExtensions/SmilieReplacer";
 import ImageResizer from "tiptap-extension-resize-image";
+import { AiInsertSuggestion } from "@/components/ui/EditorExtensions/AiInsertExtension/Extension";
 
 export const myExtensions = [
   StarterKit,
@@ -36,11 +37,11 @@ export const myExtensions = [
       if (pos == 0 && node.type.name === "heading") {
         return "What’s the title?";
       } else if (node.type.name === "paragraph") {
-        return "Write here...";
+        return "Write here or insert two backslash to trigger Novo...";
       }
     },
   }),
-
+  AiInsertSuggestion,
   TextAlign.configure({
     types: ["heading", "paragraph"],
   }),

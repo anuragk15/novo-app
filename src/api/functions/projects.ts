@@ -7,6 +7,22 @@ export const getProjects = async () => {
   });
   return response?.data;
 };
+export const getProjectBilling = async ({
+  projectId,
+}: {
+  projectId: string;
+}) => {
+  const response = await axiosClient
+    .get(URLs.PROJECTS_BILLING, {
+      params: {
+        projectId,
+      },
+    })
+    .catch((error) => {
+      throw error;
+    });
+  return response?.data;
+};
 
 export const deleteProject = async ({ projectId }: { projectId: string }) => {
   const response = await axiosClient

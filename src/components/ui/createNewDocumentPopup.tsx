@@ -17,7 +17,7 @@ import { getTemplates } from "@/api/functions/templates";
 import { Spinner } from "./spinner";
 import { useDebounce } from "@/hooks/useDebounce";
 import DynamicForm from "./formTemplate";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 export function CreateNewDocumentPopup({ trigger }: { trigger?: JSX.Element }) {
   const [option, setOption] = useState<null | "TEMPLATE" | "BLANK">(null);
@@ -68,6 +68,8 @@ export function CreateNewDocumentPopup({ trigger }: { trigger?: JSX.Element }) {
 
 const ChooseOption = ({ setOption }) => {
   const [selected, setSelected] = useState<"BLANK" | "TEMPLATE" | null>(null);
+  const navigate = useNavigate();
+  const { projectId } = useParams();
   return (
     <div className="flex gap-4 flex-col flex-1 items-center w-full h-full justify-center">
       <div className="flex  md:flex-row   flex-col gap-4 flex-1 items-center w-full h-full justify-center">
@@ -116,7 +118,9 @@ const ChooseOption = ({ setOption }) => {
       <Button
         disabled={selected == null}
         onClick={() => {
-          setOption(selected);
+          if (selected == "BLANK") {
+            navigate(`/document/editor/${projectId}/new`);
+          } else setOption(selected);
         }}
       >
         Continue

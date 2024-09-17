@@ -5,7 +5,6 @@ import SearchBar from "./search";
 import { FilesTable } from "./ui/filesTable";
 
 export default function HomeScreen({ data }) {
- console.log(data);
 
   if (data?.length === 0) {
     return (

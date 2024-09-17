@@ -1,13 +1,13 @@
 import { Button } from "@/components/ui/button";
 
+import { uploadImageToServer } from "@/api/functions/assets";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { useClickOutside } from "@/hooks/useClickOutside";
 import { Editor } from "@tiptap/core";
-import { useRef, useState } from "react";
-import { ToggleGroup, ToggleGroupItem } from "../toggle-group";
 import {
   AlignCenter,
   AlignLeft,
@@ -21,14 +21,13 @@ import {
   Quote,
   Redo,
   Ruler,
-  Sparkles,
-  Undo,
+  Undo
 } from "lucide-react";
-import { Separator } from "../separator";
+import { useRef, useState } from "react";
 import { Input } from "../input";
-import { useClickOutside } from "@/hooks/useClickOutside";
+import { Separator } from "../separator";
+import { ToggleGroup, ToggleGroupItem } from "../toggle-group";
 import { useToast } from "../use-toast";
-import { uploadImageToServer } from "@/api/functions/assets";
 
 export function ActionButtons({
   editor,
@@ -87,13 +86,13 @@ export function ActionButtons({
   return (
     <div className="  sticky pb-2 pt-2 space-y-2 mx-auto  bottom-0 max-w-fit items-center justify-center">
       <div className="flex rounded-lg mb-2 justify-center border-slate-900 border  bg-slate-800 ">
-        <div
+        {/* <div
           className="hover:bg-slate-900 my-auto items-center p-2 cursor-pointer data-[state=on]:bg-slate-800"
           data-state="off"
           onClick={() => setIsAiOpen(true)}
         >
           <Sparkles size={18} color="white" />
-        </div>
+        </div> */}
         <Popover
           open={isOpen}
           onOpenChange={(e) => {

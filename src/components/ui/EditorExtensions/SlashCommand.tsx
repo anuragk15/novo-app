@@ -4,7 +4,6 @@ export const SlashCommandExtension = Extension.create({
   name: "slashCommand",
 
   addKeyboardShortcuts() {
-
     return {
       "Mod-i": () => {
         alert("mod i");
@@ -23,10 +22,7 @@ export const SlashCommandExtension = Extension.create({
 
         const { state, view } = editor;
         //  console.log(editor);
-        const { $from, empty } = state.selection;
-        console.log(empty);
-
-        if (!empty) return false;
+        const { $from } = state.selection;
 
         // Check if the current line starts with a slash
         const lineText = $from.nodeBefore?.textContent;
@@ -38,6 +34,7 @@ export const SlashCommandExtension = Extension.create({
           view.dispatch(
             state.tr.delete(slashPos, slashPos + 1) // Delete one character at the first slash position
           );
+
           // Trigger the input field display logic here
           this.options.onSlashEnter();
           return true;

@@ -11,15 +11,15 @@ declare module "@tiptap/core" {
        * @example editor.commands.toggleParagraph()
        */
       insertAISuggestion: (attributes: {
+        insertedConent?: string;
         previousContent: string;
         nextContent: string;
-        prompt: string;
         projectId: string;
       }) => void;
     };
   }
 }
-export const AiAcceptExtension = Node.create({
+export const AiInsertSuggestion = Node.create({
   name: "insertSuggestion",
 
   group: "block",
@@ -31,7 +31,7 @@ export const AiAcceptExtension = Node.create({
       projectId: {
         default: "",
       },
-      prompt: {
+      insertedContent: {
         default: "",
       },
       previousContent: {
@@ -63,7 +63,7 @@ export const AiAcceptExtension = Node.create({
             .chain()
             .focus()
             .deleteSelection()
-            .insertContent({ type: "acceptSuggestion", attrs: attributes }) // Specify the node type here
+            .insertContent({ type: "insertSuggestion", attrs: attributes }) // Specify the node type here
             .run();
           return;
           //return commands.toggleNode(this.name, "acceptSuggestion", attributes);

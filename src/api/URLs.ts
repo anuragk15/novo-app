@@ -7,6 +7,7 @@ export const URLs = {
 
   // Prompts
   PROMPTS_SUMMARISE: "/prompts/summarise",
+  PROMPT_INSERT_CONTENT: "/prompts/insert-content",
   PROMPTS_FIX_GRAMMAR: "/prompts/fix-grammar",
   PROMPTS_SIMPLIFY: "/prompts/simplify",
   PROMPTS_EXPAND: "/prompts/expand",
@@ -32,6 +33,7 @@ export const URLs = {
   //Projects
   PROJECTS_GET: "/projects",
   PROJECTS_DELETE: "/projects/id",
+  PROJECTS_BILLING: "/projects/billing",
   PROJECTS_COLLABS: "/projects/collaborators",
   PROJECT_BY_ID: "/projects/id",
   PROJECTS_INVITE_COLLAB: "/projects/invite/collaborator",

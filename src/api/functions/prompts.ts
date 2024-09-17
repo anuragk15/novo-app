@@ -156,12 +156,38 @@ export const promptsGenerateTemplate = async ({
     });
   return response.data;
 };
+
+export const promptInsertContent = async ({
+  textBefore,
+  textAfter,
+  prompt,
+  projectId,
+}: {
+  textBefore: string;
+  textAfter: string;
+  prompt: string;
+  projectId: string;
+}) => {
+  const response = await axiosClient
+    .post(URLs.PROMPT_INSERT_CONTENT, {
+      textBefore,
+      textAfter,
+      prompt,
+      projectId,
+    })
+    .catch((error) => {
+      throw error;
+    });
+  return response.data;
+};
+
 export type PromptType =
   | "summarise"
   | "fix-grammar"
   | "simplify"
   | "expand"
   | "change-tone"
+  | "insert-content"
   | "custom-prompt"
   | "generate-with-template"
   | "generate-template";
@@ -171,9 +197,13 @@ export const runPrompts = async ({
   type,
   customUserPrompt,
   projectId,
+  textAfter,
+  textBefore,
 }: {
+  textBefore?: string;
+  textAfter?: string;
   type: PromptType;
-  content: string;
+  content?: string;
   tone?: string;
   projectId: string;
   customUserPrompt?: string;
@@ -193,6 +223,13 @@ export const runPrompts = async ({
       return promptsCustomPrompt({
         projectId,
         content,
+        prompt: customUserPrompt,
+      });
+    case 'insert-content':
+      return promptInsertContent({
+        projectId,
+        textBefore: textBefore,
+        textAfter: textAfter,
         prompt: customUserPrompt,
       });
     case "generate-with-template":

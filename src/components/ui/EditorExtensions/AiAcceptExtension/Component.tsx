@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { NodeViewWrapper } from "@tiptap/react";
 import { Button } from "../../button";
@@ -8,10 +9,12 @@ import { useEffect, useState } from "react";
 import { runPrompts } from "@/api/functions/prompts";
 import { useMutation } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
+import { useToast } from "../../use-toast";
 
 export default function Component(props) {
   const [newText, setNewText] = useState(props.node.attrs.newText || "");
   const { projectId } = useParams();
+  const { toast } = useToast();
   const { mutateAsync, isError, error } = useMutation({
     mutationFn: async () => {
       if (!projectId) return;
@@ -32,7 +35,12 @@ export default function Component(props) {
   });
   useEffect(() => {
     if (isError && error) {
-      console.log(error);
+      toast({
+        title: "Error",
+        // @ts-ignore
+        description: error?.response?.data?.message || "An error occurred",
+      });
+      //  console.log(error);
     }
   }, [isError, error]);
 
@@ -89,7 +97,6 @@ export default function Component(props) {
         ) : (
           <div className="bg-green-50 px-2 text-black rounded-lg border border-green-200">
             <MarkdownPreview
-            
               source={newText}
               style={{ padding: 16, background: "transparent", color: "black" }}
             />

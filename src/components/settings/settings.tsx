@@ -102,64 +102,77 @@ export default function SettingsOverview({ data }) {
               </div>
             </div>
             <Separator />
-            <div className="flex items-center justify-between ">
-              <h1 className="text-2xl">Usage</h1>
-              <h1 className=" font-medium text-sm border p-2 rounded-lg">
-                Plan ends in {daysBetweenDates(endDate, new Date())} day(s)
-              </h1>
-            </div>
-            <div className="flex flex-col gap-2">
-              <div className="flex flex-col gap-2">
-                <label className="text-slate-500">
-                  Total AI usage (
-                  {((data?.usage?.maxApiCalls - data?.usage?.apiCalls) /
-                    data?.usage?.maxApiCalls) *
-                    100}
-                  %)
-                </label>
-                <p>
-                  {data?.usage?.apiCalls}/{data?.usage?.maxApiCalls}
-                </p>
-              </div>
-              <div className="flex flex-col gap-2">
-                <label className="text-slate-500">
-                  Total sources (
-                  {((data?.usage?.maxSources - data?.usage?.sourcesCreated) /
-                    data?.usage?.maxSources) *
-                    100}
-                  %)
-                </label>
-                <p>
-                  {data?.usage?.sourcesCreated}/{data?.usage?.maxSources}
-                </p>
-              </div>
-
-              <div className="flex flex-col gap-2">
-                <label className="text-slate-500">
-                  Total documents (
-                  {((data?.usage?.maxDocuments -
-                    data?.usage?.documentsCreated) /
-                    data?.usage?.maxDocuments) *
-                    100}
-                  %)
-                </label>
-                <p>
-                  {data?.usage?.documentsCreated}/{data?.usage?.maxDocuments}
-                </p>
-              </div>
+            {data?.usage == null ? (
+              <div>No plans seem to be active right now. Contact team admin to buy a plan!</div>
+            ) : (
               <div>
-                <label className="text-slate-500">
-                  Total collaborators (
-                  {((data?.usage?.maxInvites - data?.usage?.invitesCreated) /
-                    data?.usage?.maxInvites) *
-                    100}
-                  %)
-                </label>
-                <p>
-                  {data?.usage?.invitesCreated}/{data?.usage?.maxInvites}
-                </p>
+                <div className="flex items-center justify-between ">
+                  <h1 className="text-2xl">Usage</h1>
+                  <h1 className=" font-medium text-sm border p-2 rounded-lg">
+                    Plan ends in {daysBetweenDates(endDate, new Date())} day(s)
+                  </h1>
+                </div>
+                <div className="flex flex-col gap-2">
+                  <div className="flex flex-col gap-2">
+                    <label className="text-slate-500">
+                      Total AI usage (
+                      {(
+                        (data?.usage?.apiCalls / data?.usage?.maxApiCalls) *
+                        100
+                      ).toFixed(1)}
+                      %)
+                    </label>
+                    <p>
+                      {data?.usage?.apiCalls}/{data?.usage?.maxApiCalls}
+                    </p>
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <label className="text-slate-500">
+                      Total sources (
+                      {(
+                        (data?.usage?.sourcesCreated /
+                          data?.usage?.maxSources) *
+                        100
+                      ).toFixed(1)}
+                      %)
+                    </label>
+                    <p>
+                      {data?.usage?.sourcesCreated}/{data?.usage?.maxSources}
+                    </p>
+                  </div>
+
+                  <div className="flex flex-col gap-2">
+                    <label className="text-slate-500">
+                      Total documents (
+                      {(
+                        (data?.usage?.documentsCreated /
+                          data?.usage?.maxDocuments) *
+                        100
+                      ).toFixed(1)}
+                      %)
+                    </label>
+                    <p>
+                      {data?.usage?.documentsCreated}/
+                      {data?.usage?.maxDocuments}
+                    </p>
+                  </div>
+                  <div>
+                    <label className="text-slate-500">
+                      Total collaborators (
+                      {(
+                        (data?.usage?.invitesCreated /
+                          data?.usage?.maxInvites) *
+                        100
+                      ).toFixed(1)}
+                      %)
+                    </label>
+                    <p>
+                      {data?.usage?.invitesCreated}/{data?.usage?.maxInvites}
+                    </p>
+                  </div>
+                </div>
               </div>
-            </div>
+            )}
           </div>
         ) : (
           <div className="flex h-[70vh] w-full flex-col  justify-center items-center ">
@@ -170,7 +183,7 @@ export default function SettingsOverview({ data }) {
                 height: "15rem",
               }}
             />
-            <p className=" text-center font-sans text-2xl">No sources found</p>
+            <p className=" text-center font-sans text-2xl">No project found</p>
           </div>
         )}
       </div>

@@ -19,6 +19,7 @@ import SourceHome from "./pages/home/source";
 import TeamsScreen from "./pages/home/teams";
 import TemplatesHome from "./pages/home/template";
 import ErrorScreen from "./pages/misc/Error";
+import SettingsBillingScreen from "./pages/home/settings/billing";
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
@@ -81,6 +82,14 @@ const router = createBrowserRouter([
           </div>
         ),
       },
+      {
+        path: "/project/:projectId/settings/billing",
+        element: (
+          <div>
+            <SettingsBillingScreen />
+          </div>
+        ),
+      },
 
       {
         path: "/document/editor/:projectId/:id",
@@ -114,7 +123,11 @@ const queryClient = new QueryClient();
 
 function App() {
   return (
-    <ClerkProvider signUpForceRedirectUrl="/create-account" publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
+    <ClerkProvider
+      signUpForceRedirectUrl="/create-account"
+      publishableKey={PUBLISHABLE_KEY}
+      afterSignOutUrl="/"
+    >
       <QueryClientProvider client={queryClient}>
         <Toaster />
         <RouterProvider router={router} />

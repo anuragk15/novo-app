@@ -9,21 +9,24 @@ import { myExtensions } from "@/lib/editor";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useEditor } from "@tiptap/react";
 import { useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Image from "@tiptap/extension-image";
 import { Plugin } from "@tiptap/pm/state";
 import { SlashCommandExtension } from "@/components/ui/EditorExtensions/SlashCommand";
 
 export default function DocumentEditorScreen() {
   const { projectId, id } = useParams();
+  const navigate = useNavigate();
   const { toast } = useToast();
   const [docTitle, setTitle] = useState("");
-  const { data, isLoading, error, isError } = useQuery({
+  const { data, isLoading, error, isError, refetch } = useQuery({
     queryKey: ["get", "document", id],
     queryFn: async () => {
       const res = await getDocumentById({ projectId, documentId: id });
       return res?.data;
     },
+
+    enabled: false,
   });
   const debounceTimeoutRef = useRef(null);
   const [isDirty, setIsDirty] = useState(false); // Tracks if there are unsaved changes
@@ -43,13 +46,17 @@ export default function DocumentEditorScreen() {
     }) => {
       const res = await updateDocument({
         projectId,
-        documentId: id,
+        documentId: id == "new" ? undefined : id,
         title: title,
         content: content,
       });
-      return res?.data;
+      // console.log(res);
+      return res?.documentId;
     },
   });
+  useEffect(() => {
+    if (id != "new") refetch();
+  }, []);
   useEffect(() => {
     if (isError && error)
       //@ts-ignore
@@ -83,10 +90,28 @@ export default function DocumentEditorScreen() {
       }),
       SlashCommandExtension.configure({
         onSlashEnter: () => {
+          const { state } = editor;
+          const { $from, to } = state.selection;
+
+          // Get the text before the selection
+          const textBefore = state.doc.textBetween(0, $from.pos, "\n", "\n");
+
+          // Get the text after the selection
+          const textAfter = state.doc.textBetween(
+            to,
+            state.doc.content.size,
+            "\n",
+            "\n"
+          );
+
+          // console.log("Text before selection: ", textBefore);
+          // console.log("Text after selection: ", textAfter);
           // Logic to show your input field
-          alert("Slash command activated!");
-          const { from, to } = editor.state.selection;
-          console.log(from, to);
+          editor.chain().focus().insertAISuggestion({
+            previousContent: textBefore,
+            nextContent: textAfter,
+            projectId: projectId,
+          });
         },
       }),
     ],
@@ -95,17 +120,25 @@ export default function DocumentEditorScreen() {
       setIsDirty(true);
 
       clearTimeout(debounceTimeoutRef.current);
-      debounceTimeoutRef.current = setTimeout(() => {
+      debounceTimeoutRef.current = setTimeout(async () => {
         let title = "";
         try {
           title = editor.getJSON().content[0].content[0].text;
         } catch (e) {
-          console.log(e);
+          console.error(e);
         }
         if (title !== "") {
-          setIsDirty(false);
           if (title != docTitle) setTitle(title);
-          mutateAsync({ content: editor.getHTML(), title });
+          const docId = await mutateAsync({ content: editor.getHTML(), title });
+
+          if (docId) {
+            setIsDirty(false);
+            if (id != docId) {
+              navigate(`/document/editor/${projectId}/${docId}`, {
+                replace: true,
+              });
+            }
+          }
         } else {
           toast({
             title: "Title is required",
@@ -152,8 +185,8 @@ export default function DocumentEditorScreen() {
   useEffect(() => {
     //console.log(data);
     if (data) {
-      editor.commands.setContent(data?.content?.content);
-      setTitle(data?.content?.title);
+      editor.commands.setContent(data?.content?.content || "");
+      setTitle(data?.content?.title || "");
     }
   }, [data, editor]);
 
