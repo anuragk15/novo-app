@@ -31,10 +31,8 @@ import {
   Wand,
 } from "lucide-react";
 import { ToggleGroup, ToggleGroupItem } from "../toggle-group";
-
 import { useEffect, useState } from "react";
 import { Input } from "../input";
-
 import { cn } from "@/lib/utils";
 import { Label } from "@radix-ui/react-label";
 import {
@@ -43,7 +41,7 @@ import {
   PopoverTrigger,
 } from "@radix-ui/react-popover";
 import { Editor } from "@tiptap/core";
-import { promptsCustomPrompt, runPrompts } from "@/api/functions/prompts";
+import { PromptType } from "@/api/functions/prompts";
 
 // define your extension array
 export const MenuBar = ({
@@ -70,28 +68,49 @@ export const MenuBar = ({
   }
 
   async function runCustomPrompt({
-    content,
+    type,
     prompt,
+    tone,
   }: {
-    content: string;
-    prompt: string;
+    type: PromptType;
+    prompt?: string;
+    tone?: string;
   }) {
-    const result = await runPrompts({
-      type: "custom-prompt",
-      projectId,
-      content,
-      customUserPrompt: prompt,
-    });
+    const { from, to } = editor.state.selection;
 
-    console.log(result);
-    if (result?.content) setCustomPrompt("");
-    editor
-      .chain()
-      .focus()
-      .setAISuggestion({
+    const { state, dispatch } = editor.view;
+
+    //const selectedText = state.doc.textBetween(from, to, " ");
+    const paragraphNode = state.doc.nodeAt(from);
+
+    if (paragraphNode) {
+      // Find the start and end of the paragraph
+      const paragraphStart = state.selection.$anchor.start();
+      const paragraphEnd = state.selection.$anchor.end();
+      //  console.log(paragraphStart, paragraphEnd);
+
+      // Use a transaction to delete the paragraph
+
+      const selectedText = state.doc.textBetween(from, to, " ");
+
+      const content =
+        selectedText?.length > paragraphNode.text?.length
+          ? selectedText
+          : paragraphNode.text;
+      editor.chain().focus().setAISuggestion({
+        projectId: projectId,
+        prompt: prompt,
+        type: type,
+        tone: tone,
         previousText: content,
-        newText: result?.content || "",
       });
+      setCustomPrompt("");
+      if (selectedText?.length > paragraphNode.text?.length) {
+        // Delete the selected text
+      } else {
+        dispatch(state.tr.delete(paragraphStart - 1, paragraphEnd + 1));
+      }
+    }
   }
 
   return (
@@ -104,51 +123,27 @@ export const MenuBar = ({
             onChange={(e) => setCustomPrompt(e.target.value)}
             onKeyDown={(e) => {
               if (e.code === "Enter") {
-                const { from, to } = editor.state.selection;
-
-                const { state, dispatch } = editor.view;
-
-                //const selectedText = state.doc.textBetween(from, to, " ");
-                const paragraphNode = state.doc.nodeAt(from);
-
-                if (paragraphNode) {
-                  // Find the start and end of the paragraph
-                  const paragraphStart = state.selection.$anchor.start();
-                  const paragraphEnd = state.selection.$anchor.end();
-                  //  console.log(paragraphStart, paragraphEnd);
-
-                  // Use a transaction to delete the paragraph
-
-                  const selectedText = state.doc.textBetween(from, to, " ");
-
-                  const content =
-                    selectedText?.length > paragraphNode.text?.length
-                      ? selectedText
-                      : paragraphNode.text;
-                  runCustomPrompt({
-                    content: content,
-                    prompt: customPrompt,
-                  });
-                  if (selectedText?.length > paragraphNode.text?.length) {
-                    // Delete the selected text
-                  } else {
-                    dispatch(
-                      state.tr.delete(paragraphStart - 1, paragraphEnd + 1)
-                    );
-                  }
-                }
-
-                // editor.commands.setAISuggestion({
-                //   previousText: paragraphNode.text,
-                //   newText: "This is a summary",
-                // });
+                runCustomPrompt({
+                  type: "custom-prompt",
+                  prompt: customPrompt,
+                });
               }
             }}
             multiple
             placeholder="Mention tap to pay feature here..."
             className=" shadow-none border-none   bg-transparent focus-visible:ring-none focus-visible:ring-offset-0 focus-visible:ring-transparent text-black "
           />
-          <div className="bg-slate-900 cursor-pointer opacity-40 rounded-full p-1">
+          <div
+            onClick={() => {
+              if (customPrompt != "") {
+                runCustomPrompt({
+                  type: "custom-prompt",
+                  prompt: customPrompt,
+                });
+              }
+            }}
+            className="bg-slate-900 cursor-pointer opacity-40 rounded-full p-1"
+          >
             <ArrowUp size={18} color="white" />
           </div>
         </div>
@@ -189,27 +184,69 @@ export const MenuBar = ({
                   </div>
 
                   <div className="flex flex-col gap-2">
-                    <MenuItem onClick={() => {}}>
+                    <MenuItem
+                      onClick={() => {
+                        runCustomPrompt({
+                          type: "change-tone",
+                          tone: "engaging",
+                        });
+                      }}
+                    >
                       <ChartNoAxesGantt size={14} />
                       <p>Engaging</p>
                     </MenuItem>
-                    <MenuItem onClick={() => {}}>
+                    <MenuItem
+                      onClick={() => {
+                        runCustomPrompt({
+                          type: "change-tone",
+                          tone: "friendly",
+                        });
+                      }}
+                    >
                       <Handshake size={14} />
                       <p>Friendly</p>
                     </MenuItem>
-                    <MenuItem onClick={() => {}}>
+                    <MenuItem
+                      onClick={() => {
+                        runCustomPrompt({
+                          type: "change-tone",
+                          tone: "professional",
+                        });
+                      }}
+                    >
                       <BriefcaseBusiness size={14} />
                       <p>Professional</p>
                     </MenuItem>
-                    <MenuItem onClick={() => {}}>
+                    <MenuItem
+                      onClick={() => {
+                        runCustomPrompt({
+                          type: "change-tone",
+                          tone: "sarcastic",
+                        });
+                      }}
+                    >
                       <Annoyed size={14} />
                       <p>Sarcastic</p>
                     </MenuItem>
-                    <MenuItem onClick={() => {}}>
+                    <MenuItem
+                      onClick={() => {
+                        runCustomPrompt({
+                          type: "change-tone",
+                          tone: "mystical",
+                        });
+                      }}
+                    >
                       <Microscope size={14} />
                       <p>Mystical</p>
                     </MenuItem>
-                    <MenuItem onClick={() => {}}>
+                    <MenuItem
+                      onClick={() => {
+                        runCustomPrompt({
+                          type: "change-tone",
+                          tone: "funny",
+                        });
+                      }}
+                    >
                       <Laugh size={14} />
                       <p>Funnny</p>
                     </MenuItem>
@@ -224,19 +261,43 @@ export const MenuBar = ({
                   </div>
 
                   <div className="flex flex-col gap-2">
-                    <MenuItem onClick={() => {}}>
+                    <MenuItem
+                      onClick={() => {
+                        runCustomPrompt({
+                          type: "fix-grammar",
+                        });
+                      }}
+                    >
                       <SpellCheck size={14} />
                       <p>Fix grammar & spelling</p>
                     </MenuItem>
-                    <MenuItem onClick={() => {}}>
+                    <MenuItem
+                      onClick={() => {
+                        runCustomPrompt({
+                          type: "simplify",
+                        });
+                      }}
+                    >
                       <CaseSensitive size={14} />
                       <p>Simplify text</p>
                     </MenuItem>
-                    <MenuItem onClick={() => {}}>
+                    <MenuItem
+                      onClick={() => {
+                        runCustomPrompt({
+                          type: "summarise",
+                        });
+                      }}
+                    >
                       <Scissors size={14} />
                       <p>Summarise</p>
                     </MenuItem>
-                    <MenuItem onClick={() => {}}>
+                    <MenuItem
+                      onClick={() => {
+                        runCustomPrompt({
+                          type: "expand",
+                        });
+                      }}
+                    >
                       <Expand size={14} />
                       <p>Expand</p>
                     </MenuItem>

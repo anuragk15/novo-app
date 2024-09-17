@@ -156,7 +156,15 @@ export const promptsGenerateTemplate = async ({
     });
   return response.data;
 };
-
+export type PromptType =
+  | "summarise"
+  | "fix-grammar"
+  | "simplify"
+  | "expand"
+  | "change-tone"
+  | "custom-prompt"
+  | "generate-with-template"
+  | "generate-template";
 export const runPrompts = async ({
   content,
   tone,
@@ -164,15 +172,7 @@ export const runPrompts = async ({
   customUserPrompt,
   projectId,
 }: {
-  type:
-    | "summarise"
-    | "fix-grammar"
-    | "simplify"
-    | "expand"
-    | "change-tone"
-    | "custom-prompt"
-    | "generate-with-template"
-    | "generate-template";
+  type: PromptType;
   content: string;
   tone?: string;
   projectId: string;

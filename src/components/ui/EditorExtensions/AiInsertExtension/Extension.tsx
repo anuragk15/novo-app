@@ -2,35 +2,28 @@ import { Editor, mergeAttributes, Node } from "@tiptap/core";
 import { ReactNodeViewRenderer } from "@tiptap/react";
 
 import Component from "./Component.tsx";
-import { PromptType } from "@/api/functions/prompts.ts";
 declare module "@tiptap/core" {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   interface Commands<ReturnType> {
-    acceptSuggestion: {
+    insertSuggestion: {
       /**
        * Toggle a paragraph
        * @example editor.commands.toggleParagraph()
        */
-      setAISuggestion: (attributes: {
-        previousText: string;
-        type: PromptType;
-        tone?: string;
-        prompt?: string;
+      insertAISuggestion: (attributes: {
+        previousContent: string;
+        nextContent: string;
+        prompt: string;
         projectId: string;
-        newText?: string;
       }) => void;
     };
   }
 }
 export const AiAcceptExtension = Node.create({
-  name: "acceptSuggestion",
+  name: "insertSuggestion",
 
   group: "block",
-  addOptions() {
-    return {
-      previousText: {},
-    };
-  },
+
   atom: true,
   isolating: true,
   addAttributes() {
@@ -38,19 +31,13 @@ export const AiAcceptExtension = Node.create({
       projectId: {
         default: "",
       },
-      type: {
-        default: "custom-prompt",
-      },
-      tone: {
-        default: "",
-      },
       prompt: {
         default: "",
       },
-      previousText: {
+      previousContent: {
         default: "",
       },
-      newText: {
+      nextContent: {
         default: "",
       },
     };
@@ -59,20 +46,19 @@ export const AiAcceptExtension = Node.create({
   parseHTML() {
     return [
       {
-        tag: "accept-suggestion",
+        tag: "insert-suggestion",
       },
     ];
   },
 
   renderHTML({ HTMLAttributes }) {
-    return ["accept-suggestion", mergeAttributes(HTMLAttributes)];
+    return ["insert-suggestion", mergeAttributes(HTMLAttributes)];
   },
   addCommands() {
     return {
-      setAISuggestion:
+      insertAISuggestion:
         (attributes) =>
         ({ editor }: { editor: Editor }) => {
-          
           editor
             .chain()
             .focus()

@@ -4,11 +4,11 @@ import "./Editor.css";
 
 import { ActionButtons } from "./EditorElements/ActionButtons";
 
-import { MenuBar } from "./EditorElements/BubbleMenu";
 import { useParams } from "react-router-dom";
+import { MenuBar } from "./EditorElements/BubbleMenu";
 
 export default function EditorFn({ editor }: { editor: Editor }) {
-  const {projectId} = useParams();
+  const { projectId } = useParams();
   return (
     <div className=" ">
       <EditorContent
@@ -39,8 +39,9 @@ export default function EditorFn({ editor }: { editor: Editor }) {
         className=" p-2 gap-2 flex  relative flex-col"
         editor={editor}
       >
-        <MenuBar editor={editor} projectId={projectId}  />
+        <MenuBar editor={editor} projectId={projectId} />
       </BubbleMenu>
+    
       <ActionButtons editor={editor} projectId={projectId} />
     </div>
   );
