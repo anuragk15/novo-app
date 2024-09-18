@@ -55,7 +55,7 @@ export default function ProjectsScreen() {
       throw new Error(error?.response?.data?.message || "An error occurred");
     }
   }, [error, projects, isLoading]);
-  // console.log(projects);
+  //console.log(projects);
   if (isLoading) {
     return <LoadingState />;
   }

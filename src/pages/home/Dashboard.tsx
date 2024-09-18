@@ -14,6 +14,7 @@ export default function DashboardHome() {
       return res?.data;
     },
   });
+  console.log(data)
 
   return (
     <div className="flex  bg-slate-100">

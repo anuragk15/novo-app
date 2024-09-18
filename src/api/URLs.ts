@@ -37,6 +37,8 @@ export const URLs = {
   PROJECTS_COLLABS: "/projects/collaborators",
   PROJECT_BY_ID: "/projects/id",
   PROJECTS_INVITE_COLLAB: "/projects/invite/collaborator",
+  PROJECTS_REMOVE_INVITE: "/projects/remove/invite",
+
   PROJECTS_COLLAB_CHANGE_ACCESS: "/projects/change/collaborator/access",
   PROJECT_ACCEPT_INVITE: "/projects/invite/accept",
   PROJECT_UPDATE: "/projects/update",

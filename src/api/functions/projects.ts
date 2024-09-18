@@ -86,6 +86,23 @@ export const inviteCollaborator = async ({
     });
   return response?.data;
 };
+export const removeInvite = async ({
+  projectId,
+  inviteId,
+}: {
+  projectId: string;
+  inviteId: string;
+}) => {
+  const response = await axiosClient
+    .post(URLs.PROJECTS_REMOVE_INVITE, {
+      projectId,
+      inviteId,
+    })
+    .catch((error) => {
+      throw error;
+    });
+  return response?.data;
+};
 
 export const removeCollaborator = async ({
   projectId,
