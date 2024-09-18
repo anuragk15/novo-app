@@ -32,6 +32,7 @@ export const URLs = {
 
   //Projects
   PROJECTS_GET: "/projects",
+  INVITES_GET: "/projects/invites",
   PROJECTS_DELETE: "/projects/id",
   PROJECTS_BILLING: "/projects/billing",
   PROJECTS_COLLABS: "/projects/collaborators",
@@ -40,7 +41,7 @@ export const URLs = {
   PROJECTS_REMOVE_INVITE: "/projects/remove/invite",
 
   PROJECTS_COLLAB_CHANGE_ACCESS: "/projects/change/collaborator/access",
-  PROJECT_ACCEPT_INVITE: "/projects/invite/accept",
+  PROJECTS_RESPOND_INVITE: "/projects/invite/respond",
   PROJECT_UPDATE: "/projects/update",
   PROJECTS_ADD_TAG: "/documents/add/tag",
   PROJECTS_GET_TAGS: "/documents/tags",

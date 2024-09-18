@@ -1,4 +1,5 @@
 import { getProjects } from "@/api/functions/projects";
+import AcceptInviteUI from "@/components/home/ui/acceptInvite";
 import CreateProjectPopup from "@/components/home/ui/createProject";
 import { OnboardingOverviewContent } from "@/components/onboarding/overview";
 import { Button } from "@/components/ui/button";
@@ -32,6 +33,7 @@ export default function ProjectsScreen() {
     },
     staleTime: Infinity,
   });
+
   useEffect(() => {
     if (data?.length > 0) {
       if (name == "") {
@@ -72,7 +74,9 @@ export default function ProjectsScreen() {
               <Navbar name={name} setName={setName} />
             </div>
           </div>
-
+          <div className=" px-5 md:px-10 space-y-4 max-w-[1280px] mx-auto">
+            <AcceptInviteUI />
+          </div>
           <div className=" px-5 md:px-10 space-y-4 max-w-[1280px] mx-auto">
             <div className=" flex sm:flex-row flex-col-reverse  items-center justify-between">
               <h2 className="text-2xl font-sans">Your projects</h2>
@@ -93,6 +97,7 @@ export default function ProjectsScreen() {
                 projects?.length > 0 &&
                 projects.map((project) => (
                   <ProjectCard
+                    key={project?.projects?.id}
                     role={
                       project?.collaborators?.accessLevel == "admin"
                         ? "Admin"

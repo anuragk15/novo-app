@@ -21,6 +21,17 @@ export function daysBetweenDates(date1: Date, date2: Date) {
   return daysDifference;
 }
 
+export function formatAccessLevel(accessLevel: string) {
+  if (accessLevel == "admin") {
+    return "Admin";
+  } else if (accessLevel == "manager") {
+    return "Manager";
+  } else if (accessLevel == "write") {
+    return "Editor";
+  } else if (accessLevel == "read") {
+    return "Viewer";
+  }
+}
 
 export function isFileNameOrUrl(inputString: string) {
   // Regular expression to check if the string is a URL

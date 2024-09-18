@@ -2,10 +2,12 @@ import {
   getProjectById,
   getProjectCollaborators,
   inviteCollaborator,
+  removeCollaborator,
   removeInvite,
 } from "@/api/functions/projects";
 import Sidebar from "@/components/home/sidebar";
 import { Button } from "@/components/ui/button";
+import { ConfirmDelete } from "@/components/ui/confirmDelete";
 import {
   Dialog,
   DialogClose,
@@ -36,10 +38,10 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useToast } from "@/components/ui/use-toast";
-import { cn } from "@/lib/utils";
+import { cn, formatAccessLevel } from "@/lib/utils";
 import { TooltipContent } from "@radix-ui/react-tooltip";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { KeyRound, Plus, Trash } from "lucide-react";
+import { Plus, Trash } from "lucide-react";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 
@@ -86,24 +88,7 @@ export default function TeamsScreen() {
       return res?.data;
     },
   });
-  // const { mutateAsync: removeCollaboratorFn } = useMutation({
-  //   mutationKey: ["remove", "collaborator", email, projectId],
-  //   mutationFn: async ({
-  //     email,
-  //     accessLevel,
-  //     projectId,
-  //   }: {
-  //     email: string;
-  //     collaboratorId: string;
-  //     projectId;
-  //   }) => {
-  //     const res = await inviteCollaborator({ email, accessLevel, projectId });
-  //     queryClient.invalidateQueries({
-  //       queryKey: ["get", "collaborators", "project", projectId],
-  //     });
-  //     return res?.data;
-  //   },
-  // });
+
   const handleSubmit = async () => {
     if (selectedAccessLevel == null) {
       toast({
@@ -150,15 +135,7 @@ export default function TeamsScreen() {
       });
     }
   };
-  function checkNumberOfAdmins() {
-    let adminCount = 0;
-    data.forEach((item) => {
-      if (item.accessLevel == "admin" && item.type == "collaborator") {
-        adminCount++;
-      }
-    });
-    return adminCount;
-  }
+
   return (
     <div className="flex  bg-slate-100">
       <Sidebar projectId={projectId} />
@@ -331,74 +308,18 @@ export default function TeamsScreen() {
                       ? "Viewer"
                       : null}
                   </TableCell>
-                  <TableCell className="text-right">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button className="m-0" variant="ghost">
-                          Edit
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent className="mr-2">
-                        {item?.type == "collaborator" && (
-                          <DropdownMenuItem className=" flex gap-2 group cursor-pointer items-center">
-                            <KeyRound size={16} color="orange" />
-                            <span>Change access level</span>
-                          </DropdownMenuItem>
-                        )}
-                        <DropdownMenuItem
-                          onClickCapture={() => {
-                            if (item?.type == "collaborator") {
-                              //only admin can remove other admin
-                              if (
-                                item?.accessLevel == "admin" &&
-                                currentProject?.project?.accessLevel != "admin"
-                              ) {
-                                toast({
-                                  title: "Error",
-                                  variant: "destructive",
-                                  description: "Cannot remove an admin",
-                                });
-                                return;
-                              } else if (item?.accessLevel == "admin") {
-                                const count = checkNumberOfAdmins();
-                                if (count == 1) {
-                                  toast({
-                                    variant: "destructive",
-                                    title: "Error",
-                                    description: "Cannot remove the only admin",
-                                  });
-                                  return;
-                                }
-                              }
-                              // add remove collaborator function
-                            } else {
-                              removeInvite({
-                                inviteId: item.inviteId,
-                                projectId,
-                              });
-                              queryClient.invalidateQueries({
-                                queryKey: [
-                                  "get",
-                                  "collaborators",
-                                  "project",
-                                  projectId,
-                                ],
-                              });
-                              toast({
-                                title: "Removed",
-                                description: "Invite has been successfully removed!",
-                              });
-                            }
-                          }}
-                          className=" flex gap-2 group cursor-pointer items-center"
-                        >
-                          <Trash size={16} color="red" />
-                          <span className="group-hover:text-red-500 ">
-                            Remove
-                          </span>
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
+                  <TableCell className="text-right flex gap-4 justify-end">
+                    {/* {item?.type == "collaborator" && (
+                      <div className=" flex gap-2 group cursor-pointer items-center">
+                        <KeyRound size={18} color="orange" />
+                      </div>
+                    )} */}
+                    <DeleteCollaboratorUI
+                      projectId={projectId}
+                      item={item}
+                      data={data}
+                      currentProject={currentProject}
+                    />
                   </TableCell>
                 </TableRow>
               ))}
@@ -410,14 +331,94 @@ export default function TeamsScreen() {
   );
 }
 
-function formatAccessLevel(accessLevel: string) {
-  if (accessLevel == "admin") {
-    return "Admin";
-  } else if (accessLevel == "manager") {
-    return "Manager";
-  } else if (accessLevel == "write") {
-    return "Editor";
-  } else if (accessLevel == "read") {
-    return "Viewer";
+const DeleteCollaboratorUI = ({ item, projectId, data, currentProject }) => {
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
+  const [showDialog, setShowDialog] = useState(false);
+  function checkNumberOfAdmins() {
+    let adminCount = 0;
+    data.forEach((item) => {
+      if (item.accessLevel == "admin" && item.type == "collaborator") {
+        adminCount++;
+      }
+    });
+    return adminCount;
   }
-}
+  return (
+    <div>
+      <ConfirmDelete
+        onConfirm={async () => {
+          if (item?.type == "collaborator") {
+            //only admin can remove other admin
+            if (
+              item?.accessLevel == "admin" &&
+              currentProject?.project?.accessLevel != "admin"
+            ) {
+              toast({
+                title: "Error",
+                variant: "destructive",
+                description: "Cannot remove an admin",
+              });
+              return;
+            } else if (
+              item?.accessLevel == "admin" &&
+              checkNumberOfAdmins() == 1
+            ) {
+              toast({
+                variant: "destructive",
+                title: "Error",
+                description: "Cannot remove the only admin",
+              });
+              return;
+            } else {
+              await removeCollaborator({
+                projectId,
+                collaboratorId: item.collaboratorId,
+              })
+                .then(() => {
+                  queryClient.invalidateQueries({
+                    queryKey: ["get", "collaborators", "project", projectId],
+                  });
+                  toast({
+                    title: "Removed",
+                    description: "Collaborator has been successfully removed!",
+                  });
+                })
+                .catch(() => {
+                  toast({
+                    variant: "destructive",
+                    title: "Failed",
+                    description: "An error occurred",
+                  });
+                });
+            }
+            // add remove collaborator function
+          } else {
+            removeInvite({
+              inviteId: item.inviteId,
+              projectId,
+            });
+            queryClient.invalidateQueries({
+              queryKey: ["get", "collaborators", "project", projectId],
+            });
+            toast({
+              title: "Removed",
+              description: "Invite has been successfully removed!",
+            });
+          }
+        }}
+        open={showDialog}
+        setOpen={setShowDialog}
+        message={
+          "Are you sure you want to remove this collaborator? This cannot be undone."
+        }
+      />
+      <div
+        onClick={() => setShowDialog(true)}
+        className="p-2 cursor-pointer hover:bg-slate-200 rounded-xl"
+      >
+        <Trash size={18} color="red" />
+      </div>
+    </div>
+  );
+};

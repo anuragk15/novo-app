@@ -28,6 +28,7 @@ export default function DocumentEditorScreen() {
 
     enabled: false,
   });
+  
   const debounceTimeoutRef = useRef(null);
   const [isDirty, setIsDirty] = useState(false); // Tracks if there are unsaved changes
 

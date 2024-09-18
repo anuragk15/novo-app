@@ -7,6 +7,12 @@ export const getProjects = async () => {
   });
   return response?.data;
 };
+export const getInvites = async () => {
+  const response = await axiosClient.get(URLs.INVITES_GET).catch((error) => {
+    throw error;
+  });
+  return response?.data;
+};
 export const getProjectBilling = async ({
   projectId,
 }: {
@@ -112,11 +118,9 @@ export const removeCollaborator = async ({
   collaboratorId: string;
 }) => {
   const response = await axiosClient
-    .delete(URLs.PROJECTS_REMOVE_COLLAB, {
-      params: {
-        projectId,
-        collaboratorId,
-      },
+    .post(URLs.PROJECTS_REMOVE_COLLAB, {
+      projectId,
+      collaboratorId,
     })
     .catch((error) => {
       throw error;
@@ -145,10 +149,17 @@ export const changeCollaboratorAccess = async ({
   return response?.data;
 };
 
-export const acceptInvite = async ({ inviteId }: { inviteId: string }) => {
+export const respondInvite = async ({
+  inviteId,
+  accepted,
+}: {
+  inviteId: string;
+  accepted: boolean;
+}) => {
   const response = await axiosClient
-    .post(URLs.PROJECT_ACCEPT_INVITE, {
+    .post(URLs.PROJECTS_RESPOND_INVITE, {
       inviteId,
+      accepted,
     })
     .catch((error) => {
       throw error;
