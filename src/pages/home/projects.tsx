@@ -3,6 +3,7 @@ import AcceptInviteUI from "@/components/home/ui/acceptInvite";
 import CreateProjectPopup from "@/components/home/ui/createProject";
 import { OnboardingOverviewContent } from "@/components/onboarding/overview";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,14 +11,16 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import LoadingState from "@/components/ui/loadingState";
 import ProjectCard from "@/components/ui/projectCard";
+import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
 import { useUserStore } from "@/store/user";
 import OnboardingWrapper from "@/wrappers/onboarding";
 import { useClerk } from "@clerk/clerk-react";
 import { useQuery } from "@tanstack/react-query";
-import { Lightbulb, LogOut, Plus, Search, Settings, User } from "lucide-react";
+import { Lightbulb, LogOut, Plus, Search, User, User2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
@@ -148,68 +151,117 @@ export default function ProjectsScreen() {
 const Navbar = ({ name, setName }) => {
   const { signOut } = useClerk();
   const { user } = useUserStore();
-
+  const [showDialog, setShowDialog] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [searchParams, setSearchParams] = useSearchParams();
-
+  const { toast } = useToast();
   return (
-    <div className="py-2 px-2 flex justify-between items-center">
-      <h1
-        className="text-3xl"
-        style={{
-          fontFamily: "Pacifico",
-        }}
-      >
-        Novo
-      </h1>
-      <div className="flex gap-5 items-center">
-        <div className=" flex gap-2 px-2 items-center bg-slate-100 rounded-xl">
-          <Search color="gray" />
-          <Input
-            name={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder="Search projects..."
-            className={cn(
-              "border-none bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 font-sans "
-            )}
-          />
+    <>
+      <Dialog open={showDialog} onOpenChange={setShowDialog}>
+        <DialogContent>
+          <div>
+            <div className="flex justify-between">
+              <div className="space-y-4">
+                <h1 className="text-2xl">Profile</h1>
+                <div>
+                  <Label className="text-md text-slate-500">User name</Label>
+                  <div
+                    onClick={() => {
+                      navigator.clipboard.writeText(user.username);
+                      toast({
+                        title: "Username copied",
+                        description: "Username copied to clipboard",
+                      });
+                    }}
+                    className=" border p-2 rounded-lg bg-slate-100 text-slate-700 cursor-pointer"
+                  >
+                    {user.username}
+                  </div>
+                </div>
+                <div>
+                  <Label className="text-md text-slate-500">Email</Label>
+                  <div
+                    onClick={() => {
+                      navigator.clipboard.writeText(user.email);
+                      toast({
+                        title: "Email copied",
+                        description: "Email copied to clipboard",
+                      });
+                    }}
+                    className=" cursor-pointer  border p-2 rounded-lg bg-slate-100 text-slate-700"
+                  >
+                    {user.email}
+                  </div>
+                </div>
+              </div>
+              <div>
+                <img className="rounded-full" src={user.photo} />
+              </div>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+      <div className="py-2 px-2 flex justify-between items-center">
+        <h1
+          className="text-3xl"
+          style={{
+            fontFamily: "Pacifico",
+          }}
+        >
+          Novo
+        </h1>
+        <div className="flex gap-5 items-center">
+          <div className=" flex gap-2 px-2 items-center bg-slate-100 rounded-xl">
+            <Search color="gray" />
+            <Input
+              name={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Search projects..."
+              className={cn(
+                "border-none bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 font-sans "
+              )}
+            />
+          </div>
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              {user?.photo ? (
+                <img
+                  src={user?.photo}
+                  className="w-10 rounded-full"
+                  alt="User profile"
+                />
+              ) : (
+                <User size={20} />
+              )}
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className=" mr-2">
+              <DropdownMenuItem
+                onClick={() => {
+                  setSearchParams({ onboarding: "true" });
+                }}
+                className="cursor-pointer flex items-center gap-2"
+              >
+                <Lightbulb size={14} />
+                <p>Quick intro</p>
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => setShowDialog(true)}
+                className="cursor-pointer flex items-center gap-2"
+              >
+                <User2 size={14} />
+                <p>Profile</p>
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => signOut({ redirectUrl: "/sign-in" })}
+                className="cursor-pointer flex items-center gap-2"
+              >
+                <LogOut size={14} />
+                Log out
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
-        <DropdownMenu>
-          <DropdownMenuTrigger>
-            {user?.photo ? (
-              <img
-                src={user?.photo}
-                className="w-10 rounded-full"
-                alt="User profile"
-              />
-            ) : (
-              <User size={20} />
-            )}
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className=" mr-2">
-            <DropdownMenuItem
-              onClick={() => {
-                setSearchParams({ onboarding: "true" });
-              }}
-              className="cursor-pointer flex items-center gap-2"
-            >
-              <Lightbulb size={14} />
-              <p>Quick intro</p>
-            </DropdownMenuItem>
-            <DropdownMenuItem className="cursor-pointer flex items-center gap-2">
-              <Settings size={14} />
-              <p>Settings</p>
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() => signOut({ redirectUrl: "/sign-in" })}
-              className="cursor-pointer flex items-center gap-2"
-            >
-              <LogOut size={14} />
-              Log out
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
       </div>
-    </div>
+    </>
   );
 };

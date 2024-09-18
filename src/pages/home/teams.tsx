@@ -125,8 +125,8 @@ export default function TeamsScreen() {
         projectId,
       });
       toast({
-        title: "✅ Invite sent",
-        description: `An invite has been sent to ${email}`,
+        title: "✅ Invite created",
+        description: `Ask them to sign up on Novo and accept the invite`,
       });
     } catch (e) {
       toast({
