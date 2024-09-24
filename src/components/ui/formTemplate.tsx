@@ -65,8 +65,11 @@ const DynamicForm = ({ formFields, name, templateId, onBack }) => {
   //   console.log(isPending);
   if (isPending) {
     return (
-      <div>
-        <Spinner />
+      <div className="h-full w-full flex flex-1 justify-center items-center flex-col gap-4">
+        <Spinner size="large" />
+        <p className="text-lg font-medium">
+          Hang tight, your ideas are taking shape... 🚀 <br />
+        </p>
       </div>
     );
   }

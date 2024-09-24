@@ -5,6 +5,7 @@ import { useAuth } from "@clerk/clerk-react";
 import { useQuery } from "@tanstack/react-query";
 import * as React from "react";
 import { Outlet, useNavigate } from "react-router-dom";
+import PostHogPageView from "./pageview";
 
 export default function AuthLayout() {
   const { userId, isLoaded } = useAuth();
@@ -43,5 +44,10 @@ export default function AuthLayout() {
       </div>
     );
 
-  return <Outlet />;
+  return (
+    <>
+      <PostHogPageView />
+      <Outlet />
+    </>
+  );
 }

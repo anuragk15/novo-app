@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { ClerkProvider } from "@clerk/clerk-react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "non.geist";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom";
 import "./App.css";
 import DashboardHome from "./pages/home/dashboard";
 
@@ -14,12 +14,13 @@ import SignIn from "./pages/auth/signIn";
 import SignUpPage from "./pages/auth/signUp";
 import DocumentEditorScreen from "./pages/editor/document";
 import ProjectsScreen from "./pages/home/projects";
+import SettingsBillingScreen from "./pages/home/settings/billing";
 import SettingsOverviewScreen from "./pages/home/settings/overview";
 import SourceHome from "./pages/home/source";
 import TeamsScreen from "./pages/home/teams";
 import TemplatesHome from "./pages/home/template";
 import ErrorScreen from "./pages/misc/Error";
-import SettingsBillingScreen from "./pages/home/settings/billing";
+import { PHProvider } from "./wrappers/posthog";
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
@@ -34,6 +35,10 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
+        element: <Navigate to="/projects" replace />,
+      },
+      {
+        path: "/projects",
         element: <ProjectsScreen />,
       },
       {
@@ -129,8 +134,10 @@ function App() {
       afterSignOutUrl="/"
     >
       <QueryClientProvider client={queryClient}>
-        <Toaster />
-        <RouterProvider router={router} />
+        <PHProvider>
+          <Toaster />
+          <RouterProvider router={router} />
+        </PHProvider>
       </QueryClientProvider>
     </ClerkProvider>
   );
