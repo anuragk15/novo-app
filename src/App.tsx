@@ -2,7 +2,11 @@ import { Toaster } from "@/components/ui/toaster";
 import { ClerkProvider } from "@clerk/clerk-react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "non.geist";
-import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  Navigate,
+  RouterProvider,
+} from "react-router-dom";
 import "./App.css";
 import DashboardHome from "./pages/home/dashboard";
 
@@ -21,6 +25,7 @@ import TeamsScreen from "./pages/home/teams";
 import TemplatesHome from "./pages/home/template";
 import ErrorScreen from "./pages/misc/Error";
 import { PHProvider } from "./wrappers/posthog";
+import LiveDocumentEditorScreen from "./pages/editor/live";
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
@@ -106,7 +111,6 @@ const router = createBrowserRouter([
       },
     ],
   },
-
   {
     path: "/sign-in",
     element: (
