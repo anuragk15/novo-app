@@ -6,11 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
 import {
-    HobbyWithoutTrial,
-    HobbyWithTrial,
-    planLimits,
-    ProWithoutTrial,
-    ProWithTrial,
+  planLimits
 } from "@/lib/plan";
 import { useUser } from "@clerk/clerk-react";
 import { useQueryClient } from "@tanstack/react-query";
@@ -64,36 +60,52 @@ export const CreateProjectUI = ({
     }
     const prjId = uuidv4();
     // console.log(user.emailAddresses[0].emailAddress);
-    let url = "";
-    if (planName === "hobby") {
-      url = withTrial ? HobbyWithTrial : HobbyWithoutTrial;
-    } else {
-      url = withTrial ? ProWithTrial : ProWithoutTrial;
-    }
-    if (url == "") {
-      return;
-    }
-    const eml = user.emailAddresses[0].emailAddress;
-    //if you do not close the dialog box, the checkout will malfunction
+    // let url = "";
+    // if (planName === "hobby") {
+    //   url = withTrial ? HobbyWithTrial : HobbyWithoutTrial;
+    // } else {
+    //   url = withTrial ? ProWithTrial : ProWithoutTrial;
+    // }
+    // if (url == "") {
+    //   return;
+    // }
+    // const eml = user.emailAddresses[0].emailAddress;
+    // //if you do not close the dialog box, the checkout will malfunction
+    // if (closeDialog) {
+    //   closeDialog();
+    // }
+    // //@ts-ignore
+    // LemonSqueezy.Setup({
+    //   eventHandler: (event) => {
+    //     if (event?.event == "Checkout.Success") {
+    //       queryClient.invalidateQueries({
+    //         queryKey: ["get", "projects"],
+    //       });
+    //     }
+    //   },
+    // });
+    // const checkoutUrl = `${url}&checkout[email]=${eml}&checkout[email]=${eml}&checkout[custom][project_id]=${prjId}&checkout[custom][project_name]=${name}&logo=0`;
+    // //@ts-ignore
+    // LemonSqueezy.Url.Open(checkoutUrl);
+
     if (closeDialog) {
       closeDialog();
     }
+    const eml = user.emailAddresses[0].emailAddress;
     //@ts-ignore
-    LemonSqueezy.Setup({
-      eventHandler: (event) => {
-        if (event?.event == "Checkout.Success") {
-          queryClient.invalidateQueries({
-            queryKey: ["get", "projects"],
-          });
-        }
-      },
+    fastspring.builder.recognize({
+      email: eml,
     });
-    const checkoutUrl = `${url}&checkout[email]=${eml}&checkout[email]=${eml}&checkout[custom][project_id]=${prjId}&checkout[custom][project_name]=${name}&logo=0`;
     //@ts-ignore
-    LemonSqueezy.Url.Open(checkoutUrl);
+    fastspring.builder.tag({
+      projectId: prjId,
+      projectName: name,
+    });
 
-    // console.log(checkoutUrl);
-    // window.open(checkoutUrl);
+    //@ts-ignore
+    fastspring.builder.add(planName);
+    //@ts-ignore
+    fastspring.builder.checkout();
   };
 
   return (

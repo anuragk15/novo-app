@@ -9,7 +9,7 @@ import PostHogPageView from "./pageview";
 
 export default function AuthLayout() {
   const { userId, isLoaded } = useAuth();
-  const { setUser } = useUserStore();
+  const { setUser, user } = useUserStore();
   const navigate = useNavigate();
 
   ////console.log('test', userId)
@@ -37,7 +37,7 @@ export default function AuthLayout() {
     }
   }, [data, isLoading, setUser]);
 
-  if (!isLoaded || isLoading)
+  if (!isLoaded || isLoading || !user?.username )
     return (
       <div className="flex h-screen justify-center items-center">
         <Spinner size="large" />

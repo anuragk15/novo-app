@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { getDocumentById, updateDocument } from "@/api/functions/documents";
 import EditorFn from "@/components/ui/editor";
@@ -15,31 +14,36 @@ import Image from "@tiptap/extension-image";
 import { Plugin } from "@tiptap/pm/state";
 import { SlashCommandExtension } from "@/components/ui/EditorExtensions/SlashCommand";
 import Collaboration from "@tiptap/extension-collaboration";
-import { WebsocketProvider } from "y-websocket";
-import * as Y from "yjs";
 import CollaborationCursor from "@tiptap/extension-collaboration-cursor";
-import { useUser } from "@clerk/clerk-react";
+import * as Y from "yjs";
 const yDoc = new Y.Doc();
-import useWebSocket from "react-use-websocket";
-export default function DocumentEditorScreen() {
+import { HocuspocusProvider } from "@hocuspocus/provider";
+import { useUserStore } from "@/store/user";
+import { generateColorsFromInitial } from "@/lib/utils";
+export default function LiveDocumentEditorScreen() {
   const { projectId, id } = useParams();
-
   const navigate = useNavigate();
   const { toast } = useToast();
   const [docTitle, setTitle] = useState("");
-  const { sendMessage, lastMessage, readyState } = useWebSocket(
-    "ws://localhost:3000/collaborate/" + id,
-    {
-      onOpen: () => {
-        console.log("opened");
-      },
-      onMessage: (event) => {
-        console.log("event", event?.data);
-        const json = JSON.parse(event.data);
-        Y.applyUpdate(yDoc, new Uint8Array(json.message.data));
-      },
-    }
-  );
+  const { data, isLoading, error, isError, refetch } = useQuery({
+    queryKey: ["get", "document", id],
+    queryFn: async () => {
+      const res = await getDocumentById({ projectId, documentId: id });
+      return res?.data;
+    },
+    staleTime: 0,
+    enabled: false,
+  });
+  const { user } = useUserStore();
+  const provider = useCallback(() => {
+    return new HocuspocusProvider({
+      url: "ws://127.0.0.1:1234/collaboration/",
+      name: id,
+      document: yDoc,
+    });
+  }, []);
+  const debounceTimeoutRef = useRef(null);
+  const [isDirty, setIsDirty] = useState(false); // Tracks if there are unsaved changes
 
   const {
     mutateAsync,
@@ -64,27 +68,6 @@ export default function DocumentEditorScreen() {
       return res?.documentId;
     },
   });
-  const { data, isLoading, error, isError, refetch } = useQuery({
-    queryKey: ["get", "document", id],
-    queryFn: async () => {
-      const res = await getDocumentById({ projectId, documentId: id });
-      return res?.data;
-    },
-
-    enabled: false,
-  });
-
-  const { user } = useUser();
-  const debounceTimeoutRef = useRef(null);
-  const [isDirty, setIsDirty] = useState(false); // Tracks if there are unsaved changes
-  useEffect(() => {
-    yDoc.on("update", (update) => {
-      console.log(update);
-      sendMessage(update);
-    });
-    return () => {};
-  }, [id, yDoc]);
-
   useEffect(() => {
     if (id != "new") refetch();
   }, []);
@@ -93,6 +76,112 @@ export default function DocumentEditorScreen() {
       //@ts-ignore
       throw new Error(error?.response?.data?.message || error);
   }, [isError, error]);
+
+  const editor = useEditor({
+    extensions: [
+      ...myExtensions,
+      Image.extend({
+        addProseMirrorPlugins() {
+          const plugin = new Plugin({
+            props: {
+              handleDOMEvents: {
+                paste(view, event) {
+                  const url = event.clipboardData.getData("text/plain");
+                  const isImage =
+                    /(https?:\/\/.*\.(?:png|jpg|jpeg|gif|bmp|webp)(\?.*)?$)/i.test(
+                      url
+                    );
+
+                  if (isImage) {
+                    editor.chain().focus().setImage({ src: url }).run();
+                  }
+                },
+              },
+            },
+          });
+          return [plugin];
+        },
+      }),
+      SlashCommandExtension.configure({
+        onSlashEnter: () => {
+          const { state } = editor;
+          const { $from, to } = state.selection;
+
+          // Get the text before the selection
+          const textBefore = state.doc.textBetween(0, $from.pos, "\n", "\n");
+
+          // Get the text after the selection
+          const textAfter = state.doc.textBetween(
+            to,
+            state.doc.content.size,
+            "\n",
+            "\n"
+          );
+
+          // console.log("Text before selection: ", textBefore);
+          // console.log("Text after selection: ", textAfter);
+          // Logic to show your input field
+          editor.chain().focus().insertAISuggestion({
+            previousContent: textBefore,
+            nextContent: textAfter,
+            projectId: projectId,
+          });
+        },
+      }),
+      Collaboration.configure({
+        document: yDoc,
+      }),
+
+      CollaborationCursor.configure({
+        provider: provider(),
+        user: {
+          name: user?.username,
+          color: generateColorsFromInitial(user?.username).background,
+        },
+      }),
+    ],
+
+    onUpdate: ({ editor }) => {
+      // console.log(editor.getJSON());
+      if (editor.getJSON().content?.length == 0) return;
+      if (
+        !editor.getJSON().content[0].content ||
+        editor.getJSON().content[0].content?.length == 0
+      )
+        return;
+      setIsDirty(true);
+
+      clearTimeout(debounceTimeoutRef.current);
+      debounceTimeoutRef.current = setTimeout(async () => {
+        let title = "";
+        try {
+          title = editor.getJSON().content[0].content[0].text;
+        } catch (e) {
+          console.error(e);
+        }
+        if (title !== "") {
+          if (title != docTitle) setTitle(title);
+          const docId = await mutateAsync({ content: editor.getHTML(), title });
+
+          if (docId) {
+            setIsDirty(false);
+            if (id != docId) {
+              navigate(`/document/editor/${projectId}/${docId}`, {
+                replace: true,
+              });
+            }
+          }
+        } else {
+          toast({
+            title: "Title is required",
+            description: "Please add a title to save the document",
+          });
+        }
+      }, 1500);
+    },
+
+    // content: mkdown,
+  });
 
   useEffect(() => {
     const handleBeforeUnload = (event) => {
@@ -128,101 +217,11 @@ export default function DocumentEditorScreen() {
   useEffect(() => {
     //console.log(data);
     if (data) {
-      if (editor?.getText() == "")
-        editor.commands.setContent(data?.content?.content || "");
+      editor.commands.setContent(data?.content?.content || "");
       setTitle(data?.content?.title || "");
     }
-  }, [data]);
-  const editor = useEditor({
-    extensions: [
-      ...myExtensions,
-      Image.extend({
-        addProseMirrorPlugins() {
-          const plugin = new Plugin({
-            props: {
-              handleDOMEvents: {
-                paste(view, event) {
-                  const url = event.clipboardData.getData("text/plain");
-                  const isImage =
-                    /(https?:\/\/.*\.(?:png|jpg|jpeg|gif|bmp|webp)(\?.*)?$)/i.test(
-                      url
-                    );
+  }, [data, editor]);
 
-                  if (isImage) {
-                    editor.chain().focus().setImage({ src: url }).run();
-                  }
-                },
-              },
-            },
-          });
-          return [plugin];
-        },
-      }),
-      Collaboration.configure({
-        document: yDoc,
-      }),
-
-      SlashCommandExtension.configure({
-        onSlashEnter: () => {
-          const { state } = editor;
-          const { $from, to } = state.selection;
-
-          // Get the text before the selection
-          const textBefore = state.doc.textBetween(0, $from.pos, "\n", "\n");
-
-          // Get the text after the selection
-          const textAfter = state.doc.textBetween(
-            to,
-            state.doc.content.size,
-            "\n",
-            "\n"
-          );
-
-          // console.log("Text before selection: ", textBefore);
-          // console.log("Text after selection: ", textAfter);
-          // Logic to show your input field
-          editor.chain().focus().insertAISuggestion({
-            previousContent: textBefore,
-            nextContent: textAfter,
-            projectId: projectId,
-          });
-        },
-      }),
-    ],
-
-    onUpdate: ({ editor }) => {
-      setIsDirty(true);
-
-      clearTimeout(debounceTimeoutRef.current);
-      debounceTimeoutRef.current = setTimeout(async () => {
-        let title = "";
-        try {
-          title = editor.getJSON().content[0].content[0].text;
-        } catch (e) {
-          console.error(e);
-        }
-        if (title !== "") {
-          //   if (title != docTitle) setTitle(title);
-          //   const docId = await mutateAsync({ content: editor.getHTML(), title });
-          //   if (docId) {
-          //     setIsDirty(false);
-          //     if (id != docId) {
-          //       navigate(`/document/editor/${projectId}/${docId}`, {
-          //         replace: true,
-          //       });
-          //     }
-          //   }
-        } else {
-          toast({
-            title: "Title is required",
-            description: "Please add a title to save the document",
-          });
-        }
-      }, 1500);
-    },
-
-    // content: mkdown,
-  });
   if (isLoading) {
     return <LoadingState />;
   }
@@ -235,7 +234,7 @@ export default function DocumentEditorScreen() {
 
         <div className="flex gap-2 max-w-[1280px]  mx-auto">
           <ToC editor={editor} />
-          {yDoc ? <EditorFn editor={editor} /> : null}
+          <EditorFn editor={editor} />
         </div>
       </div>
     </div>

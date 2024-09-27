@@ -91,6 +91,12 @@ export function generateColorsFromInitial(str: string) {
   return colorMap[initial] || { background: "#FFFFFF", text: "#000000" }; // Default to white bg, black text if letter is not found
 }
 
+export function capitalizeFirstCharacter(str: string): string {
+  if (!str) return '';  // Handle empty string case
+
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
 export function formatDate(date: Date) {
   const now = new Date();
 

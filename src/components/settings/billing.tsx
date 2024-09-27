@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+import { capitalizeFirstCharacter, cn } from "@/lib/utils";
 import { Button } from "../ui/button";
 import { Separator } from "../ui/separator";
 
@@ -12,74 +12,43 @@ export default function SettingsBilling({ data }) {
             <div
               className={cn(
                 "p-2 bg-red-100 rounded-xl",
-                data?.project?.billing?.status == "active" && "bg-green-100"
+                data?.project?.billing?.state == "active" && "bg-green-100"
               )}
             >
               <p
                 className={cn(
                   "text-red-700",
-                  data?.project?.billing?.status == "active" && "text-green-700"
+                  data?.project?.billing?.state == "active" && "text-green-700"
                 )}
               >
-                {data?.project?.billing?.status_formatted}
+                {capitalizeFirstCharacter(data?.project?.billing?.state)}
               </p>
             </div>
           </div>
         </div>
         <div className="w-full space-y-4">
           <p className="text-lg">
-            <b>Plan:</b> {data?.project?.billing?.product_name}
+            <b>Plan:</b> {data?.project?.billing?.display}
           </p>
-          {data?.project?.billing?.renews_at && (
-            <p className="text-lg">
-              <b>Renews at:</b>{" "}
-              {new Date(data?.project?.billing?.renews_at).toLocaleString()}
-            </p>
-          )}
-          {data?.project?.billing?.ends_at && (
+      
+          {data?.project?.billing?.nextDisplayEmailEnhancementsWithTime && (
             <p>
               <b>Renews at:</b>{" "}
-              {new Date(data?.project?.billing?.ends_at).toLocaleString()}
+              {new Date(data?.project?.billing?.nextDisplayEmailEnhancementsWithTime).toLocaleString()}
             </p>
           )}
           <Separator />
           <div className=" text-2xl">Actions</div>
           <div className=" flex gap-4 flex-wrap">
-            {data?.project?.billing?.urls && (
+            {data?.portalLink && (
               <>
                 <Button
                   variant="outline"
                   onClick={() => {
-                    window.open(
-                      data?.project?.billing?.urls?.customer_portal,
-                      "_blank"
-                    );
+                    window.open(data?.portalLink, "_blank");
                   }}
                 >
                   Customer portal
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => {
-                    window.open(
-                      data?.project?.billing?.urls
-                        ?.customer_portal_update_subscription,
-                      "_blank"
-                    );
-                  }}
-                >
-                  Update subscription
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => {
-                    window.open(
-                      data?.project?.billing?.urls?.update_payment_method,
-                      "_blank"
-                    );
-                  }}
-                >
-                  Change payment method
                 </Button>
               </>
             )}
