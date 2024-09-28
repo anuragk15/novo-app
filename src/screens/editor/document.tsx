@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { getDocumentById, updateDocument } from "@/api/functions/documents";
-import EditorFn from "@/components/ui/editor";
+import EditorFn from '@/components/ui/editor.tsx'
 import { ToC } from "@/components/ui/EditorElements/Contents";
 import DocNavbar from "@/components/ui/EditorElements/Navbar";
 import LoadingState from "@/components/ui/loadingState";

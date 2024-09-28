@@ -301,13 +301,12 @@ function CarouselContent({
       }}
       onDragEnd={disableDrag ? undefined : onDragEnd}
       transition={
-        // eslint-disable-next-line no-constant-binary-expression
-        {
+        transition || {
           damping: 18,
           stiffness: 90,
           type: "spring",
           duration: 0.2,
-        } || transition
+        }
       }
       className={cn(
         "flex items-center",
