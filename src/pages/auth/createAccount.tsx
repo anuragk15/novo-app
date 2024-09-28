@@ -2,6 +2,7 @@ import { createUser } from "@/api/functions/users";
 import { Spinner } from "@/components/ui/spinner";
 import { useUserStore } from "@/store/user";
 import { useMutation } from "@tanstack/react-query";
+import { usePostHog } from "posthog-js/react";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -15,7 +16,7 @@ export default function CreateAccountScreen() {
       return user.data;
     },
   });
-  console.log("Create account page");
+  const posthog = usePostHog();
 
   useEffect(() => {
     if (user) {
@@ -25,6 +26,7 @@ export default function CreateAccountScreen() {
       mutateAsync().then((user) => {
         setUser(user);
         navigation("/?onboarding=true");
+        posthog.capture("user_signed_up");
       });
     }
   }, [user]);

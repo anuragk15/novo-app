@@ -25,7 +25,7 @@ import TeamsScreen from "./pages/home/teams";
 import TemplatesHome from "./pages/home/template";
 import ErrorScreen from "./pages/misc/Error";
 import { PHProvider } from "./wrappers/posthog";
-import LiveDocumentEditorScreen from "./pages/editor/live";
+// import LiveDocumentEditorScreen from "./pages/editor/live";
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 

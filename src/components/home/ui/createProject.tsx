@@ -5,13 +5,12 @@ import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
-import {
-  planLimits
-} from "@/lib/plan";
+import { planLimits } from "@/lib/plan";
 import { useUser } from "@clerk/clerk-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Check } from "lucide-react";
-import { useState } from "react";
+import { usePostHog } from "posthog-js/react";
+import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 export default function CreateProjectPopup({
@@ -22,6 +21,12 @@ export default function CreateProjectPopup({
   projects: any;
 }) {
   const [isOpen, setIsOpen] = useState(false);
+  const postHog = usePostHog();
+  useEffect(() => {
+    if (isOpen) {
+      postHog.capture("project_creation_popup_opened");
+    }
+  }, []);
   return (
     <Dialog open={isOpen} onOpenChange={(isOpen) => setIsOpen(isOpen)}>
       <DialogTrigger>{trigger}</DialogTrigger>
@@ -43,6 +48,7 @@ export const CreateProjectUI = ({
   withTrial: boolean;
 }) => {
   const queryClient = useQueryClient();
+  const postHog = usePostHog();
   const { toast } = useToast();
   const [name, setName] = useState("");
   const { user } = useUser();
@@ -57,36 +63,11 @@ export const CreateProjectUI = ({
         title: "Enter a longer name",
       });
       return;
+    } else {
+      postHog.capture("project_name_added");
     }
+
     const prjId = uuidv4();
-    // console.log(user.emailAddresses[0].emailAddress);
-    // let url = "";
-    // if (planName === "hobby") {
-    //   url = withTrial ? HobbyWithTrial : HobbyWithoutTrial;
-    // } else {
-    //   url = withTrial ? ProWithTrial : ProWithoutTrial;
-    // }
-    // if (url == "") {
-    //   return;
-    // }
-    // const eml = user.emailAddresses[0].emailAddress;
-    // //if you do not close the dialog box, the checkout will malfunction
-    // if (closeDialog) {
-    //   closeDialog();
-    // }
-    // //@ts-ignore
-    // LemonSqueezy.Setup({
-    //   eventHandler: (event) => {
-    //     if (event?.event == "Checkout.Success") {
-    //       queryClient.invalidateQueries({
-    //         queryKey: ["get", "projects"],
-    //       });
-    //     }
-    //   },
-    // });
-    // const checkoutUrl = `${url}&checkout[email]=${eml}&checkout[email]=${eml}&checkout[custom][project_id]=${prjId}&checkout[custom][project_name]=${name}&logo=0`;
-    // //@ts-ignore
-    // LemonSqueezy.Url.Open(checkoutUrl);
 
     if (closeDialog) {
       closeDialog();
@@ -104,6 +85,8 @@ export const CreateProjectUI = ({
 
     //@ts-ignore
     fastspring.builder.add(planName);
+
+    postHog.capture("payment_initiated");
     //@ts-ignore
     fastspring.builder.checkout();
   };

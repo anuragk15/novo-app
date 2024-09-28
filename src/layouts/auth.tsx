@@ -6,12 +6,13 @@ import { useQuery } from "@tanstack/react-query";
 import * as React from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import PostHogPageView from "./pageview";
+import { usePostHog } from "posthog-js/react";
 
 export default function AuthLayout() {
   const { userId, isLoaded } = useAuth();
   const { setUser, user } = useUserStore();
   const navigate = useNavigate();
-
+  const posthog = usePostHog();
   ////console.log('test', userId)
 
   const { data, isLoading } = useQuery({
@@ -34,10 +35,14 @@ export default function AuthLayout() {
     // console.log(data);
     if (data) {
       setUser(data?.data);
+      posthog.identify(
+        data?.data?.email, //'distinct_id' with your user's unique identifier
+        { name: data?.data?.username } // optional: set additional person properties
+      );
     }
-  }, [data, isLoading, setUser]);
+  }, [data, isLoading, setUser, posthog]);
 
-  if (!isLoaded || isLoading || !user?.username )
+  if (!isLoaded || isLoading || !user?.username)
     return (
       <div className="flex h-screen justify-center items-center">
         <Spinner size="large" />
