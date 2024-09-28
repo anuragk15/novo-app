@@ -8,22 +8,22 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import "@/App.css";
-import DashboardHome from '@/pages/home/dashboard';
+import DashboardHome from '@/screens/home/dashboard';
 
 // For Geist Mono
 import "non.geist/mono";
 import AuthLayout from "@/layouts/auth";
-import CreateAccountScreen from "@/pages/auth/createAccount";
-import SignIn from "@/pages/auth/signIn";
-import SignUpPage from "@/pages/auth/signUp";
-import DocumentEditorScreen from "@/pages/editor/document";
-import ProjectsScreen from "@/pages/home/projects";
-import SettingsBillingScreen from "@/pages/home/settings/billing";
-import SettingsOverviewScreen from "@/pages/home/settings/overview";
-import SourceHome from "@/pages/home/source";
-import TeamsScreen from "@/pages/home/teams";
-import TemplatesHome from "@/pages/home/template";
-import ErrorScreen from "@/pages/misc/Error";
+import CreateAccountScreen from "@/screens/auth/createAccount";
+import SignIn from "@/screens/auth/signIn";
+import SignUpPage from "@/screens/auth/signUp";
+import DocumentEditorScreen from "@/screens/editor/document";
+import ProjectsScreen from "@/screens/home/projects";
+import SettingsBillingScreen from "@/screens/home/settings/billing";
+import SettingsOverviewScreen from "@/screens/home/settings/overview";
+import SourceHome from "@/screens/home/source";
+import TeamsScreen from "@/screens/home/teams";
+import TemplatesHome from "@/screens/home/template";
+import ErrorScreen from "@/screens/misc/Error";
 import { PHProvider } from "@/wrappers/posthog";
 // import LiveDocumentEditorScreen from "./pages/editor/live";
 
