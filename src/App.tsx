@@ -7,24 +7,24 @@ import {
   Navigate,
   RouterProvider,
 } from "react-router-dom";
-import "./App.css";
-import DashboardHome from "./pages/home/dashboard";
+import "@/App.css";
+import DashboardHome from '@/pages/home/dashboard';
 
 // For Geist Mono
 import "non.geist/mono";
-import AuthLayout from "./layouts/auth";
-import CreateAccountScreen from "./pages/auth/createAccount";
-import SignIn from "./pages/auth/signIn";
-import SignUpPage from "./pages/auth/signUp";
-import DocumentEditorScreen from "./pages/editor/document";
-import ProjectsScreen from "./pages/home/projects";
-import SettingsBillingScreen from "./pages/home/settings/billing";
-import SettingsOverviewScreen from "./pages/home/settings/overview";
-import SourceHome from "./pages/home/source";
-import TeamsScreen from "./pages/home/teams";
-import TemplatesHome from "./pages/home/template";
-import ErrorScreen from "./pages/misc/Error";
-import { PHProvider } from "./wrappers/posthog";
+import AuthLayout from "@/layouts/auth";
+import CreateAccountScreen from "@/pages/auth/createAccount";
+import SignIn from "@/pages/auth/signIn";
+import SignUpPage from "@/pages/auth/signUp";
+import DocumentEditorScreen from "@/pages/editor/document";
+import ProjectsScreen from "@/pages/home/projects";
+import SettingsBillingScreen from "@/pages/home/settings/billing";
+import SettingsOverviewScreen from "@/pages/home/settings/overview";
+import SourceHome from "@/pages/home/source";
+import TeamsScreen from "@/pages/home/teams";
+import TemplatesHome from "@/pages/home/template";
+import ErrorScreen from "@/pages/misc/Error";
+import { PHProvider } from "@/wrappers/posthog";
 // import LiveDocumentEditorScreen from "./pages/editor/live";
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
