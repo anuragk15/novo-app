@@ -8,7 +8,8 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import "@/App.css";
-import DashboardHome from '@/screens/home/dashboard';
+import DashboardHome from "@/screens/home/dashboard";
+import { Crisp } from "crisp-sdk-web";
 
 // For Geist Mono
 import "non.geist/mono";
@@ -25,6 +26,7 @@ import TeamsScreen from "@/screens/home/teams";
 import TemplatesHome from "@/screens/home/template";
 import ErrorScreen from "@/screens/misc/Error";
 import { PHProvider } from "@/wrappers/posthog";
+import { useEffect } from "react";
 // import LiveDocumentEditorScreen from "./pages/editor/live";
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
@@ -131,6 +133,9 @@ const router = createBrowserRouter([
 const queryClient = new QueryClient();
 
 function App() {
+  useEffect(() => {
+    Crisp.configure('41debc16-d37d-4000-b537-d606bd561b74');
+  }, []);
   return (
     <ClerkProvider
       signUpForceRedirectUrl="/create-account"
