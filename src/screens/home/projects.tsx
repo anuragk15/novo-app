@@ -17,7 +17,7 @@ import ProjectCard from "@/components/ui/projectCard";
 import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
 import OnboardingWrapper from "@/wrappers/onboarding";
-import { useClerk, useUser } from "@clerk/clerk-react";
+import {  useClerk, useUser } from "@clerk/clerk-react";
 import { useQuery } from "@tanstack/react-query";
 import { Lightbulb, LogOut, Plus, Search, User, User2 } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -25,6 +25,7 @@ import { useSearchParams } from "react-router-dom";
 
 export default function ProjectsScreen() {
   const [name, setName] = useState("");
+
   const [projects, setProjects] = useState([]);
   const { data, isLoading, error } = useQuery({
     queryKey: ["get", "projects"],
@@ -35,7 +36,6 @@ export default function ProjectsScreen() {
     },
     staleTime: Infinity,
   });
-
 
   useEffect(() => {
     if (data?.length > 0) {

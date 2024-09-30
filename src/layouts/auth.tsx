@@ -7,14 +7,14 @@ import * as React from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import PostHogPageView from "./pageview";
 import { usePostHog } from "posthog-js/react";
+import { Crisp } from "crisp-sdk-web";
 
 export default function AuthLayout() {
   const { userId, isLoaded } = useAuth();
   const { setUser } = useUserStore();
   const navigate = useNavigate();
   const posthog = usePostHog();
-  ////console.log('test', userId)
-
+ 
   const { data, isLoading } = useQuery({
     queryKey: ["get", "user"],
     queryFn: async () => {
@@ -35,12 +35,19 @@ export default function AuthLayout() {
 
     if (data) {
       setUser(data?.data);
+      try {
+        Crisp.user.setEmail(data?.data?.email);
+        Crisp.user.setNickname(data?.data?.username);
+      } catch (e) {
+        console.error("CRISP ERROR", e);
+      }
+
       posthog.identify(
         data?.data?.email, //'distinct_id' with your user's unique identifier
         { name: data?.data?.username } // optional: set additional person properties
       );
     }
-  }, [data, isLoading]);
+  }, [data, isLoading, posthog, setUser]);
 
   if (!isLoaded || isLoading)
     return (
