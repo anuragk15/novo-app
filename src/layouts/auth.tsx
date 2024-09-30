@@ -10,7 +10,7 @@ import { usePostHog } from "posthog-js/react";
 
 export default function AuthLayout() {
   const { userId, isLoaded } = useAuth();
-  const { setUser, user } = useUserStore();
+  const { setUser } = useUserStore();
   const navigate = useNavigate();
   const posthog = usePostHog();
   ////console.log('test', userId)
@@ -32,7 +32,7 @@ export default function AuthLayout() {
 
   React.useEffect(() => {
     if (isLoading) return;
-    // console.log(data);
+
     if (data) {
       setUser(data?.data);
       posthog.identify(
@@ -40,9 +40,9 @@ export default function AuthLayout() {
         { name: data?.data?.username } // optional: set additional person properties
       );
     }
-  }, [data, isLoading, setUser, posthog]);
+  }, [data, isLoading]);
 
-  if (!isLoaded || isLoading || !user?.username)
+  if (!isLoaded || isLoading)
     return (
       <div className="flex h-screen justify-center items-center">
         <Spinner size="large" />

@@ -16,9 +16,8 @@ import LoadingState from "@/components/ui/loadingState";
 import ProjectCard from "@/components/ui/projectCard";
 import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
-import { useUserStore } from "@/store/user";
 import OnboardingWrapper from "@/wrappers/onboarding";
-import { useClerk } from "@clerk/clerk-react";
+import { useClerk, useUser } from "@clerk/clerk-react";
 import { useQuery } from "@tanstack/react-query";
 import { Lightbulb, LogOut, Plus, Search, User, User2 } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -37,6 +36,7 @@ export default function ProjectsScreen() {
     staleTime: Infinity,
   });
 
+
   useEffect(() => {
     if (data?.length > 0) {
       if (name == "") {
@@ -54,7 +54,7 @@ export default function ProjectsScreen() {
   }, [name, data]);
   useEffect(() => {
     if (error) {
-      console.log(error);
+      console.error(error);
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       //@ts-ignore
       throw new Error(error?.response?.data?.message || "An error occurred");
@@ -150,11 +150,12 @@ export default function ProjectsScreen() {
 
 const Navbar = ({ name, setName }) => {
   const { signOut } = useClerk();
-  const { user } = useUserStore();
+  const { user } = useUser();
   const [showDialog, setShowDialog] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [searchParams, setSearchParams] = useSearchParams();
   const { toast } = useToast();
+
   return (
     <>
       <Dialog open={showDialog} onOpenChange={setShowDialog}>
@@ -167,7 +168,7 @@ const Navbar = ({ name, setName }) => {
                   <Label className="text-md text-slate-500">User name</Label>
                   <div
                     onClick={() => {
-                      navigator.clipboard.writeText(user.username);
+                      navigator.clipboard.writeText(user?.username);
                       toast({
                         title: "Username copied",
                         description: "Username copied to clipboard",
@@ -175,27 +176,33 @@ const Navbar = ({ name, setName }) => {
                     }}
                     className=" border p-2 rounded-lg bg-slate-100 text-slate-700 cursor-pointer"
                   >
-                    {user.username}
+                    {user?.username}
                   </div>
                 </div>
                 <div>
                   <Label className="text-md text-slate-500">Email</Label>
                   <div
                     onClick={() => {
-                      navigator.clipboard.writeText(user.email);
-                      toast({
-                        title: "Email copied",
-                        description: "Email copied to clipboard",
-                      });
+                      if (user?.emailAddresses.length > 0) {
+                        navigator.clipboard.writeText(
+                          user?.emailAddresses[0].emailAddress
+                        );
+                        toast({
+                          title: "Email copied",
+                          description: "Email copied to clipboard",
+                        });
+                      }
                     }}
                     className=" cursor-pointer  border p-2 rounded-lg bg-slate-100 text-slate-700"
                   >
-                    {user.email}
+                    {user?.emailAddresses.length > 0
+                      ? user?.emailAddresses[0].emailAddress
+                      : "Loading"}
                   </div>
                 </div>
               </div>
               <div>
-                <img className="rounded-full" src={user.photo} />
+                <img className="rounded-full" src={user?.imageUrl} />
               </div>
             </div>
           </div>
@@ -224,9 +231,9 @@ const Navbar = ({ name, setName }) => {
           </div>
           <DropdownMenu>
             <DropdownMenuTrigger>
-              {user?.photo ? (
+              {user?.imageUrl ? (
                 <img
-                  src={user?.photo}
+                  src={user?.imageUrl}
                   className="w-10 rounded-full"
                   alt="User profile"
                 />

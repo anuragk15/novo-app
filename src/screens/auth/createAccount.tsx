@@ -16,8 +16,8 @@ export default function CreateAccountScreen() {
       return user.data;
     },
   });
-  const posthog = usePostHog();
 
+  const posthog = usePostHog();
   useEffect(() => {
     if (user) {
       navigation("/");
@@ -25,7 +25,7 @@ export default function CreateAccountScreen() {
     } else {
       mutateAsync().then((user) => {
         setUser(user);
-        navigation("/?onboarding=true");
+        navigation("/projects?onboarding=true");
         posthog.capture("user_signed_up");
       });
     }
