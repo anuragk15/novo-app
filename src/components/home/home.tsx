@@ -16,8 +16,8 @@ export default function HomeScreen({ data, projectId }) {
                 size={64}
                 className=" text-slate-700 group-hover:text-black"
               />
-              <h1 className=" text-2xl font-sans">Create document</h1>
-              <p className=" text-slate-500">
+              <h1 className=" text-2xl font-sans text-center">Create document</h1>
+              <p className=" text-slate-500 text-center">
                 Create documents effortlessly with AI
               </p>
             </div>
@@ -31,8 +31,8 @@ export default function HomeScreen({ data, projectId }) {
                 size={64}
                 className=" text-slate-700 group-hover:text-black"
               />
-              <h1 className=" text-2xl font-sans">Add a source</h1>
-              <p className=" text-slate-500">
+              <h1 className=" text-2xl font-sans text-center">Add a source</h1>
+              <p className=" text-slate-500 text-center">
                 Novo will use this to improve suggestions
               </p>
             </div>
