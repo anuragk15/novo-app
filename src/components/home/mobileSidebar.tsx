@@ -133,7 +133,7 @@ export default function MobileSideBar({ projectId }) {
                           " flex items-center gap-2 p-2 font-sans font-light rounded-md",
                           {
                             "bg-slate-200 font-normal":
-                              pathname.split("/").at(-1) === "templates",
+                              pathname.split("/").at(-1) === "settings",
                           }
                         )}
                       >

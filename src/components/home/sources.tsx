@@ -15,7 +15,7 @@ export default function SourcesScreen({ data }) {
   const { projectId } = useParams();
 
   return (
-    <div className=" flex-col w-[85vw] pl-2 pb-2 overflow-scroll h-screen bg-slate-100">
+    <div className=" flex-col w-full md:w-[85vw] pl-2 pb-2 overflow-scroll h-screen bg-slate-100">
       <SourceSearch />
 
       <div className="flex flex-col gap-4 items-start border shadow-sm rounded-lg mr-2 p-8 min-h-[91vh] bg-white">

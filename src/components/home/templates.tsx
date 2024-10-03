@@ -30,10 +30,10 @@ export default function TemplatesScreen({ data }) {
           />
         </DialogContent>
       </Dialog>
-      <div className=" flex-col w-[85vw] pl-2 pb-2 overflow-scroll h-screen bg-slate-100">
+      <div className=" flex-col w-full md:w-[85vw] pl-2 pb-2 overflow-scroll h-screen bg-slate-100">
         <SourceSearch />
         <div className="flex flex-col gap-4 items-start border shadow-sm rounded-lg mr-2 p-8 min-h-[91vh] bg-white">
-          <div className="flex justify-between w-full items-center">
+          <div className="flex flex-col md:flex-row justify-between w-full items-center">
             <div>
               <h2 className="text-2xl">Templates</h2>
               <p className="text-slate-500">

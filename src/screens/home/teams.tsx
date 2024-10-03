@@ -5,6 +5,7 @@ import {
   removeCollaborator,
   removeInvite,
 } from "@/api/functions/projects";
+import MobileSideBar from "@/components/home/mobileSidebar";
 import Sidebar from "@/components/home/sidebar";
 import { Button } from "@/components/ui/button";
 import { ConfirmDelete } from "@/components/ui/confirmDelete";
@@ -138,193 +139,202 @@ export default function TeamsScreen() {
 
   return (
     <div className="flex  bg-slate-100">
-      <Sidebar projectId={projectId} />
+      <div className="hidden md:block">
+        <Sidebar projectId={projectId} />
+      </div>
       {isLoading || isProjectLoading ? (
         <div className="flex flex-col w-[85vw] justify-center  pl-2 pb-2 overflow-scroll h-screen bg-white">
           <Spinner />
         </div>
       ) : (
-        <div className="flex flex-col w-[85vw]  gap-10 p-8 overflow-scroll h-screen bg-white">
-          <div className="flex justify-between items-center">
-            <div>
-              <h1 className=" text-2xl">Manage collaborators</h1>
-              <p className="text-slate-500">
-                Invite your team members and manage access.
-              </p>
-            </div>
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button className="flex gap-2">
-                  <Plus size={16} />
-                  <p>Invite</p>
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="bg-white">
-                <div className="flex flex-col gap-6">
-                  <h1 className="text-xl font-medium">
-                    Invite your team member
-                  </h1>
-                  <div className="flex flex-col gap-1">
-                    <Label className="font-medium text-sm">Email</Label>
-                    <Input
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      className="focus-visible:ring-1 focus-visible:ring-offset-0"
-                      placeholder="peter@parker.com"
-                    />
-                  </div>
-                  <div>
-                    <p>Access level:</p>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger>
-                        <Button
-                          className="min-w-[120px] mt-2"
-                          variant="outline"
-                        >
-                          {selectedAccessLevel
-                            ? formatAccessLevel(selectedAccessLevel)
-                            : "Select"}
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent>
-                        {currentProject?.project?.accessLevel == "admin" && (
+        <div>
+          <MobileSideBar projectId={projectId} />
+          <div className="flex flex-col w-full md:w-[85vw]  gap-10 p-8 overflow-scroll h-screen bg-white">
+            <div className="flex justify-between items-center">
+              <div>
+                <h1 className=" text-2xl">Manage collaborators</h1>
+                <p className="text-slate-500 hidden md:block">
+                  Invite your team members and manage access.
+                </p>
+              </div>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button className=" gap-2 md:flex hidden">
+                    <Plus size={16} />
+                    <p>Invite</p>
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="bg-white">
+                  <div className="flex flex-col gap-6">
+                    <h1 className="text-xl font-medium">
+                      Invite your team member
+                    </h1>
+                    <div className="flex flex-col gap-1">
+                      <Label className="font-medium text-sm">Email</Label>
+                      <Input
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="focus-visible:ring-1 focus-visible:ring-offset-0"
+                        placeholder="peter@parker.com"
+                      />
+                    </div>
+                    <div>
+                      <p>Access level:</p>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger>
+                          <Button
+                            className="min-w-[120px] mt-2"
+                            variant="outline"
+                          >
+                            {selectedAccessLevel
+                              ? formatAccessLevel(selectedAccessLevel)
+                              : "Select"}
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent>
+                          {currentProject?.project?.accessLevel == "admin" && (
+                            <DropdownMenuItem
+                              onClick={() => setSelectedAccessLevel("admin")}
+                            >
+                              <TooltipProvider>
+                                <Tooltip>
+                                  <TooltipTrigger>Admin</TooltipTrigger>
+                                  <TooltipContent
+                                    align="end"
+                                    className="bg-white p-2 border rounded-xl"
+                                  >
+                                    Admins can manage all aspects of the project
+                                    including billing, team management, and
+                                    deletion of project.
+                                  </TooltipContent>
+                                </Tooltip>
+                              </TooltipProvider>
+                            </DropdownMenuItem>
+                          )}
                           <DropdownMenuItem
-                            onClick={() => setSelectedAccessLevel("admin")}
+                            onClick={() => setSelectedAccessLevel("manager")}
                           >
                             <TooltipProvider>
                               <Tooltip>
-                                <TooltipTrigger>Admin</TooltipTrigger>
+                                <TooltipTrigger>Manager</TooltipTrigger>
                                 <TooltipContent
                                   align="end"
                                   className="bg-white p-2 border rounded-xl"
                                 >
-                                  Admins can manage all aspects of the project
-                                  including billing, team management, and
-                                  deletion of project.
+                                  Managers can read, write, and delete
+                                  documents. They can also invite and remove
+                                  team members.
                                 </TooltipContent>
                               </Tooltip>
                             </TooltipProvider>
                           </DropdownMenuItem>
-                        )}
-                        <DropdownMenuItem
-                          onClick={() => setSelectedAccessLevel("manager")}
-                        >
-                          <TooltipProvider>
-                            <Tooltip>
-                              <TooltipTrigger>Manager</TooltipTrigger>
-                              <TooltipContent
-                                align="end"
-                                className="bg-white p-2 border rounded-xl"
-                              >
-                                Managers can read, write, and delete documents.
-                                They can also invite and remove team members.
-                              </TooltipContent>
-                            </Tooltip>
-                          </TooltipProvider>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          onClick={() => setSelectedAccessLevel("write")}
-                        >
-                          <TooltipProvider>
-                            <Tooltip>
-                              <TooltipTrigger>Editor</TooltipTrigger>
-                              <TooltipContent
-                                align="end"
-                                className="bg-white p-2 border rounded-xl"
-                              >
-                                Editors can create and edit documents.
-                              </TooltipContent>
-                            </Tooltip>
-                          </TooltipProvider>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          onClick={() => setSelectedAccessLevel("read")}
-                        >
-                          <TooltipProvider>
-                            <Tooltip>
-                              <TooltipTrigger>Viewer</TooltipTrigger>
-                              <TooltipContent
-                                align="end"
-                                className="bg-white p-2 border rounded-xl"
-                              >
-                                Viewer just have read access.
-                              </TooltipContent>
-                            </Tooltip>
-                          </TooltipProvider>
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
+                          <DropdownMenuItem
+                            onClick={() => setSelectedAccessLevel("write")}
+                          >
+                            <TooltipProvider>
+                              <Tooltip>
+                                <TooltipTrigger>Editor</TooltipTrigger>
+                                <TooltipContent
+                                  align="end"
+                                  className="bg-white p-2 border rounded-xl"
+                                >
+                                  Editors can create and edit documents.
+                                </TooltipContent>
+                              </Tooltip>
+                            </TooltipProvider>
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={() => setSelectedAccessLevel("read")}
+                          >
+                            <TooltipProvider>
+                              <Tooltip>
+                                <TooltipTrigger>Viewer</TooltipTrigger>
+                                <TooltipContent
+                                  align="end"
+                                  className="bg-white p-2 border rounded-xl"
+                                >
+                                  Viewer just have read access.
+                                </TooltipContent>
+                              </Tooltip>
+                            </TooltipProvider>
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </div>
                   </div>
-                </div>
-                <DialogFooter className="flex">
-                  <DialogClose>
-                    <Button variant="ghost">Close</Button>
-                  </DialogClose>
-                  <Button onClick={handleSubmit}>Send invite</Button>
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
-          </div>
+                  <DialogFooter className="flex">
+                    <DialogClose>
+                      <Button variant="ghost">Close</Button>
+                    </DialogClose>
+                    <Button onClick={handleSubmit}>Send invite</Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+            </div>
 
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-[100px]">#</TableHead>
-                <TableHead>Name</TableHead>
-                <TableHead>Email</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Access</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {data.map((item, i) => (
-                <TableRow key={i}>
-                  <TableCell className="font-medium text-slate-600">
-                    {i + 1}
-                  </TableCell>
-                  <TableCell>{item.name}</TableCell>
-                  <TableCell>{item.email}</TableCell>
-                  <TableCell>
-                    <p
-                      className={cn(
-                        " p-2 text-xs  max-w-fit text-center rounded-xl",
-                        item?.accepted == true
-                          ? "text-green-700 bg-green-100"
-                          : "text-yellow-700 bg-yellow-100"
-                      )}
-                    >
-                      {item?.accepted == true ? "Accepted" : "Pending"}
-                    </p>
-                  </TableCell>
-                  <TableCell>
-                    {item?.accessLevel == "admin"
-                      ? "Admin"
-                      : item?.accessLevel == "manager"
-                      ? "Manager"
-                      : item?.accessLevel == "write"
-                      ? "Editor"
-                      : item?.accessLevel == "read"
-                      ? "Viewer"
-                      : null}
-                  </TableCell>
-                  <TableCell className="text-right flex gap-4 justify-end">
-                    {/* {item?.type == "collaborator" && (
+            <Table className="hidden md:block">
+              <TableHeader className=" overflow-x-scroll">
+                <TableRow className=" overflow-x-scroll ">
+                  <TableHead className="w-[100px]">#</TableHead>
+                  <TableHead>Name</TableHead>
+                  <TableHead>Email</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Access</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody className=" overflow-x-scroll">
+                {data.map((item, i) => (
+                  <TableRow key={i} className="overflow-x-scroll">
+                    <TableCell className="font-medium text-slate-600">
+                      {i + 1}
+                    </TableCell>
+                    <TableCell>{item.name}</TableCell>
+                    <TableCell>{item.email}</TableCell>
+                    <TableCell>
+                      <p
+                        className={cn(
+                          " p-2 text-xs  max-w-fit text-center rounded-xl",
+                          item?.accepted == true
+                            ? "text-green-700 bg-green-100"
+                            : "text-yellow-700 bg-yellow-100"
+                        )}
+                      >
+                        {item?.accepted == true ? "Accepted" : "Pending"}
+                      </p>
+                    </TableCell>
+                    <TableCell>
+                      {item?.accessLevel == "admin"
+                        ? "Admin"
+                        : item?.accessLevel == "manager"
+                        ? "Manager"
+                        : item?.accessLevel == "write"
+                        ? "Editor"
+                        : item?.accessLevel == "read"
+                        ? "Viewer"
+                        : null}
+                    </TableCell>
+                    <TableCell className="text-right flex gap-4 justify-end">
+                      {/* {item?.type == "collaborator" && (
                       <div className=" flex gap-2 group cursor-pointer items-center">
                         <KeyRound size={18} color="orange" />
                       </div>
                     )} */}
-                    <DeleteCollaboratorUI
-                      projectId={projectId}
-                      item={item}
-                      data={data}
-                      currentProject={currentProject}
-                    />
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+                      <DeleteCollaboratorUI
+                        projectId={projectId}
+                        item={item}
+                        data={data}
+                        currentProject={currentProject}
+                      />
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+            <p className="md:hidden text-center h-full flex-1 items-center my-auto">
+              Log in on desktop or a bigger screen to manage team.
+            </p>
+          </div>
         </div>
       )}
     </div>

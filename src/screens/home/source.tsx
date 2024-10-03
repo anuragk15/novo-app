@@ -1,4 +1,5 @@
 import { getSources } from "@/api/functions/sources";
+import MobileSideBar from "@/components/home/mobileSidebar";
 import Sidebar from "@/components/home/sidebar";
 import SourcesScreen from "@/components/home/sources";
 import { Spinner } from "@/components/ui/spinner";
@@ -15,14 +16,19 @@ export default function SourceHome() {
     },
   });
   return (
-    <div className="flex  bg-slate-100">
-      <Sidebar projectId={projectId} />
+    <div className="flex  bg-slate-100 w-full">
+      <div className="hidden md:block">
+        <Sidebar projectId={projectId} />
+      </div>
       {isLoading ? (
         <div className="flex flex-col w-[85vw] justify-center  pl-2 pb-2 overflow-scroll h-screen bg-white">
           <Spinner />
         </div>
       ) : (
-        <SourcesScreen data={data} />
+        <div className="w-full md:w-[85vw]">
+          <MobileSideBar projectId={projectId} />
+          <SourcesScreen data={data} />
+        </div>
       )}
     </div>
   );
