@@ -8,7 +8,7 @@ import AddSource from "./ui/addSource";
 export default function HomeScreen({ data, projectId }) {
   if (data?.length === 0) {
     return (
-      <div className=" flex gap-10 w-[85vw] items-center justify-center pl-2 pb-2 overflow-scroll h-screen bg-white">
+      <div className=" flex flex-col md:flex-row gap-10 md:w-[85vw] items-center justify-center pl-2 pb-2 overflow-scroll h-screen bg-white">
         <CreateNewDocumentPopup
           trigger={
             <div className=" space-y-4 border cursor-pointer p-20 group justify-center flex flex-col items-center hover:border-black rounded-xl border-dashed">

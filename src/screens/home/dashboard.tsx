@@ -1,5 +1,6 @@
 import { getDocuments } from "@/api/functions/documents";
 import HomeScreen from "@/components/home/home";
+import MobileSideBar from "@/components/home/mobileSidebar";
 import Sidebar from "@/components/home/sidebar";
 import { Spinner } from "@/components/ui/spinner";
 import { useQuery } from "@tanstack/react-query";
@@ -14,18 +15,23 @@ export default function DashboardHome() {
       return res?.data;
     },
   });
-  console.log(data)
+  console.log(data);
 
   return (
-    <div className="flex  bg-slate-100">
-      <Sidebar projectId={projectId} />
+    <div className="flex  bg-slate-100 w-full">
+      <div className="hidden md:block">
+        <Sidebar projectId={projectId} />
+      </div>
 
       {isLoading ? (
-        <div className="flex flex-col w-[85vw] justify-center  pl-2 pb-2 overflow-scroll h-screen bg-white">
+        <div className="flex flex-col  md:w-[85vw] justify-center  pl-2 pb-2 overflow-scroll h-screen bg-white">
           <Spinner />
         </div>
       ) : (
-        <HomeScreen data={data} projectId={projectId}  />
+        <div className="w-full md:w-[85vw]">
+          <MobileSideBar projectId={projectId} />
+          <HomeScreen data={data} projectId={projectId} />
+        </div>
       )}
     </div>
   );
