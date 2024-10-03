@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { getDocumentById, updateDocument } from "@/api/functions/documents";
-import EditorFn from '@/components/ui/editorWrapper'
+import EditorFn from "@/components/ui/editorWrapper";
 import { ToC } from "@/components/ui/EditorElements/Contents";
 import DocNavbar from "@/components/ui/EditorElements/Navbar";
 import LoadingState from "@/components/ui/loadingState";
@@ -13,6 +13,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import Image from "@tiptap/extension-image";
 import { Plugin } from "@tiptap/pm/state";
 import { SlashCommandExtension } from "@/components/ui/EditorExtensions/SlashCommand";
+import { Crisp } from "crisp-sdk-web";
 
 export default function DocumentEditorScreen() {
   const { projectId, id } = useParams();
@@ -28,7 +29,7 @@ export default function DocumentEditorScreen() {
 
     enabled: false,
   });
-  
+
   const debounceTimeoutRef = useRef(null);
   const [isDirty, setIsDirty] = useState(false); // Tracks if there are unsaved changes
 
@@ -56,7 +57,11 @@ export default function DocumentEditorScreen() {
     },
   });
   useEffect(() => {
+    Crisp.chat.hide();
     if (id != "new") refetch();
+    return () => {
+      Crisp.chat.show();
+    };
   }, []);
   useEffect(() => {
     if (isError && error)

@@ -38,6 +38,7 @@ export default function AuthLayout() {
       try {
         Crisp.user.setEmail(data?.data?.email);
         Crisp.user.setNickname(data?.data?.username);
+      
       } catch (e) {
         console.error("CRISP ERROR", e);
       }

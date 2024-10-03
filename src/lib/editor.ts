@@ -37,7 +37,7 @@ export const myExtensions = [
       if (pos == 0 && node.type.name === "heading") {
         return "What’s the title?";
       } else if (node.type.name === "paragraph") {
-        return "Write here or insert two backslash to trigger Novo...";
+        return "Write here or type two backslash to prompt Novo...";
       }
     },
   }),

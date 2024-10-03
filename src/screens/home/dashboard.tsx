@@ -25,7 +25,7 @@ export default function DashboardHome() {
           <Spinner />
         </div>
       ) : (
-        <HomeScreen data={data} />
+        <HomeScreen data={data} projectId={projectId}  />
       )}
     </div>
   );

@@ -81,7 +81,7 @@ export default function TemplateCard({
         )}
       >
         <div className="space-y-2">
-          <div className=" font-mono text-xl"># {name}</div>
+          <div className=" font-mono text-lg lg:text-xl"># {name}</div>
 
           <div className=" font-sans text-slate-600">{description}</div>
         </div>

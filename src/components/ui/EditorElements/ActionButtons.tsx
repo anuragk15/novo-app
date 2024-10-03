@@ -104,6 +104,7 @@ export function ActionButtons({
               variant="outline"
               className="bg-slate-800 my-auto border-none  hover:text-white text-white hover:bg-slate-900"
             >
+              
               <Heading size={18} />
             </Button>
           </PopoverTrigger>

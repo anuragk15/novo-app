@@ -20,7 +20,7 @@ import {
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogFooter,
-  AlertDialogHeader
+  AlertDialogHeader,
 } from "./alert-dialog";
 import { Button } from "./button";
 import { useToast } from "./use-toast";
@@ -44,8 +44,12 @@ export default function ProjectCard({
   return (
     <a
       href={"/project/" + id}
-      className="group w-full md:w-fit hover:shadow-sm  py-4 px-4 bg-white flex flex-col gap-4 rounded-lg hover:bg-slate-50 cursor-pointer border min-w-[20vw]"
+      className="group relative w-full md:w-fit hover:shadow-sm  py-4 px-4 bg-white flex flex-col gap-4 rounded-lg hover:bg-slate-50 cursor-pointer border min-w-[20vw]"
     >
+      {/* <div className="absolute w-1 h-1 bg-slate-800 rounded-full  animate-border-ball">
+        <div className="w-1 h-1 animate-glow bg-slate-800 rounded-full "></div>
+      </div> */}
+
       <AlertDialog open={confirmDelete} onOpenChange={setConfirmDelete}>
         <AlertDialogContent>
           <AlertDialogHeader>
@@ -57,9 +61,7 @@ export default function ProjectCard({
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>
-              <Button variant="ghost">
-                Cancel
-              </Button>
+              <Button variant="ghost">Cancel</Button>
             </AlertDialogCancel>
             <AlertDialogAction
               onClick={async () => {

@@ -3,9 +3,9 @@ import { Button } from "../ui/button";
 import { CreateNewDocumentPopup } from "../ui/createNewDocumentPopup";
 import SearchBar from "./search";
 import { FilesTable } from "./ui/filesTable";
+import AddSource from "./ui/addSource";
 
-export default function HomeScreen({ data }) {
-
+export default function HomeScreen({ data, projectId }) {
   if (data?.length === 0) {
     return (
       <div className=" flex gap-10 w-[85vw] items-center justify-center pl-2 pb-2 overflow-scroll h-screen bg-white">
@@ -23,13 +23,21 @@ export default function HomeScreen({ data }) {
             </div>
           }
         />
-        <div className=" space-y-4 border cursor-pointer p-20 group justify-center flex flex-col items-center hover:border-black rounded-xl border-dashed">
-          <Plus size={64} className=" text-slate-700 group-hover:text-black" />
-          <h1 className=" text-2xl font-sans">Add a source</h1>
-          <p className=" text-slate-500">
-            Novo will use this to improve suggestions
-          </p>
-        </div>
+        <AddSource
+          projectId={projectId}
+          children={
+            <div className=" space-y-4 border cursor-pointer p-20 group justify-center flex flex-col items-center hover:border-black rounded-xl border-dashed">
+              <Plus
+                size={64}
+                className=" text-slate-700 group-hover:text-black"
+              />
+              <h1 className=" text-2xl font-sans">Add a source</h1>
+              <p className=" text-slate-500">
+                Novo will use this to improve suggestions
+              </p>
+            </div>
+          }
+        />
       </div>
     );
   }

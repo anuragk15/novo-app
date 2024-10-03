@@ -12,13 +12,14 @@ import {
 } from "lucide-react";
 import MarkdownPreview from "@uiw/react-markdown-preview";
 import { Spinner } from "../../spinner";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { runPrompts } from "@/api/functions/prompts";
 import { useMutation } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { Input } from "../../input";
 import { cn } from "@/lib/utils";
 import { useToast } from "../../use-toast";
+import { useClickOutside } from "@/hooks/useClickOutside";
 
 export default function Component(props) {
   const [newText, setNewText] = useState(
@@ -27,6 +28,7 @@ export default function Component(props) {
   const [showInput, setShowInput] = useState(
     props.node.attrs.insertedContent == ""
   );
+  const containerRef = useRef();
   const { toast } = useToast();
   const [prompt, setPrompt] = useState(props.node.attrs.prompt || "");
   const { projectId } = useParams();
@@ -82,7 +84,11 @@ export default function Component(props) {
       props.deleteNode();
     }
   }
-
+  useClickOutside(containerRef, () => {
+    if (isPending || !showInput) return;
+    props.deleteNode();
+    return;
+  });
   return (
     <NodeViewWrapper className="">
       {isPending ? (
@@ -90,7 +96,7 @@ export default function Component(props) {
           <Spinner />
         </div>
       ) : (
-        <div className="content space-y-2">
+        <div className="content space-y-2" ref={containerRef}>
           {showInput ? (
             <div className=" flex gap-2 items-center p-1 px-4 border rounded-xl">
               <Sparkles size={18} />
