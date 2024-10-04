@@ -57,7 +57,7 @@ export const ToC = ({ editor }: { editor: Editor }) => {
       if (element?.length > 0) {
         element[0].scrollIntoView({ behavior: "smooth" });
       } else {
-        console.error(`Element with ID "${id}" not found.`);
+        //console.error(`Element with ID "${id}" not found.`);
       }
       return;
     }

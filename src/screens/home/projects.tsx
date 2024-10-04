@@ -17,17 +17,30 @@ import ProjectCard from "@/components/ui/projectCard";
 import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
 import OnboardingWrapper from "@/wrappers/onboarding";
-import {  useClerk, useUser } from "@clerk/clerk-react";
+import { useClerk, useUser } from "@clerk/clerk-react";
 import { useQuery } from "@tanstack/react-query";
-import { Lightbulb, LogOut, Plus, Search, User, User2 } from "lucide-react";
+import {
+  Lightbulb,
+  LogOut,
+  Plus,
+  RefreshCcw,
+  Search,
+  User,
+  User2,
+} from "lucide-react";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 export default function ProjectsScreen() {
   const [name, setName] = useState("");
 
   const [projects, setProjects] = useState([]);
-  const { data, isLoading, error } = useQuery({
+  const { data, refetch, isRefetching, isLoading, error } = useQuery({
     queryKey: ["get", "projects"],
     queryFn: async () => {
       const res = await getProjects();
@@ -54,14 +67,14 @@ export default function ProjectsScreen() {
   }, [name, data]);
   useEffect(() => {
     if (error) {
-      console.error(error);
+      //console.error(error);
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       //@ts-ignore
       throw new Error(error?.response?.data?.message || "An error occurred");
     }
   }, [error, projects, isLoading]);
-  //console.log(projects);
-  if (isLoading) {
+  ////console.log(projects);
+  if (isLoading || isRefetching) {
     return <LoadingState />;
   }
 
@@ -83,17 +96,32 @@ export default function ProjectsScreen() {
           <div className=" px-5 md:px-10 space-y-4 max-w-[1280px] mx-auto">
             <div className=" flex sm:flex-row flex-col-reverse  items-center justify-between">
               <h2 className="text-2xl font-sans">Your projects</h2>
-              {projects?.length != 0 && (
-                <CreateProjectPopup
-                  projects={projects}
-                  trigger={
-                    <Button className="flex gap-1">
-                      <Plus size={18} />
-                      <p>New project</p>
-                    </Button>
-                  }
-                />
-              )}
+              <div className=" flex items-center gap-4">
+                {projects?.length != 0 && (
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <Button onClick={async () => refetch()} variant="ghost">
+                          <RefreshCcw size={16} />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent className="md:max-w-[60vw]">
+                        Refresh projects
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                )}
+                {projects?.length != 0 && (
+                  <CreateProjectPopup
+                    trigger={
+                      <Button className="flex gap-1">
+                        <Plus size={18} />
+                        <p>New project</p>
+                      </Button>
+                    }
+                  />
+                )}
+              </div>
             </div>
             <div className="flex justify-center md:justify-start flex-wrap gap-4 w-full">
               {projects &&
@@ -126,7 +154,6 @@ export default function ProjectsScreen() {
             {projects?.length == 0 && (
               <div className="flex h-full  min-h-[60vh] justify-center items-center ">
                 <CreateProjectPopup
-                  projects={projects}
                   trigger={
                     <div className=" space-y-4 border cursor-pointer p-20 group justify-center flex flex-col items-center hover:border-black rounded-xl border-dashed">
                       <Plus

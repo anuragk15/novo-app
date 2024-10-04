@@ -15,10 +15,8 @@ import { v4 as uuidv4 } from "uuid";
 
 export default function CreateProjectPopup({
   trigger,
-  projects,
 }: {
   trigger: JSX.Element;
-  projects: any;
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const postHog = usePostHog();
@@ -31,27 +29,33 @@ export default function CreateProjectPopup({
     <Dialog open={isOpen} onOpenChange={(isOpen) => setIsOpen(isOpen)}>
       <DialogTrigger>{trigger}</DialogTrigger>
       <DialogContent className="overflow-scroll h-[80vh] md:h-auto  md:min-w-[800px]">
-        <CreateProjectUI
-          closeDialog={() => setIsOpen(false)}
-          withTrial={projects?.length == 0}
-        />
+        <CreateProjectUI closeDialog={() => setIsOpen(false)} />
       </DialogContent>
     </Dialog>
   );
 }
 
 export const CreateProjectUI = ({
-  withTrial = false,
   closeDialog,
 }: {
   closeDialog?: () => void;
-  withTrial: boolean;
 }) => {
   const queryClient = useQueryClient();
   const postHog = usePostHog();
   const { toast } = useToast();
   const [name, setName] = useState("");
   const { user } = useUser();
+
+  useEffect(() => {
+    // Define the function globally
+
+    //@ts-ignore
+    window.dataPopupClosed = function () {
+      queryClient.invalidateQueries({
+        queryKey: ["get", "projects"],
+      });
+    };
+  }, []);
   const handleProjectCreation = ({
     planName,
   }: {

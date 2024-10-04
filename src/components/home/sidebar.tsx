@@ -29,7 +29,7 @@ export default function Sidebar({ projectId }) {
     },
     staleTime: Infinity,
   });
-  console.log(data);
+  //console.log(data);
   return (
     <div className="flex flex-col w-[15vw] h-screen">
       <div className=" h-[100vh] flex flex-col justify-between ">

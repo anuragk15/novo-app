@@ -10,7 +10,7 @@ axiosClient.interceptors.request.use(
     // Do something before request is sent
 
     const jwt = getCookie("__session");
-    ////console.log(jwt)
+    //////console.log(jwt)
     config.headers.setAuthorization(`Bearer ${jwt}`);
     return config;
   },

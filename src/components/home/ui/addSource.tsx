@@ -59,7 +59,7 @@ export default function AddSource({
         description: "Please wait while we upload your file.",
       });
       const res = await addSourceFile({ file, name: name, projectId });
-      // console.log(res);
+      // //console.log(res);
       if (res) {
         toast({
           title: "File uploaded successfully",
@@ -81,7 +81,7 @@ export default function AddSource({
         description: "Please wait while we upload your URL.",
       });
       const res = await addSource({ url, name: name, projectId });
-      // console.log(res);
+      // //console.log(res);
       if (res) {
         toast({
           title: "URL uploaded successfully",

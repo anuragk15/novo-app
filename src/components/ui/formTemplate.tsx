@@ -29,7 +29,7 @@ const DynamicForm = ({ formFields, name, templateId, onBack }) => {
   // Handle form submit
   const handleSubmit = (e) => {
     e.preventDefault();
-    // console.log({
+    // //console.log({
     //   formData,
     //   templateId,
     //   projectId,
@@ -62,7 +62,7 @@ const DynamicForm = ({ formFields, name, templateId, onBack }) => {
 
     // Add validation or submit logic here
   };
-  //   console.log(isPending);
+  //   //console.log(isPending);
   if (isPending) {
     return (
       <div className="h-full w-full flex flex-1 justify-center items-center flex-col gap-4">

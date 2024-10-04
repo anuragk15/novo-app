@@ -15,18 +15,18 @@ export const SlashCommandExtension = Extension.create({
       },
       // Listen for the slash key on a new line
       "/": ({ editor }) => {
-        // console.log(editor.isActive("paragraph"));
+        // //console.log(editor.isActive("paragraph"));
         if (!editor.isActive("paragraph")) {
           return false;
         }
 
         const { state, view } = editor;
-        //  console.log(editor);
+        //  //console.log(editor);
         const { $from } = state.selection;
 
         // Check if the current line starts with a slash
         const lineText = $from.nodeBefore?.textContent;
-        console.log(lineText);
+        //console.log(lineText);
         if (lineText == "/") {
           const slashPos = $from.pos - 1; // Position of the first slash
 

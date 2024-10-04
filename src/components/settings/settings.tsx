@@ -31,7 +31,7 @@ export default function SettingsOverview({ data }) {
       projectId: data.project.id,
       name: projectName,
     }).then((r) => {
-      console.log(r);
+      //console.log(r);
       if (r?.data) {
         toast({
           title: "Project name updated",

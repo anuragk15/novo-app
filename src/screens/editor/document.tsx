@@ -52,7 +52,7 @@ export default function DocumentEditorScreen() {
         title: title,
         content: content,
       });
-      // console.log(res);
+      // //console.log(res);
       return res?.documentId;
     },
   });
@@ -110,8 +110,8 @@ export default function DocumentEditorScreen() {
             "\n"
           );
 
-          // console.log("Text before selection: ", textBefore);
-          // console.log("Text after selection: ", textAfter);
+          // //console.log("Text before selection: ", textBefore);
+          // //console.log("Text after selection: ", textAfter);
           // Logic to show your input field
           editor.chain().focus().insertAISuggestion({
             previousContent: textBefore,
@@ -131,7 +131,7 @@ export default function DocumentEditorScreen() {
         try {
           title = editor.getJSON().content[0].content[0].text;
         } catch (e) {
-          console.error(e);
+          //console.error(e);
         }
         if (title !== "") {
           if (title != docTitle) setTitle(title);
@@ -189,7 +189,7 @@ export default function DocumentEditorScreen() {
   }, [isErrorSaving]);
 
   useEffect(() => {
-    //console.log(data);
+    ////console.log(data);
     if (data) {
       editor.commands.setContent(data?.content?.content || "");
       setTitle(data?.content?.title || "");

@@ -6,7 +6,7 @@ export default function ErrorScreen() {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   //@ts-ignore
   const error: Error = useRouteError();
-  console.error(error);
+  //console.error(error);
   return (
     <div className="flex flex-col items-center justify-center h-screen">
       <img src="/NotFound.svg" className="w-full max-w-[20rem]" />

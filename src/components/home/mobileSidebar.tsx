@@ -34,7 +34,7 @@ export default function MobileSideBar({ projectId }) {
     },
     staleTime: Infinity,
   });
-  console.log(data);
+  //console.log(data);
   return (
     <div className="  md:hidden w-full">
       <div className="  flex  w-full ">

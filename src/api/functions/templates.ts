@@ -51,7 +51,7 @@ export const addBookmark = async ({
   templateId: string;
   projectId: string;
 }) => {
-  //console.log(templateId, projectId);
+  ////console.log(templateId, projectId);
   const response = await axiosClient
     .post(
       URLs.TEMPLATES_ADD_BOOKMARK,

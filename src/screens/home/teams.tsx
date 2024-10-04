@@ -69,7 +69,7 @@ export default function TeamsScreen() {
     },
     staleTime: Infinity,
   });
-  console.log(data);
+  //console.log(data);
   const queryClient = useQueryClient();
   const { mutateAsync: inviteCollaboratorFn } = useMutation({
     mutationKey: ["invite", "collaborator", email, projectId],

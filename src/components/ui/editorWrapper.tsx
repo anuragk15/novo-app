@@ -30,10 +30,10 @@ export default function EditorFn({ editor }: { editor: Editor }) {
         tippyOptions={{
           onShown: () => {},
           onClickOutside: () => {
-            // console.log("clicked outside");
+            // //console.log("clicked outside");
           },
           onHide: () => {
-            // console.log("hidden");
+            // //console.log("hidden");
           },
         }}
         className=" p-2 gap-2 flex  relative flex-col"

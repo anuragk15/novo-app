@@ -40,7 +40,7 @@ export default function AuthLayout() {
         Crisp.user.setNickname(data?.data?.username);
       
       } catch (e) {
-        console.error("CRISP ERROR", e);
+        //console.error("CRISP ERROR", e);
       }
 
       posthog.identify(

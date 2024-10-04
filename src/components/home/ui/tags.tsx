@@ -38,12 +38,12 @@ export default function TagsDropdown({
       await removeTagFromDocument({ tagId: itemId, projectId, documentId });
       // If the item exists, remove it from the array
       itemsArray.splice(itemIndex, 1);
-      // console.log(`Item with id ${itemId} removed.`);
+      // //console.log(`Item with id ${itemId} removed.`);
     } else {
       await addTagToDocument({ tagId: itemId, projectId, documentId });
       // If it doesn't exist, add the new object to the array
       itemsArray.push(tags.find((item) => item.id === itemId));
-      //  console.log(`Item with id ${itemId} added.`);
+      //  //console.log(`Item with id ${itemId} added.`);
     }
 
     setSelectedItems(itemsArray);

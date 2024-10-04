@@ -45,19 +45,19 @@ export default function Component(props) {
         // @ts-ignore
         description: error?.response?.data?.message || "An error occurred",
       });
-      //  console.log(error);
+      //  //console.log(error);
     }
   }, [isError, error]);
 
   useEffect(() => {
-    // console.log("Component mounted");
-    // console.log(newText);
+    // //console.log("Component mounted");
+    // //console.log(newText);
     if (newText == "") generateNewText();
   }, []);
 
   async function generateNewText() {
-    // console.log(props.node.attrs);
-    // console.log("Generating new text");
+    // //console.log(props.node.attrs);
+    // //console.log("Generating new text");
     const result = await mutateAsync();
     // const result = {
     //   content:"new text"
@@ -69,7 +69,7 @@ export default function Component(props) {
   }
 
   function acceptSuggestion(accepted: boolean) {
-    // console.log(props.getPos());
+    // //console.log(props.getPos());
     if (accepted) {
       // this replaces the current node with the new text
       props.editor.commands.insertContentAt(props.getPos(), newText);

@@ -48,13 +48,13 @@ export default function Component(props) {
   });
   useEffect(() => {
     if (isError && error) {
-      console.log(error);
+      //console.log(error);
     }
   }, [isError, error]);
 
   async function generateNewText() {
-    // console.log(props.node.attrs);
-    // console.log("Generating new text");
+    // //console.log(props.node.attrs);
+    // //console.log("Generating new text");
     const result = await mutateAsync();
     // const result = {
     //   content:"new text"
@@ -69,7 +69,7 @@ export default function Component(props) {
   }
 
   function acceptSuggestion(accepted: boolean) {
-    // console.log(props.getPos());
+    // //console.log(props.getPos());
     if (accepted) {
       // this replaces the current node with the new text
       props.editor.commands.insertContentAt(props.getPos(), newText);
