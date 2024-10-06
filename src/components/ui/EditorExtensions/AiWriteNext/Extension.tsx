@@ -5,21 +5,21 @@ import Component from "./Component.tsx";
 declare module "@tiptap/core" {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   interface Commands<ReturnType> {
-    insertSuggestion: {
+    writeNext: {
       /**
        * Toggle a paragraph
        * @example editor.commands.toggleParagraph()
        */
-      insertAISuggestion: (attributes: {
-        previousContent: string;
-        nextContent: string;
+      writeNextWithAI: (attributes: {
+        topic: string;
+        content: string;
         projectId: string;
       }) => void;
     };
   }
 }
-export const AiInsertSuggestion = Node.create({
-  name: "insertSuggestion",
+export const AiWriteNext = Node.create({
+  name: "writeNext",
 
   group: "block",
 
@@ -30,13 +30,10 @@ export const AiInsertSuggestion = Node.create({
       projectId: {
         default: "",
       },
-      insertedContent: {
+      topic: {
         default: "",
       },
-      previousContent: {
-        default: "",
-      },
-      nextContent: {
+      content: {
         default: "",
       },
     };
@@ -45,24 +42,24 @@ export const AiInsertSuggestion = Node.create({
   parseHTML() {
     return [
       {
-        tag: "insert-suggestion",
+        tag: "write-next-suggestion",
       },
     ];
   },
 
   renderHTML({ HTMLAttributes }) {
-    return ["insert-suggestion", mergeAttributes(HTMLAttributes)];
+    return ["insert-next-suggestion", mergeAttributes(HTMLAttributes)];
   },
   addCommands() {
     return {
-      insertAISuggestion:
+      writeNextWithAI:
         (attributes) =>
         ({ editor }: { editor: Editor }) => {
           editor
             .chain()
             .focus()
             .deleteSelection()
-            .insertContent({ type: "insertSuggestion", attrs: attributes }) // Specify the node type here
+            .insertContent({ type: "writeNext", attrs: attributes }) // Specify the node type here
             .run();
           return;
           //return commands.toggleNode(this.name, "acceptSuggestion", attributes);

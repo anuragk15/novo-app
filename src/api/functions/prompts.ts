@@ -19,6 +19,27 @@ export const promptsSummarise = async ({
   return response.data;
 };
 
+export const promptsWriteNext = async ({
+  projectId,
+  content,
+  topic,
+}: {
+  projectId: string;
+  content: string;
+  topic: string;
+}) => {
+  const response = await axiosClient
+    .post(URLs.PROMPTS_WRITE_NEXT, {
+      projectId,
+      content,
+      prompt: topic,
+    })
+    .catch((error) => {
+      throw error;
+    });
+  return response.data;
+};
+
 export const promptsFixGrammar = async ({
   projectId,
   content,
@@ -190,6 +211,7 @@ export type PromptType =
   | "insert-content"
   | "custom-prompt"
   | "generate-with-template"
+  | "write-next"
   | "generate-template";
 export const runPrompts = async ({
   content,
@@ -211,6 +233,8 @@ export const runPrompts = async ({
   switch (type) {
     case "summarise":
       return promptsSummarise({ projectId, content });
+    case "write-next":
+      return promptsWriteNext({ projectId, content, topic: customUserPrompt });
     case "fix-grammar":
       return promptsFixGrammar({ projectId, content });
     case "simplify":
@@ -225,7 +249,7 @@ export const runPrompts = async ({
         content,
         prompt: customUserPrompt,
       });
-    case 'insert-content':
+    case "insert-content":
       return promptInsertContent({
         projectId,
         textBefore: textBefore,

@@ -27,6 +27,7 @@ import TemplatesHome from "@/screens/home/template";
 import ErrorScreen from "@/screens/misc/Error";
 import { PHProvider } from "@/wrappers/posthog";
 import { useEffect } from "react";
+import RedesignDocument from "./screens/editor/redesign";
 // import LiveDocumentEditorScreen from "./pages/editor/live";
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
@@ -107,7 +108,7 @@ const router = createBrowserRouter([
         path: "/document/editor/:projectId/:id",
         element: (
           <div>
-            <DocumentEditorScreen />
+            <RedesignDocument />
           </div>
         ),
       },

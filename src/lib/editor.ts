@@ -20,6 +20,7 @@ import { ColorHighlighter } from "@/components/ui/EditorExtensions/ColorHighligh
 import { SmilieReplacer } from "@/components/ui/EditorExtensions/SmilieReplacer";
 import ImageResizer from "tiptap-extension-resize-image";
 import { AiInsertSuggestion } from "@/components/ui/EditorExtensions/AiInsertExtension/Extension";
+import { AiWriteNext } from "@/components/ui/EditorExtensions/AiWriteNext/Extension";
 
 export const myExtensions = [
   StarterKit,
@@ -29,6 +30,7 @@ export const myExtensions = [
   Paragraph,
   AiAcceptExtension,
   ImageResizer,
+  AiWriteNext,
   Document.extend({
     content: "heading block*",
   }),

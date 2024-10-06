@@ -14,8 +14,9 @@ import Image from "@tiptap/extension-image";
 import { Plugin } from "@tiptap/pm/state";
 import { SlashCommandExtension } from "@/components/ui/EditorExtensions/SlashCommand";
 import { Crisp } from "crisp-sdk-web";
+import SidePanel from "@/components/ui/EditorElements/SidePanel";
 
-export default function DocumentEditorScreen() {
+export default function RedesignDocument() {
   const { projectId, id } = useParams();
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -131,7 +132,7 @@ export default function DocumentEditorScreen() {
         try {
           title = editor.getJSON().content[0].content[0].text;
         } catch (e) {
-          console.error(e);
+          //console.error(e);
         }
         if (title !== "") {
           if (title != docTitle) setTitle(title);
@@ -200,15 +201,17 @@ export default function DocumentEditorScreen() {
     return <LoadingState />;
   }
   return (
-    <div className=" bg-slate-50">
-      <div className=" flex flex-col  md:px-2">
-        <div className="p-0 z-[10000]  ">
+    <div className=" bg-white">
+      <div className=" flex flex-col  ">
+        {/* <div className="p-0 z-[10000]  ">
           <DocNavbar name={docTitle} saving={isPending} editor={editor} />
-        </div>
+        </div> */}
 
-        <div className="flex gap-2 max-w-[1280px]  mx-auto">
-          <ToC editor={editor} />
-          <EditorFn editor={editor} />
+        <div className="flex">
+          <SidePanel editor={editor} />
+          <div className="bg-white flex-1 py-5 md:py-20 flex justify-center">
+            <EditorFn editor={editor} />
+          </div>
         </div>
       </div>
     </div>

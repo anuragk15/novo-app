@@ -7,6 +7,7 @@ export const URLs = {
 
   // Prompts
   PROMPTS_SUMMARISE: "/prompts/summarise",
+  PROMPTS_WRITE_NEXT: "/prompts/next-content",
   PROMPT_INSERT_CONTENT: "/prompts/insert-content",
   PROMPTS_FIX_GRAMMAR: "/prompts/fix-grammar",
   PROMPTS_SIMPLIFY: "/prompts/simplify",
