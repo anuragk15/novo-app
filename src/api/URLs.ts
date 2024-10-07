@@ -16,6 +16,10 @@ export const URLs = {
   PROMPTS_CUSTOM_PROMPT: "/prompts/custom-prompt",
   PROMPTS_GENERATE_WITH_TEMPLATE: "/prompts/generate-with-template",
   PROMPTS_GENERATE_TEMPLATE: "/prompts/generate-template",
+  PROMPTS_COPILOT_ALT_TITLES: "/prompts/copilot/alternative-titles",
+  PROMPTS_COPILOT_CONTENT_ANALYSIS: "/prompts/copilot/content-analysis",
+  PROMPTS_COPILOT_NEXT_TOPICS: "/prompts/copilot/generate-next-topics",
+
   //Sources
   SOURCES_GET: "/sources",
   SOURCES_ADD: "/sources/add",

@@ -26,8 +26,11 @@ export default function Component(props) {
         content: props.node.attrs.content,
         customUserPrompt: props.node.attrs.topic,
       });
+      setNewText(result?.content);
       return result;
     },
+    retry: 0,
+    retryDelay: 1000,
   });
   useEffect(() => {
     if (isError && error) {

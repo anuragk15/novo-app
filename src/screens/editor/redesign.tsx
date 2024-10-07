@@ -1,20 +1,19 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { getDocumentById, updateDocument } from "@/api/functions/documents";
+import SideChat from "@/components/ui/EditorElements/SideChat";
+import SidePanel from "@/components/ui/EditorElements/SidePanel";
+import { SlashCommandExtension } from "@/components/ui/EditorExtensions/SlashCommand";
 import EditorFn from "@/components/ui/editorWrapper";
-import { ToC } from "@/components/ui/EditorElements/Contents";
-import DocNavbar from "@/components/ui/EditorElements/Navbar";
 import LoadingState from "@/components/ui/loadingState";
 import { useToast } from "@/components/ui/use-toast";
 import { myExtensions } from "@/lib/editor";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useEditor } from "@tiptap/react";
-import { useEffect, useRef, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
 import Image from "@tiptap/extension-image";
 import { Plugin } from "@tiptap/pm/state";
-import { SlashCommandExtension } from "@/components/ui/EditorExtensions/SlashCommand";
+import { useEditor } from "@tiptap/react";
 import { Crisp } from "crisp-sdk-web";
-import SidePanel from "@/components/ui/EditorElements/SidePanel";
+import { useEffect, useRef, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
 export default function RedesignDocument() {
   const { projectId, id } = useParams();
@@ -132,7 +131,7 @@ export default function RedesignDocument() {
         try {
           title = editor.getJSON().content[0].content[0].text;
         } catch (e) {
-          //console.error(e);
+          console.error(e);
         }
         if (title !== "") {
           if (title != docTitle) setTitle(title);
@@ -208,10 +207,11 @@ export default function RedesignDocument() {
         </div> */}
 
         <div className="flex">
-          <SidePanel editor={editor} />
-          <div className="bg-white flex-1 py-5 md:py-20 flex justify-center">
-            <EditorFn editor={editor} />
+          <SidePanel editor={editor} document={data} />
+          <div className="bg-white   flex-1 py-5 md:py-20 flex justify-center">
+            <EditorFn name={docTitle} saving={isPending} editor={editor} />
           </div>
+          <SideChat />
         </div>
       </div>
     </div>

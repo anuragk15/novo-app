@@ -86,7 +86,7 @@ export const SidePanelContents = ({ editor }: { editor: Editor }) => {
   }
 
   return (
-    <div className="hidden md:block">
+    <div className="">
       <div className=" px-2 space-y-4 rounded-lg">
         <div className=" space-y-2">
           {items.map((item, i) => (

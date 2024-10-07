@@ -2,15 +2,29 @@
 import { BubbleMenu, Editor, EditorContent } from "@tiptap/react";
 import "./Editor.css";
 
-import { ActionButtons } from "./EditorElements/ActionButtons";
-
 import { useParams } from "react-router-dom";
 import { MenuBar } from "./EditorElements/BubbleMenu";
+import { FloatingButtons } from "./EditorElements/FloatingButtons";
 
-export default function EditorFn({ editor }: { editor: Editor }) {
+export default function EditorFn({
+  editor,
+  name,
+  saving,
+}: {
+  editor: Editor;
+  name: string;
+  saving: boolean;
+}) {
   const { projectId } = useParams();
   return (
-    <div className=" ">
+    <div className="">
+      <FloatingButtons
+        name={name}
+        saving={saving}
+        editor={editor}
+        projectId={projectId}
+      />
+
       <EditorContent
         onSelectCapture={() => alert("seled")}
         className="rounded-lg bg-white min-h-[90vh] md:min-w-[800px] max-w-[960px]  mx-auto "
@@ -41,8 +55,6 @@ export default function EditorFn({ editor }: { editor: Editor }) {
       >
         <MenuBar editor={editor} projectId={projectId} />
       </BubbleMenu>
-    
-      <ActionButtons editor={editor} projectId={projectId} />
     </div>
   );
 }
