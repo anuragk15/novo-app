@@ -37,7 +37,7 @@ export default function Component(props) {
       console.error(error);
       props?.deleteNode();
     }
-  }, [isError, error]);
+  }, [isError, error, props]);
 
   function acceptSuggestion(accepted: boolean) {
     // //console.log(props.getPos());
@@ -60,7 +60,6 @@ export default function Component(props) {
     <NodeViewWrapper className="">
       {isLoading || isRefetching ? (
         <div>
-          
           <Spinner />
         </div>
       ) : (
