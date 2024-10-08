@@ -57,6 +57,28 @@ export const promptsCopilotContentAnalysis = async ({
   return response.data;
 };
 
+export const promptsCopilotChat = async ({
+  projectId,
+  documentId,
+  message
+}: {
+  projectId: string;
+  message: string;
+  documentId: string;
+}) => {
+  
+  const response = await axiosClient
+    .post(URLs.PROMPTS_COPILOT_CHAT, {
+      projectId,
+      documentId,
+      message
+    })
+    .catch((error) => {
+      throw error;
+    });
+  return response.data;
+};
+
 export const promptCopilotNextTopics = async ({
   projectId,
   documentId,

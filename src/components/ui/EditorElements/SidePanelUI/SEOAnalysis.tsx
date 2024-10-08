@@ -1,5 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { promptsCopilotContentAnalysis } from "@/api/functions/prompts";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { capitalizeFirstCharacter, cn } from "@/lib/utils";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   Annoyed,
   BicepsFlexed,
@@ -10,29 +18,19 @@ import {
   GraduationCap,
   Handshake,
   Heart,
-  Info,
   Laugh,
   LucideClock2,
-  Sigma,
   Smile,
   Sparkles,
   TrendingDown,
   WholeWord,
-  Zap,
+  Zap
 } from "lucide-react";
-import { useToast } from "../../use-toast";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { useEffect, useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
-import { Spinner } from "../../spinner";
-import { promptsCopilotContentAnalysis } from "@/api/functions/prompts";
-export default function SEOAnalysis({  copilot }) {
+import { BorderTrail } from "../../border-trail";
+import { useToast } from "../../use-toast";
+export default function SEOAnalysis({ copilot }) {
   const { toast } = useToast();
   const { projectId, id } = useParams();
 
@@ -65,14 +63,25 @@ export default function SEOAnalysis({  copilot }) {
   }, [isError, toast]);
   return (
     <div className="w-full">
-      {isPending ? (
-        <Spinner />
-      ) : data == null ? (
+      {data == null ? (
         <div>
           <button
+            disabled={isPending}
             onClick={async () => await mutateAsync()}
-            className="flex px-1 flex-col w-full  mx-auto py-10 rounded-md items-center bg-slate-100 border gap-3 hover:bg-slate-200"
+            className="flex relative px-1 flex-col w-full  mx-auto py-10 rounded-md items-center bg-slate-100 border gap-3 hover:bg-slate-200"
           >
+            <BorderTrail
+              className={cn(
+                "bg-gradient-to-l from-black-300 via-black-500 to-black-300 transition-opacity duration-300 dark:from-green-700/30 dark:via-white-500 dark:to-white-700/30 opacity-0",
+                isPending && "opacity-100"
+              )}
+              size={70}
+              transition={{
+                ease: [0, 0.5, 0.8, 0.5],
+                duration: 4,
+                repeat: 20,
+              }}
+            />
             <Sparkles size={18} className="text-slate-700" />
             <span className=" font-mono">Perform SEO & content analysis</span>
           </button>
@@ -110,8 +119,6 @@ export default function SEOAnalysis({  copilot }) {
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
-
-           
 
             <p className="flex  gap-1  border shadow-lg  p-2 rounded-lg  items-center">
               {generateToneIcon(data?.tone)}
@@ -199,50 +206,7 @@ export default function SEOAnalysis({  copilot }) {
               </TooltipProvider>
             </div>
           )}
-          {/* <div className=" space-y-2  group">
-            <div className=" flex justify-between items-center">
-              <p className=" text-gray-600">External link suggestions:</p>
-              <div>
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger>
-                      <Info size={16} className=" text-gray-600" />
-                    </TooltipTrigger>
-                    <TooltipContent className="md:max-w-[60vw] bg-white">
-                      <div className="bg-white md:max-w-[20vw] px-2">
-                        Try including these external links to reputable sources
-                        to improve the credibility & SEO of your content.
-                      </div>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              </div>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {data?.externalLinkSuggestions?.map((item, i) => {
-                return (
-                  <div className="flex   gap-1 items-center relative w-full border rounded-lg p-2">
-                    <div className=" text-gray-700 ">
-                      {item}
-                      <div
-                        onClick={() => {
-                          navigator.clipboard.writeText(item);
 
-                          toast({
-                            title: "✨ Copied to clipboard!",
-                            description: "You’ve copied the title!",
-                          });
-                        }}
-                        className="hidden absolute top-0 right-0 z-20 bg-slate-50 hover:bg-slate-100 p-2 rounded-lg cursor-pointer group-hover:flex"
-                      >
-                        <Copy size={18} className=" text-slate-500" />
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div> */}
           {data?.people?.length > 0 && (
             <div className=" space-y-2  group">
               <p className=" text-gray-600">People recognised:</p>
@@ -300,6 +264,7 @@ export default function SEOAnalysis({  copilot }) {
             </div>
           )}
           <button
+            disabled={isPending}
             onClick={async () => {
               await mutateAsync().then(() => {
                 queryClient.invalidateQueries({
@@ -307,8 +272,20 @@ export default function SEOAnalysis({  copilot }) {
                 });
               });
             }}
-            className="flex px-1 justify-center  w-full  mx-auto py-2 rounded-md items-center bg-slate-100 border gap-3 hover:bg-slate-200"
+            className="flex relative px-1 justify-center  w-full  mx-auto py-2 rounded-md items-center bg-slate-100 border gap-3 hover:bg-slate-200"
           >
+            <BorderTrail
+              className={cn(
+                "bg-gradient-to-l from-black-300 via-black-500 to-black-300 transition-opacity duration-300 dark:from-green-700/30 dark:via-white-500 dark:to-white-700/30 opacity-0",
+                isPending && "opacity-100"
+              )}
+              size={30}
+              transition={{
+                ease: [0, 0.5, 0.8, 0.5],
+                duration: 4,
+                repeat: 20,
+              }}
+            />
             <Sparkles size={18} className="text-slate-700" />
             <span className=" font-mono">Regenerate</span>
           </button>

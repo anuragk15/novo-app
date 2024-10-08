@@ -1,15 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Sparkles } from "lucide-react";
-import { useToast } from "../../use-toast";
-import { Editor } from "@tiptap/core";
-import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
-  promptCopilotNextTopics,
-  promptsCopilotAlternativeTitles,
+  promptCopilotNextTopics
 } from "@/api/functions/prompts";
-import { Spinner } from "../../spinner";
+import { cn } from "@/lib/utils";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Editor } from "@tiptap/core";
+import { Sparkles } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { BorderTrail } from "../../border-trail";
+import { useToast } from "../../use-toast";
 
 export default function WriteNext({
   editor,
@@ -49,14 +49,24 @@ export default function WriteNext({
   const text = "How Novo can help you write better content";
   return (
     <div className="w-full">
-      {isPending ? (
-        <Spinner />
-      ) : altTitles?.length == 0 ? (
+      {altTitles?.length == 0 ? (
         <div>
           <button
             onClick={async () => await mutateAsync()}
-            className="flex px-1  w-full   flex-col  mx-auto py-10 rounded-md items-center bg-slate-100 border gap-3 hover:bg-slate-200"
+            className="flex px-1 relative  w-full   flex-col  mx-auto py-10 rounded-md items-center bg-slate-100 border gap-3 hover:bg-slate-200"
           >
+            <BorderTrail
+              className={cn(
+                "bg-gradient-to-l from-black-300 via-black-500 to-black-300 transition-opacity duration-300 dark:from-green-700/30 dark:via-white-500 dark:to-white-700/30 opacity-0",
+                isPending && "opacity-100"
+              )}
+              size={70}
+              transition={{
+                ease: [0, 0.5, 0.8, 0.5],
+                duration: 4,
+                repeat: 20,
+              }}
+            />
             <Sparkles size={18} className="text-slate-700" />
             <span className=" font-mono">
               Having a writer's block? Let Novo suggest the next topics!
@@ -95,6 +105,7 @@ export default function WriteNext({
             );
           })}
           <button
+            disabled={isPending}
             onClick={async () => {
               await mutateAsync().then(() => {
                 queryClient.invalidateQueries({
@@ -102,8 +113,20 @@ export default function WriteNext({
                 });
               });
             }}
-            className="flex px-1 justify-center  w-full  mx-auto py-2 rounded-md items-center bg-slate-100 border gap-3 hover:bg-slate-200"
+            className="flex px-1 relative justify-center  w-full  mx-auto py-2 rounded-md items-center bg-slate-100 border gap-3 hover:bg-slate-200"
           >
+            <BorderTrail
+              className={cn(
+                "bg-gradient-to-l from-black-300 via-black-500 to-black-300 transition-opacity duration-300 dark:from-green-700/30 dark:via-white-500 dark:to-white-700/30 opacity-0",
+                isPending && "opacity-100"
+              )}
+              size={30}
+              transition={{
+                ease: [0, 0.5, 0.8, 0.5],
+                duration: 4,
+                repeat: 20,
+              }}
+            />
             <Sparkles size={18} className="text-slate-700" />
             <span className=" font-mono">Regenerate</span>
           </button>

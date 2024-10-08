@@ -60,6 +60,7 @@ export default function Component(props) {
     <NodeViewWrapper className="">
       {isLoading || isRefetching ? (
         <div>
+          
           <Spinner />
         </div>
       ) : (

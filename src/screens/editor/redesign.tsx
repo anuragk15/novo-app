@@ -211,7 +211,7 @@ export default function RedesignDocument() {
           <div className="bg-white   flex-1 py-5 md:py-20 flex justify-center">
             <EditorFn name={docTitle} saving={isPending} editor={editor} />
           </div>
-          <SideChat />
+          <SideChat defaultMessages={data?.content?.copilot?.messages} />
         </div>
       </div>
     </div>
