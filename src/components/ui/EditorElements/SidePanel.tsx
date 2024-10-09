@@ -57,7 +57,7 @@ export default function SidePanel({
     );
   }
   return (
-    <div className=" bg-slate-50 md:w-[15vw]  py-2 px-2 pr-4 fixed z-[2000] w-full md:flex flex-col h-screen  md:sticky top-0 border-r border-slate-200 overflow-scroll  ">
+    <div className=" bg-slate-50    lg:w-[20vw]  py-2 px-2 pr-4 fixed z-[2000] w-full lg:flex flex-col h-screen  lg:sticky top-0 border-r border-slate-200 overflow-scroll  ">
       <div className="flex justify-between items-center">
         <div
           onClick={() => navigate("/project/" + projectId)}

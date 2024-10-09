@@ -1,25 +1,25 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { getDocumentById, updateDocument } from "@/api/functions/documents";
-import EditorFn from '@/components/ui/editorWrapper'
 import { ToC } from "@/components/ui/EditorElements/Contents";
 import DocNavbar from "@/components/ui/EditorElements/Navbar";
+import { SlashCommandExtension } from "@/components/ui/EditorExtensions/SlashCommand";
+import EditorFn from "@/components/ui/editorWrapper";
 import LoadingState from "@/components/ui/loadingState";
 import { useToast } from "@/components/ui/use-toast";
 import { myExtensions } from "@/lib/editor";
+import { generateColorsFromInitial } from "@/lib/utils";
+import { useUserStore } from "@/store/user";
+import { HocuspocusProvider } from "@hocuspocus/provider";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import Collaboration from "@tiptap/extension-collaboration";
+import CollaborationCursor from "@tiptap/extension-collaboration-cursor";
+import Image from "@tiptap/extension-image";
+import { Plugin } from "@tiptap/pm/state";
 import { useEditor } from "@tiptap/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import Image from "@tiptap/extension-image";
-import { Plugin } from "@tiptap/pm/state";
-import { SlashCommandExtension } from "@/components/ui/EditorExtensions/SlashCommand";
-import Collaboration from "@tiptap/extension-collaboration";
-import CollaborationCursor from "@tiptap/extension-collaboration-cursor";
 import * as Y from "yjs";
 const yDoc = new Y.Doc();
-import { HocuspocusProvider } from "@hocuspocus/provider";
-import { useUserStore } from "@/store/user";
-import { generateColorsFromInitial } from "@/lib/utils";
 export default function LiveDocumentEditorScreen() {
   const { projectId, id } = useParams();
   const navigate = useNavigate();
@@ -157,7 +157,7 @@ export default function LiveDocumentEditorScreen() {
         try {
           title = editor.getJSON().content[0].content[0].text;
         } catch (e) {
-          //console.error(e);
+          console.error(e);
         }
         if (title !== "") {
           if (title != docTitle) setTitle(title);
@@ -234,7 +234,7 @@ export default function LiveDocumentEditorScreen() {
 
         <div className="flex gap-2 max-w-[1280px]  mx-auto">
           <ToC editor={editor} />
-          <EditorFn editor={editor} />
+          <EditorFn saving={false} name="Test" editor={editor} />
         </div>
       </div>
     </div>

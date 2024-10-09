@@ -1,11 +1,31 @@
 import { Plus, Sparkles } from "lucide-react";
 import { Button } from "../ui/button";
 import { CreateNewDocumentPopup } from "../ui/createNewDocumentPopup";
-import SearchBar from "./search";
 import { FilesTable } from "./ui/filesTable";
 import AddSource from "./ui/addSource";
+import { useEffect, useState } from "react";
+import { useDebounce } from "@/hooks/useDebounce";
+import SearchBar from "./ui/search";
 
 export default function HomeScreen({ data, projectId }) {
+
+  const [documents, setDocuments] = useState(data || []);
+
+  const [searchQuery, setSearchQuery] = useState("");
+  const debouncedInputValue = useDebounce(searchQuery, 500); // 500ms debounce delay
+
+  useEffect(() => {
+    if (debouncedInputValue && debouncedInputValue.length > 0) {
+      setDocuments(
+        data.filter((item) =>
+          item?.title?.toLowerCase().includes(debouncedInputValue.toLowerCase())
+        )
+      );
+    }
+    if (debouncedInputValue === "") {
+      setDocuments(data);
+    }
+  }, [debouncedInputValue, searchQuery, data]);
   if (data?.length === 0) {
     return (
       <div className=" flex flex-col md:flex-row gap-10 md:w-[85vw] items-center justify-center pl-2 pb-2 overflow-scroll h-screen bg-white">
@@ -43,7 +63,7 @@ export default function HomeScreen({ data, projectId }) {
   }
   return (
     <div className=" flex-col w-[85vw] pl-2 pb-2 overflow-scroll h-screen bg-slate-100">
-      <SearchBar />
+      <SearchBar placeholder={'Search documents...'} value={searchQuery} onChange={setSearchQuery} />
       <div className="flex flex-col gap-4 items-start border shadow-sm rounded-lg mr-2 p-8 min-h-[91vh] bg-white">
         {/* {data?.length > 4 ? (
           <div className="flex w-full items-center  justify-between">
@@ -68,7 +88,7 @@ export default function HomeScreen({ data, projectId }) {
           />
         </div>
 
-        <FilesTable files={data} />
+        <FilesTable files={documents} />
       </div>
     </div>
   );

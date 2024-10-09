@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import TemplateCard from "../ui/templateCard";
-import SourceSearch from "./ui/sourceSearch";
 import DynamicForm from "../ui/formTemplate";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { CreateNewDocumentPopup } from "../ui/createNewDocumentPopup";
+import { useDebounce } from "@/hooks/useDebounce";
+import SearchBar from "./ui/search";
 export default function TemplatesScreen({ data }) {
   const [selectedTemplate, setSelectedTemplate] = useState(null);
   const [showDialog, setShowDialog] = useState(false);
@@ -15,6 +16,24 @@ export default function TemplatesScreen({ data }) {
       setShowDialog(false);
     }
   }, [selectedTemplate]);
+
+  const [templates, setTemplates] = useState(data || []);
+
+  const [searchQuery, setSearchQuery] = useState("");
+  const debouncedInputValue = useDebounce(searchQuery, 500); // 500ms debounce delay
+
+  useEffect(() => {
+    if (debouncedInputValue && debouncedInputValue.length > 0) {
+      setTemplates(
+        data.filter((item) =>
+          item?.name?.toLowerCase().includes(debouncedInputValue.toLowerCase())
+        )
+      );
+    }
+    if (debouncedInputValue === "") {
+      setTemplates(data);
+    }
+  }, [debouncedInputValue, searchQuery, data]);
 
   return (
     <>
@@ -31,7 +50,11 @@ export default function TemplatesScreen({ data }) {
         </DialogContent>
       </Dialog>
       <div className=" flex-col w-full md:w-[85vw] pl-2 pb-2 overflow-scroll h-screen bg-slate-100">
-        <SourceSearch />
+        <SearchBar
+          placeholder={"Search templates"}
+          value={searchQuery}
+          onChange={setSearchQuery}
+        />
         <div className="flex flex-col gap-4 items-start border shadow-sm rounded-lg mr-2 p-8 min-h-[91vh] bg-white">
           <div className="flex flex-col md:flex-row justify-between w-full items-center">
             <div>
@@ -47,9 +70,9 @@ export default function TemplatesScreen({ data }) {
             />
           </div>
 
-          {data?.length > 0 ? (
+          {templates?.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-3">
-              {data.map((item, i) => (
+              {templates.map((item, i) => (
                 <TemplateCard
                   key={item.id}
                   index={i + 1}

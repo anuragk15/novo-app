@@ -1,19 +1,19 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { getDocumentById, updateDocument } from "@/api/functions/documents";
+import SideChat from "@/components/ui/EditorElements/SideChat";
+import SidePanel from "@/components/ui/EditorElements/SidePanel";
+import { SlashCommandExtension } from "@/components/ui/EditorExtensions/SlashCommand";
 import EditorFn from "@/components/ui/editorWrapper";
-import { ToC } from "@/components/ui/EditorElements/Contents";
-import DocNavbar from "@/components/ui/EditorElements/Navbar";
 import LoadingState from "@/components/ui/loadingState";
 import { useToast } from "@/components/ui/use-toast";
 import { myExtensions } from "@/lib/editor";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useEditor } from "@tiptap/react";
-import { useEffect, useRef, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
 import Image from "@tiptap/extension-image";
 import { Plugin } from "@tiptap/pm/state";
-import { SlashCommandExtension } from "@/components/ui/EditorExtensions/SlashCommand";
+import { useEditor } from "@tiptap/react";
 import { Crisp } from "crisp-sdk-web";
+import { useEffect, useRef, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
 export default function DocumentEditorScreen() {
   const { projectId, id } = useParams();
@@ -200,15 +200,18 @@ export default function DocumentEditorScreen() {
     return <LoadingState />;
   }
   return (
-    <div className=" bg-slate-50">
-      <div className=" flex flex-col  md:px-2">
-        <div className="p-0 z-[10000]  ">
+    <div className=" bg-white">
+      <div className=" flex flex-col  ">
+        {/* <div className="p-0 z-[10000]  ">
           <DocNavbar name={docTitle} saving={isPending} editor={editor} />
-        </div>
+        </div> */}
 
-        <div className="flex gap-2 max-w-[1280px]  mx-auto">
-          <ToC editor={editor} />
-          <EditorFn editor={editor} />
+        <div className="flex">
+          <SidePanel editor={editor} document={data} />
+          <div className="bg-white   flex-1 py-5 md:py-20 flex justify-center">
+            <EditorFn name={docTitle} saving={isPending} editor={editor} />
+          </div>
+          <SideChat defaultMessages={data?.content?.copilot?.messages} />
         </div>
       </div>
     </div>
