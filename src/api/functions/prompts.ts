@@ -19,6 +19,107 @@ export const promptsSummarise = async ({
   return response.data;
 };
 
+export const promptsCopilotAlternativeTitles = async ({
+  projectId,
+  documentId,
+}: {
+  projectId: string;
+  documentId: string;
+}) => {
+  
+  const response = await axiosClient
+    .post(URLs.PROMPTS_COPILOT_ALT_TITLES, {
+      projectId,
+      documentId,
+    })
+    .catch((error) => {
+      throw error;
+    });
+  return response.data;
+};
+
+export const promptsCopilotContentAnalysis = async ({
+  projectId,
+  documentId,
+}: {
+  projectId: string;
+  documentId: string;
+}) => {
+  
+  const response = await axiosClient
+    .post(URLs.PROMPTS_COPILOT_CONTENT_ANALYSIS, {
+      projectId,
+      documentId,
+    })
+    .catch((error) => {
+      throw error;
+    });
+  return response.data;
+};
+
+export const promptsCopilotChat = async ({
+  projectId,
+  documentId,
+  message
+}: {
+  projectId: string;
+  message: string;
+  documentId: string;
+}) => {
+  
+  const response = await axiosClient
+    .post(URLs.PROMPTS_COPILOT_CHAT, {
+      projectId,
+      documentId,
+      message
+    })
+    .catch((error) => {
+      throw error;
+    });
+  return response.data;
+};
+
+export const promptCopilotNextTopics = async ({
+  projectId,
+  documentId,
+}: {
+  projectId: string;
+  documentId: string;
+}) => {
+  
+  const response = await axiosClient
+    .post(URLs.PROMPTS_COPILOT_NEXT_TOPICS, {
+      projectId,
+      documentId,
+    })
+    .catch((error) => {
+      throw error;
+    });
+  return response.data;
+};
+
+
+export const promptsWriteNext = async ({
+  projectId,
+  content,
+  topic,
+}: {
+  projectId: string;
+  content: string;
+  topic: string;
+}) => {
+  const response = await axiosClient
+    .post(URLs.PROMPTS_WRITE_NEXT, {
+      projectId,
+      content,
+      prompt: topic,
+    })
+    .catch((error) => {
+      throw error;
+    });
+  return response.data;
+};
+
 export const promptsFixGrammar = async ({
   projectId,
   content,
@@ -190,6 +291,8 @@ export type PromptType =
   | "insert-content"
   | "custom-prompt"
   | "generate-with-template"
+  | "write-next"
+  | "generate-alt-titles"
   | "generate-template";
 export const runPrompts = async ({
   content,
@@ -198,6 +301,7 @@ export const runPrompts = async ({
   customUserPrompt,
   projectId,
   textAfter,
+  documentId,
   textBefore,
 }: {
   textBefore?: string;
@@ -207,12 +311,17 @@ export const runPrompts = async ({
   tone?: string;
   projectId: string;
   customUserPrompt?: string;
+  documentId?: string;
 }) => {
   switch (type) {
     case "summarise":
       return promptsSummarise({ projectId, content });
+    case "write-next":
+      return promptsWriteNext({ projectId, content, topic: customUserPrompt });
     case "fix-grammar":
       return promptsFixGrammar({ projectId, content });
+    case "generate-alt-titles":
+      return promptsCopilotAlternativeTitles({ projectId, documentId });
     case "simplify":
       return promptsSimplify({ projectId, content });
     case "expand":
@@ -225,7 +334,7 @@ export const runPrompts = async ({
         content,
         prompt: customUserPrompt,
       });
-    case 'insert-content':
+    case "insert-content":
       return promptInsertContent({
         projectId,
         textBefore: textBefore,

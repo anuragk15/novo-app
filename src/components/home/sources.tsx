@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 import {
   Tooltip,
   TooltipContent,
@@ -8,15 +7,38 @@ import {
 import { BadgeInfo } from "lucide-react";
 import { useParams } from "react-router-dom";
 import AddSource from "./ui/addSource";
-import SourceSearch from "./ui/sourceSearch";
+import SourceSearch from "./ui/search";
 import { SourcesTable } from "./ui/sourcesTable";
+import { useEffect, useState } from "react";
+import { useDebounce } from "@/hooks/useDebounce";
 
 export default function SourcesScreen({ data }) {
   const { projectId } = useParams();
+  const [sources, setSources] = useState(data || []);
+
+  const [searchQuery, setSearchQuery] = useState("");
+  const debouncedInputValue = useDebounce(searchQuery, 500); // 500ms debounce delay
+
+  useEffect(() => {
+    if (debouncedInputValue && debouncedInputValue.length > 0) {
+      setSources(
+        data.filter((item) =>
+          item?.title?.toLowerCase().includes(debouncedInputValue.toLowerCase())
+        )
+      );
+    }
+    if (debouncedInputValue === "") {
+      setSources(data);
+    }
+  }, [debouncedInputValue, searchQuery, data]);
 
   return (
     <div className=" flex-col w-full md:w-[85vw] pl-2 pb-2 overflow-scroll h-screen bg-slate-100">
-      <SourceSearch />
+      <SourceSearch
+        placeholder={"Search sources..."}
+        value={searchQuery}
+        onChange={setSearchQuery}
+      />
 
       <div className="flex flex-col gap-4 items-start border shadow-sm rounded-lg mr-2 p-8 min-h-[91vh] bg-white">
         <div className="flex justify-between w-full items-center">
@@ -42,8 +64,8 @@ export default function SourcesScreen({ data }) {
           </div>
           <AddSource projectId={projectId} />
         </div>
-        {data?.length > 0 ? (
-          <SourcesTable sources={data} />
+        {sources?.length > 0 ? (
+          <SourcesTable sources={sources} />
         ) : (
           <div className="flex h-[70vh] w-full flex-col  justify-center items-center ">
             <img

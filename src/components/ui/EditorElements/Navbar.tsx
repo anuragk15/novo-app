@@ -1,11 +1,16 @@
 import { Editor } from "@tiptap/core";
-import { ChevronLeftIcon, CloudDownload, Share2 } from "lucide-react";
-import { useNavigate, useParams } from "react-router-dom";
-import { Button } from "../button";
-import { Dialog, DialogContent, DialogTrigger } from "../dialog";
-import { Spinner } from "../spinner";
 import html2pdf from "html-to-pdf-js";
 import jsPDF from "jspdf";
+import { CloudDownload, Share2 } from "lucide-react";
+import { useParams } from "react-router-dom";
+import { Button } from "../button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from "../dropdown-menu";
+import { Spinner } from "../spinner";
 import { useToast } from "../use-toast";
 export default function DocNavbar({
   editor,
@@ -18,7 +23,6 @@ export default function DocNavbar({
 }) {
   const { projectId, id } = useParams();
   const { toast } = useToast();
-  const navigate = useNavigate();
   const downloadTxtFile = () => {
     const element = document.createElement("a");
     const file = new Blob([editor.getText()], { type: "text/plain" });
@@ -69,88 +73,77 @@ export default function DocNavbar({
     });
   };
   return (
-    <div className=" flex justify-between items-center py-2 w-full max-w-[1280px] mx-auto">
-      <div>
-        <Button
-          variant="ghost"
-          onClick={() => {
-            navigate(`/project/${projectId}`);
-          }}
-          className="flex gap-2 items-center "
-        >
-          <ChevronLeftIcon />
-        </Button>
-      </div>
-
-      <div className="flex items-center gap-2">
-        {saving ? (
-          <div className="text-sm flex gap-2">
-            <Spinner size="small" />
-            <p className="text-sm">Saving...</p>
-          </div>
-        ) : (
-          <div className="text-sm text-slate-500">Saved</div>
-        )}
-        {/* <SettingsPopup /> */}
-
-        <div
-          onClick={() => {
-            navigator.clipboard.writeText(
-              `${window.location.origin}/document/editor/${projectId}/${id}`
-            );
-            toast({
-              title: "✨  Link copied!",
-              description:
-                "You’ve got the magic link—now go inspire some readers!",
-            });
-          }}
-          className="  p-3  cursor-pointer rounded-lg  hover:bg-slate-100 flex gap-2 items-center"
-        >
-          <Share2 size={16} />
+    <div className="flex items-center gap-1">
+      {saving ? (
+        <div className="text-sm flex items-center gap-1 px-2">
+          <Spinner size="small" className="text-slate-500" />
+          <p className="text-sm text-slate-600">Saving...</p>
         </div>
+      ) : (
+        <div className="text-sm text-slate-500 px-2">Saved</div>
+      )}
+      {/* <SettingsPopup /> */}
 
-        <Dialog>
-          <DialogTrigger>
-            <Button className=" font-mono flex gap-2 items-center">
-              <CloudDownload size={14} />
-              Export
-            </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <div className="bg-white">
-              <h1 className="pb-5 font-medium">
-                Download it in a format you prefer:
-              </h1>
-              <div className="flex items-center gap-2 justify-evenly rounded-lg ">
-                <div
-                  onClick={downloadHtmlFile}
-                  className="p-8 border cursor-pointer bg-slate-50 hover:bg-slate-200 rounded-xl"
-                >
-                  <p>HTML</p>
-                </div>
-                <div
-                  onClick={downloadPDFFile}
-                  className="p-8 border cursor-pointer bg-slate-50 hover:bg-slate-200 rounded-xl"
-                >
-                  <p>PDF</p>
-                </div>
-                <div
-                  onClick={downloadJSONFile}
-                  className="p-8 border cursor-pointer bg-slate-50 hover:bg-slate-200 rounded-xl"
-                >
-                  <p>JSON</p>
-                </div>
-                <div
-                  onClick={downloadTxtFile}
-                  className="p-8 border cursor-pointer bg-slate-50 hover:bg-slate-200 rounded-xl"
-                >
-                  <p>Text</p>
-                </div>
-              </div>
-            </div>
-          </DialogContent>
-        </Dialog>
+      <div
+        onClick={() => {
+          navigator.clipboard.writeText(
+            `${window.location.origin}/document/editor/${projectId}/${id}`
+          );
+          toast({
+            title: "✨  Link copied!",
+            description:
+              "You’ve got the magic link—now go inspire some readers!",
+          });
+        }}
+        className="  p-3  cursor-pointer rounded-lg  hover:bg-slate-200 flex gap-2 items-center"
+      >
+        <Share2 size={16} className="text-slate-600" />
       </div>
+      <DropdownMenu>
+        <DropdownMenuTrigger>
+          <Button
+            variant="ghost"
+            className="text-xs flex hover:bg-slate-200 text-slate-600 gap-2 items-center"
+          >
+            <CloudDownload size={16} />
+            Export
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="bg-slate-100">
+          <DropdownMenuLabel asChild>
+            <div
+              onClick={downloadHtmlFile}
+              className="p-8  cursor-pointer  hover:bg-slate-200 rounded-lg"
+            >
+              <p className=" text-md font-normal">HTML</p>
+            </div>
+          </DropdownMenuLabel>
+          <DropdownMenuLabel asChild>
+            <div
+              onClick={downloadTxtFile}
+              className="p-8  cursor-pointer  hover:bg-slate-200 rounded-lg"
+            >
+              <p className=" text-md font-normal">Text</p>
+            </div>
+          </DropdownMenuLabel>
+          <DropdownMenuLabel asChild>
+            <div
+              onClick={downloadPDFFile}
+              className="p-8  cursor-pointer  hover:bg-slate-200 rounded-lg"
+            >
+              <p className=" text-md font-normal">PDF</p>
+            </div>
+          </DropdownMenuLabel>
+          <DropdownMenuLabel asChild>
+            <div
+              onClick={downloadJSONFile}
+              className="p-8  cursor-pointer  hover:bg-slate-200 rounded-lg"
+            >
+              <p className=" text-md font-normal">JSON</p>
+            </div>
+          </DropdownMenuLabel>
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
   );
 }

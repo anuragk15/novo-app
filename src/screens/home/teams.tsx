@@ -272,9 +272,9 @@ export default function TeamsScreen() {
               </Dialog>
             </div>
 
-            <Table className="hidden md:block">
-              <TableHeader className=" overflow-x-scroll">
-                <TableRow className=" overflow-x-scroll ">
+            <Table className="hidden md:table ">
+              <TableHeader>
+                <TableRow>
                   <TableHead className="w-[100px]">#</TableHead>
                   <TableHead>Name</TableHead>
                   <TableHead>Email</TableHead>
@@ -283,9 +283,9 @@ export default function TeamsScreen() {
                   <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
-              <TableBody className=" overflow-x-scroll">
+              <TableBody>
                 {data.map((item, i) => (
-                  <TableRow key={i} className="overflow-x-scroll">
+                  <TableRow key={i} >
                     <TableCell className="font-medium text-slate-600">
                       {i + 1}
                     </TableCell>
