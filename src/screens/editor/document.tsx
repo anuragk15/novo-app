@@ -29,6 +29,7 @@ export default function DocumentEditorScreen() {
 
     enabled: false,
   });
+  const [isNew, setIsNew] = useState(id == "new");
 
   const debounceTimeoutRef = useRef(null);
   const [isDirty, setIsDirty] = useState(false); // Tracks if there are unsaved changes
@@ -197,7 +198,7 @@ export default function DocumentEditorScreen() {
     }
   }, [data, editor]);
 
-  if (isLoading) {
+  if (isLoading && !isNew) {
     return <LoadingState />;
   }
   return (
