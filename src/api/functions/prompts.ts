@@ -26,7 +26,6 @@ export const promptsCopilotAlternativeTitles = async ({
   projectId: string;
   documentId: string;
 }) => {
-  
   const response = await axiosClient
     .post(URLs.PROMPTS_COPILOT_ALT_TITLES, {
       projectId,
@@ -45,7 +44,6 @@ export const promptsCopilotContentAnalysis = async ({
   projectId: string;
   documentId: string;
 }) => {
-  
   const response = await axiosClient
     .post(URLs.PROMPTS_COPILOT_CONTENT_ANALYSIS, {
       projectId,
@@ -60,18 +58,56 @@ export const promptsCopilotContentAnalysis = async ({
 export const promptsCopilotChat = async ({
   projectId,
   documentId,
-  message
+  message,
 }: {
   projectId: string;
   message: string;
   documentId: string;
 }) => {
-  
   const response = await axiosClient
     .post(URLs.PROMPTS_COPILOT_CHAT, {
       projectId,
       documentId,
-      message
+      message,
+    })
+    .catch((error) => {
+      throw error;
+    });
+  return response.data;
+};
+
+export const promptsCopilotRepurposeIdeas = async ({
+  projectId,
+  documentId,
+}: {
+  projectId: string;
+
+  documentId: string;
+}) => {
+  const response = await axiosClient
+    .post(URLs.PROMPTS_COPILOT_REPURPOSE_IDEAS, {
+      projectId,
+      documentId,
+    })
+    .catch((error) => {
+      throw error;
+    });
+  return response.data;
+};
+export const promptsRepurposeContent = async ({
+  projectId,
+  documentId,
+  repurpose,
+}: {
+  projectId: string;
+  repurpose: string;
+  documentId: string;
+}) => {
+  const response = await axiosClient
+    .post(URLs.PROMPTS_REPURPOSE_CONTENT, {
+      projectId,
+      repurpose,
+      documentId,
     })
     .catch((error) => {
       throw error;
@@ -86,7 +122,6 @@ export const promptCopilotNextTopics = async ({
   projectId: string;
   documentId: string;
 }) => {
-  
   const response = await axiosClient
     .post(URLs.PROMPTS_COPILOT_NEXT_TOPICS, {
       projectId,
@@ -97,7 +132,6 @@ export const promptCopilotNextTopics = async ({
     });
   return response.data;
 };
-
 
 export const promptsWriteNext = async ({
   projectId,

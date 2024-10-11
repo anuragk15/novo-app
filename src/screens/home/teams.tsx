@@ -149,7 +149,7 @@ export default function TeamsScreen() {
       ) : (
         <div>
           <MobileSideBar projectId={projectId} />
-          <div className="flex flex-col w-full md:w-[85vw]  gap-10 p-8 overflow-scroll h-screen bg-white">
+          <div className="flex flex-col w-full md:w-[85vw] md:border-l md:border-2  gap-10 p-8 overflow-scroll h-screen bg-white">
             <div className="flex justify-between items-center">
               <div>
                 <h1 className=" text-2xl">Manage collaborators</h1>

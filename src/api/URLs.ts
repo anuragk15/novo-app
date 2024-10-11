@@ -19,6 +19,9 @@ export const URLs = {
   PROMPTS_COPILOT_ALT_TITLES: "/prompts/copilot/alternative-titles",
   PROMPTS_COPILOT_CONTENT_ANALYSIS: "/prompts/copilot/content-analysis",
   PROMPTS_COPILOT_NEXT_TOPICS: "/prompts/copilot/generate-next-topics",
+  PROMPTS_COPILOT_REPURPOSE_IDEAS: "/prompts/copilot/repurpose-content",
+  PROMPTS_REPURPOSE_CONTENT: "/prompts/copilot/repurpose-content",
+
   PROMPTS_COPILOT_CHAT: "/prompts/copilot/chat",
 
   //Sources

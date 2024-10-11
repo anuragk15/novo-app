@@ -17,7 +17,7 @@ export default function SourcesScreen({ data }) {
   const [sources, setSources] = useState(data || []);
 
   const [searchQuery, setSearchQuery] = useState("");
-  const debouncedInputValue = useDebounce(searchQuery, 500); // 500ms debounce delay
+  const debouncedInputValue = useDebounce(searchQuery, 200); // 500ms debounce delay
 
   useEffect(() => {
     if (debouncedInputValue && debouncedInputValue.length > 0) {
@@ -40,7 +40,7 @@ export default function SourcesScreen({ data }) {
         onChange={setSearchQuery}
       />
 
-      <div className="flex flex-col gap-4 items-start border shadow-sm rounded-lg mr-2 p-8 min-h-[91vh] bg-white">
+      <div className="flex flex-col gap-4 items-start border shadow-sm rounded-lg mr-2 p-8 min-h-[93vh] bg-white">
         <div className="flex justify-between w-full items-center">
           <div className=" flex items-center gap-2">
             <h2 className="text-2xl">Sources</h2>

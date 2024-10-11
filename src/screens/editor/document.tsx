@@ -29,7 +29,7 @@ export default function DocumentEditorScreen() {
 
     enabled: false,
   });
-  const [isNew, setIsNew] = useState(id == "new");
+  const [isNew] = useState(id == "new");
 
   const debounceTimeoutRef = useRef(null);
   const [isDirty, setIsDirty] = useState(false); // Tracks if there are unsaved changes

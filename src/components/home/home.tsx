@@ -8,11 +8,10 @@ import { useDebounce } from "@/hooks/useDebounce";
 import SearchBar from "./ui/search";
 
 export default function HomeScreen({ data, projectId }) {
-
   const [documents, setDocuments] = useState(data || []);
 
   const [searchQuery, setSearchQuery] = useState("");
-  const debouncedInputValue = useDebounce(searchQuery, 500); // 500ms debounce delay
+  const debouncedInputValue = useDebounce(searchQuery, 200); // 500ms debounce delay
 
   useEffect(() => {
     if (debouncedInputValue && debouncedInputValue.length > 0) {
@@ -36,7 +35,9 @@ export default function HomeScreen({ data, projectId }) {
                 size={64}
                 className=" text-slate-700 group-hover:text-black"
               />
-              <h1 className=" text-2xl font-sans text-center">Create document</h1>
+              <h1 className=" text-2xl font-sans text-center">
+                Create document
+              </h1>
               <p className=" text-slate-500 text-center">
                 Create documents effortlessly with AI
               </p>
@@ -63,8 +64,12 @@ export default function HomeScreen({ data, projectId }) {
   }
   return (
     <div className=" flex-col w-[85vw] pl-2 pb-2 overflow-scroll h-screen bg-slate-100">
-      <SearchBar placeholder={'Search documents...'} value={searchQuery} onChange={setSearchQuery} />
-      <div className="flex flex-col gap-4 items-start border shadow-sm rounded-lg mr-2 p-8 min-h-[91vh] bg-white">
+      <SearchBar
+        placeholder={"Search documents..."}
+        value={searchQuery}
+        onChange={setSearchQuery}
+      />
+      <div className="flex flex-col gap-4 items-start border shadow-sm rounded-lg mr-2 p-8 min-h-[93vh] bg-white">
         {/* {data?.length > 4 ? (
           <div className="flex w-full items-center  justify-between">
             <p className="text-2xl font-sans font-extralight ">Recent</p>
@@ -73,7 +78,7 @@ export default function HomeScreen({ data, projectId }) {
         {/* {data?.length > 4 ? (
           <div className="flex flex-wrap gap-4">
             <RecentFileItem />
-            <RecentFileItem />
+            <RecentFileItem /
             <RecentFileItem />
           </div>
         ) : null} */}
@@ -81,7 +86,7 @@ export default function HomeScreen({ data, projectId }) {
           <p className="text-2xl font-sans font-extralight">All files</p>
           <CreateNewDocumentPopup
             trigger={
-              <Button className="flex gap-1 items-center" variant="outline">
+              <Button className="flex gap-1 items-center" variant="default">
                 <Sparkles size={14} /> Create
               </Button>
             }

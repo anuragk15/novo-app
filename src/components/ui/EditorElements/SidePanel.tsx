@@ -15,6 +15,7 @@ import SEOAnalysis from "./SidePanelUI/SEOAnalysis";
 import WriteNext from "./SidePanelUI/WriteNext";
 import AnimatedBackground from "../animated-background";
 import { cn } from "@/lib/utils";
+import ConvertDocumentPanel from "./SidePanelUI/Convert";
 
 export default function SidePanel({
   editor,
@@ -141,6 +142,12 @@ export default function SidePanel({
                 editor={editor}
                 topics={document?.content?.copilot?.nextTopics || []}
               />
+            </AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="item-5">
+            <AccordionTrigger>Repurpose & convert</AccordionTrigger>
+            <AccordionContent asChild>
+              <ConvertDocumentPanel documents={document?.content?.copilot?.convertIdeas || []} />
             </AccordionContent>
           </AccordionItem>
         </Accordion>

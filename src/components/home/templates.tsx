@@ -20,7 +20,7 @@ export default function TemplatesScreen({ data }) {
   const [templates, setTemplates] = useState(data || []);
 
   const [searchQuery, setSearchQuery] = useState("");
-  const debouncedInputValue = useDebounce(searchQuery, 500); // 500ms debounce delay
+  const debouncedInputValue = useDebounce(searchQuery, 200); // 500ms debounce delay
 
   useEffect(() => {
     if (debouncedInputValue && debouncedInputValue.length > 0) {
@@ -55,7 +55,7 @@ export default function TemplatesScreen({ data }) {
           value={searchQuery}
           onChange={setSearchQuery}
         />
-        <div className="flex flex-col gap-4 items-start border shadow-sm rounded-lg mr-2 p-8 min-h-[91vh] bg-white">
+        <div className="flex flex-col gap-4 items-start border shadow-sm rounded-lg mr-2 p-8 min-h-[93vh] bg-white">
           <div className="flex flex-col md:flex-row justify-between w-full items-center">
             <div>
               <h2 className="text-2xl">Templates</h2>
