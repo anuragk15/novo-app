@@ -115,6 +115,15 @@
     font-size: 0.85rem;
     padding: 0.25em 0.3em;
   }
+  .yellow-highlight {
+    background-color: yellow;
+    cursor: pointer;
+  }
+
+  .suggestion-text {
+    color: green;
+    cursor: pointer;
+  }
 
   pre {
     background: var(--black);
@@ -176,7 +185,6 @@
       width: 1em;
     }
   }
-  
 }
 
 /* Collaboration status */

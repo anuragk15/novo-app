@@ -20,7 +20,7 @@ export default function CreateAccountScreen() {
   const posthog = usePostHog();
   useEffect(() => {
     if (user) {
-      navigation("/");
+      navigation("/projects?onboarding=true");
       return;
     } else {
       mutateAsync().then((user) => {

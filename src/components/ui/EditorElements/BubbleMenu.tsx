@@ -163,7 +163,7 @@ export const MenuBar = ({
                 data-state={"off"}
                 aria-label="Toggle bold"
               >
-                <Wand className="h-4 w-4" color="black" />
+                <Wand size={14} color="black" />
               </ToggleGroupItem>
             </PopoverTrigger>
             <PopoverContent className="w-60 bg-white rounded-xl border mt-2 p-2 mx-2">
@@ -193,7 +193,7 @@ export const MenuBar = ({
                       }}
                     >
                       <ChartNoAxesGantt size={14} />
-                      <p>Engaging</p>
+                      <p className="text-xs">Engaging</p>
                     </MenuItem>
                     <MenuItem
                       onClick={() => {
@@ -204,7 +204,7 @@ export const MenuBar = ({
                       }}
                     >
                       <Handshake size={14} />
-                      <p>Friendly</p>
+                      <p className="text-xs">Friendly</p>
                     </MenuItem>
                     <MenuItem
                       onClick={() => {
@@ -215,7 +215,7 @@ export const MenuBar = ({
                       }}
                     >
                       <BriefcaseBusiness size={14} />
-                      <p>Professional</p>
+                      <p className="text-xs">Professional</p>
                     </MenuItem>
                     <MenuItem
                       onClick={() => {
@@ -226,7 +226,7 @@ export const MenuBar = ({
                       }}
                     >
                       <Annoyed size={14} />
-                      <p>Sarcastic</p>
+                      <p className="text-xs">Sarcastic</p>
                     </MenuItem>
                     <MenuItem
                       onClick={() => {
@@ -237,7 +237,7 @@ export const MenuBar = ({
                       }}
                     >
                       <Microscope size={14} />
-                      <p>Mystical</p>
+                      <p className="text-xs">Mystical</p>
                     </MenuItem>
                     <MenuItem
                       onClick={() => {
@@ -248,12 +248,12 @@ export const MenuBar = ({
                       }}
                     >
                       <Laugh size={14} />
-                      <p>Funnny</p>
+                      <p className="text-xs">Funnny</p>
                     </MenuItem>
                   </div>
                 </div>
               ) : (
-                <div className="flex flex-col gap-1">
+                <div className="flex flex-col ">
                   <div className="space-y-2">
                     <p className="text-xs text-muted-foreground border-b pb-2">
                       EDIT SELECTION
@@ -269,7 +269,7 @@ export const MenuBar = ({
                       }}
                     >
                       <SpellCheck size={14} />
-                      <p>Fix grammar & spelling</p>
+                      <p className=" text-sm">Fix grammar & spelling</p>
                     </MenuItem>
                     <MenuItem
                       onClick={() => {
@@ -279,7 +279,7 @@ export const MenuBar = ({
                       }}
                     >
                       <CaseSensitive size={14} />
-                      <p>Simplify text</p>
+                      <p className="text-sm">Simplify text</p>
                     </MenuItem>
                     <MenuItem
                       onClick={() => {
@@ -289,7 +289,7 @@ export const MenuBar = ({
                       }}
                     >
                       <Scissors size={14} />
-                      <p>Summarise</p>
+                      <p className="text-sm">Summarise</p>
                     </MenuItem>
                     <MenuItem
                       onClick={() => {
@@ -299,7 +299,7 @@ export const MenuBar = ({
                       }}
                     >
                       <Expand size={14} />
-                      <p>Expand</p>
+                      <p className="text-sm">Expand</p>
                     </MenuItem>
                     <MenuItem
                       onClick={() => {
@@ -307,7 +307,7 @@ export const MenuBar = ({
                       }}
                     >
                       <AudioLines size={14} />
-                      <p className="flex items-center justify-between w-full">
+                      <p className="text-sm flex items-center justify-between w-full">
                         Change tone
                         <ChevronRight size={14} className=" text-slate-500" />
                       </p>
@@ -324,7 +324,7 @@ export const MenuBar = ({
             onClick={() => editor.chain().focus().toggleBold().run()}
             aria-label="Toggle bold"
           >
-            <Bold className="h-4 w-4" color="black" />
+            <Bold size={14} color="black" />
           </ToggleGroupItem>
           <ToggleGroupItem
             data-state={editor.isActive("italic") ? "on" : "off"}
@@ -332,7 +332,7 @@ export const MenuBar = ({
             value="italic"
             aria-label="Toggle italic"
           >
-            <Italic className="h-4 w-4" color="black" />
+            <Italic size={14} color="black" />
           </ToggleGroupItem>
           <ToggleGroupItem
             data-state={editor.isActive("underline") ? "on" : "off"}
@@ -340,7 +340,7 @@ export const MenuBar = ({
             onClick={() => editor.chain().focus().toggleUnderline().run()}
             aria-label="Toggle underline"
           >
-            <Underline className="h-4 w-4" color="black" />
+            <Underline size={14} color="black" />
           </ToggleGroupItem>
 
           <Dialog
@@ -382,7 +382,7 @@ export const MenuBar = ({
                 }}
                 aria-label="Toggle underline"
               >
-                <Link className="h-4 w-4" color="black" />
+                <Link size={14} color="black" />
               </ToggleGroupItem>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
@@ -424,7 +424,7 @@ export const MenuBar = ({
             onClick={() => editor.chain().focus().toggleCode().run()}
             data-state={editor.isActive("code") ? "on" : "off"}
           >
-            <Code size={18} color="black" />
+            <Code size={14} color="black" />
           </ToggleGroupItem>
 
           <ToggleGroupItem
@@ -433,7 +433,7 @@ export const MenuBar = ({
             disabled={!editor.can().chain().focus().toggleHighlight().run()}
             data-state={editor.isActive("code") ? "on" : "off"}
           >
-            <Highlighter size={18} color="black" />
+            <Highlighter size={14} color="black" />
           </ToggleGroupItem>
         </ToggleGroup>
       </div>

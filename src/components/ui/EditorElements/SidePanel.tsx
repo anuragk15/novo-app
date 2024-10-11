@@ -98,7 +98,7 @@ export default function SidePanel({
               data-id={tab}
               type="button"
               className={cn(
-                "px-2  flex-1 flex justify-center py-1 rounded-lg text-zinc-600 transition-colors duration-300 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
+                "px-2  flex-1 flex justify-center py-1 text-sm rounded-lg text-zinc-600 transition-colors duration-300 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50",
                 currentTab === tab &&
                   "border border-slate-300 shadow-sm bg-slate-200 dark:bg-zinc-800"
               )}

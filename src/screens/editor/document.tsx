@@ -62,7 +62,7 @@ export default function DocumentEditorScreen() {
     return () => {
       Crisp.chat.show();
     };
-  }, []);
+  }, [id, refetch]);
   useEffect(() => {
     if (isError && error)
       //@ts-ignore
@@ -94,6 +94,7 @@ export default function DocumentEditorScreen() {
           return [plugin];
         },
       }),
+
       SlashCommandExtension.configure({
         onSlashEnter: () => {
           const { state } = editor;
@@ -186,7 +187,7 @@ export default function DocumentEditorScreen() {
         variant: "destructive",
       });
     }
-  }, [isErrorSaving]);
+  }, [isErrorSaving, toast]);
 
   useEffect(() => {
     ////console.log(data);
@@ -205,7 +206,6 @@ export default function DocumentEditorScreen() {
         {/* <div className="p-0 z-[10000]  ">
           <DocNavbar name={docTitle} saving={isPending} editor={editor} />
         </div> */}
-
         <div className="flex">
           <SidePanel editor={editor} document={data} />
           <div className="bg-white   flex-1 py-5 md:py-20 flex justify-center">

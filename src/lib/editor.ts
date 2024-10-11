@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import Document from "@tiptap/extension-document";
-import Paragraph from "@tiptap/extension-paragraph";
-import StarterKit from "@tiptap/starter-kit";
-import { nanoid } from "nanoid";
-import Link from "@tiptap/extension-link";
-import TextAlign from "@tiptap/extension-text-align";
 import { Color } from "@tiptap/extension-color";
+import Document from "@tiptap/extension-document";
+import Link from "@tiptap/extension-link";
+import Paragraph from "@tiptap/extension-paragraph";
+import TextAlign from "@tiptap/extension-text-align";
 import TextStyle from "@tiptap/extension-text-style";
 import UnderlineExt from "@tiptap/extension-underline";
+import StarterKit from "@tiptap/starter-kit";
+import { nanoid } from "nanoid";
 import { Markdown } from "tiptap-markdown";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 import Placeholder from "@tiptap/extension-placeholder";
@@ -16,11 +16,11 @@ import Heading from "@tiptap/extension-heading";
 import Highlight from "@tiptap/extension-highlight";
 // import { useState } from "react";
 import { AiAcceptExtension } from "@/components/ui/EditorExtensions/AiAcceptExtension/Extension";
+import { AiInsertSuggestion } from "@/components/ui/EditorExtensions/AiInsertExtension/Extension";
+import { AiWriteNext } from "@/components/ui/EditorExtensions/AiWriteNext/Extension";
 import { ColorHighlighter } from "@/components/ui/EditorExtensions/ColorHighlighter";
 import { SmilieReplacer } from "@/components/ui/EditorExtensions/SmilieReplacer";
 import ImageResizer from "tiptap-extension-resize-image";
-import { AiInsertSuggestion } from "@/components/ui/EditorExtensions/AiInsertExtension/Extension";
-import { AiWriteNext } from "@/components/ui/EditorExtensions/AiWriteNext/Extension";
 
 export const myExtensions = [
   StarterKit,
