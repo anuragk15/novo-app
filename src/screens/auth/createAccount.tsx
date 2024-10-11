@@ -24,9 +24,9 @@ export default function CreateAccountScreen() {
       return;
     } else {
       mutateAsync().then((user) => {
+        posthog.capture("user_signed_up");
         setUser(user);
         navigation("/projects?onboarding=true");
-        posthog.capture("user_signed_up");
       });
     }
   }, [user]);
