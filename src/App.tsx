@@ -27,6 +27,7 @@ import TemplatesHome from "@/screens/home/template";
 import ErrorScreen from "@/screens/misc/Error";
 import { PHProvider } from "@/wrappers/posthog";
 import { useEffect } from "react";
+import OnboardingProjectScreen from "./screens/onboarding/project";
 // import LiveDocumentEditorScreen from "./pages/editor/live";
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
@@ -61,7 +62,10 @@ const router = createBrowserRouter([
           </div>
         ),
       },
-
+      {
+        path: "/project/:projectId/onboarding",
+        element: <OnboardingProjectScreen />,
+      },
       {
         path: "/project/:projectId/sources",
         element: (
