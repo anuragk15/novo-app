@@ -1,12 +1,12 @@
 import { getDocuments } from "@/api/functions/documents";
-import DashboardHomeContents from "@/components/dashboard/home";
+import HomeScreen from "@/components/home/files";
 import MobileSideBar from "@/components/home/mobileSidebar";
 import Sidebar from "@/components/home/sidebar";
 import { Spinner } from "@/components/ui/spinner";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 
-export default function DashboardHome() {
+export default function FilesScreen() {
   const { projectId } = useParams(); // Extract the projectId from the URL
   const { data, isLoading } = useQuery({
     queryKey: ["get", "documents"],
@@ -30,7 +30,7 @@ export default function DashboardHome() {
       ) : (
         <div className="w-full md:w-[85vw]">
           <MobileSideBar projectId={projectId} />
-          <DashboardHomeContents data={data} projectId={projectId} />
+          <HomeScreen data={data} projectId={projectId} />
         </div>
       )}
     </div>

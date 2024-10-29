@@ -25,6 +25,7 @@ export default function TagsDropdown({
   documentId,
   projectId,
   appliedTags,
+  fileCard = false,
   tags,
 }) {
   const [selectedItems, setSelectedItems] = React.useState<any>(
@@ -54,10 +55,16 @@ export default function TagsDropdown({
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           {selectedItems?.length == 0 ? (
-            <Button variant="ghost" className="p-0 m-0 justify-between">
-              Select
-              <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-            </Button>
+            fileCard ? (
+              <Button variant="ghost" className="p-0 m-0 text-xs text-slate-700 hover:text-black justify-between">
+                Add tag
+              </Button>
+            ) : (
+              <Button variant="ghost" className="p-0 m-0 justify-between">
+                Select
+                <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+              </Button>
+            )
           ) : (
             <div className=" flex gap-2">
               {selectedItems?.map((item, i) => {
@@ -81,7 +88,7 @@ export default function TagsDropdown({
             </div>
           )}
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="w-[180px] ">
+        <DropdownMenuContent className="w-[180px] z-30">
           <DropdownMenuLabel className="px-2">Tags</DropdownMenuLabel>
 
           <DropdownMenuSeparator />

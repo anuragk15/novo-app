@@ -1,21 +1,22 @@
 import { getProjectById } from "@/api/functions/projects";
 import { cn } from "@/lib/utils";
-import { useQuery } from "@tanstack/react-query";
-import {
-  Bot,
-  ChevronLeft,
-  Gauge,
-  Home,
-  LayoutTemplate,
-  Settings,
-  Users2,
-} from "lucide-react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { DropdownMenuTrigger } from "../ui/dropdown-menu";
 import {
   DropdownMenu,
   DropdownMenuContent,
 } from "@radix-ui/react-dropdown-menu";
+import { useQuery } from "@tanstack/react-query";
+import {
+  ChevronLeft,
+  FileBox,
+  Gauge,
+  Home,
+  LayoutTemplate,
+  Library,
+  Settings,
+  Users2
+} from "lucide-react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { DropdownMenuTrigger } from "../ui/dropdown-menu";
 
 export default function Sidebar({ projectId }) {
   const location = useLocation();
@@ -32,21 +33,21 @@ export default function Sidebar({ projectId }) {
   //console.log(data);
   return (
     <div className="flex flex-col w-[15vw] h-screen">
-      <div className=" h-[100vh] flex flex-col justify-between ">
+      <div className=" h-[100vh] flex flex-col justify-between bg-white ">
         <div>
-          <div className="pt-1 pl-3">
+          <div className="pt-1 pl-3  border-b" >
             {isLoading ? (
               <div className="p-4">Loading...</div>
             ) : (
               <div>
                 <div
                   onClick={() => navigate("/")}
-                  className="flex items-center hover:bg-slate-100 py-2 cursor-pointer rounded-lg"
+                  className="flex max-w-fit  px-2 items-center hover:bg-slate-100 py-2 cursor-pointer rounded-lg"
                 >
                   <ChevronLeft size={16} />
                   <p className="text-sm">Back</p>
                 </div>
-                <h1 className="text-xl   ml-1 border-b  pb-3 font-bold font-sans">
+                <h1 className="text-xl   pb-3 font-bold font-sans">
                   {data?.project?.name?.substring(0, 20)}
                 </h1>
               </div>
@@ -58,9 +59,9 @@ export default function Sidebar({ projectId }) {
               <Link
                 to={"/project/" + projectId}
                 className={cn(
-                  "hover:bg-slate-200 flex items-center gap-2 p-2 font-sans font-light rounded-md",
+                  "hover:bg-slate-200 flex items-center gap-2 p-2 font-sans font-normal rounded-md",
                   {
-                    "bg-slate-200 font-normal":
+                    "bg-slate-200 ":
                       pathname.split("/").at(-1) === projectId,
                   }
                 )}
@@ -69,22 +70,35 @@ export default function Sidebar({ projectId }) {
                 Home
               </Link>
               <Link
-                to={`/project/${projectId}/sources`}
+                to={"/project/" + projectId + "/files"}
                 className={cn(
-                  "hover:bg-slate-200 flex items-center gap-2 p-2 font-sans font-light rounded-md",
+                  "hover:bg-slate-200 flex items-center gap-2 p-2 font-sans font-normal rounded-md",
                   {
                     "bg-slate-200 font-normal":
-                      pathname.split("/").at(-1) === "sources",
+                      pathname.split("/").at(-1) === 'files',
                   }
                 )}
               >
-                <Bot size={16} />
-                Sources
+                <FileBox size={16} />
+                Files
+              </Link>
+              <Link
+                to={`/project/${projectId}/knowledge-base`}
+                className={cn(
+                  "hover:bg-slate-200 flex items-center gap-2 p-2 font-sans font-normal rounded-md",
+                  {
+                    "bg-slate-200 font-normal":
+                      pathname.split("/").at(-1) === "knowledge-base",
+                  }
+                )}
+              >
+                <Library size={16} />
+                Knowledge Hub
               </Link>
               <Link
                 to={`/project/${projectId}/templates`}
                 className={cn(
-                  "hover:bg-slate-200 flex items-center gap-2 p-2 font-sans font-light rounded-md",
+                  "hover:bg-slate-200 flex items-center gap-2 p-2 font-sans font-normal rounded-md",
                   {
                     "bg-slate-200 font-normal":
                       pathname.split("/").at(-1) === "templates",
@@ -97,7 +111,7 @@ export default function Sidebar({ projectId }) {
               <Link
                 to={`/project/${projectId}/team`}
                 className={cn(
-                  "hover:bg-slate-200 flex items-center gap-2 p-2 font-sans font-light rounded-md",
+                  "hover:bg-slate-200 flex items-center gap-2 p-2 font-sans font-normal rounded-md",
                   {
                     "bg-slate-200 font-normal":
                       pathname.split("/").at(-1) === "team",

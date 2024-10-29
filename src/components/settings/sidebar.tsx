@@ -14,7 +14,7 @@ export default function SettingsSidebar({ projectId }) {
           <div className="p-4">
             <div>
               <div
-                onClick={() => navigate("/")}
+                onClick={() => navigate("/project/" + projectId)}
                 className="flex items-center hover:bg-slate-200 py-2 cursor-pointer rounded-lg px-1"
               >
                 <ChevronLeft size={16} />

@@ -43,7 +43,7 @@ export default function SourcesScreen({ data }) {
       <div className="flex flex-col gap-4 items-start border shadow-sm rounded-lg mr-2 p-8 min-h-[93vh] bg-white">
         <div className="flex justify-between w-full items-center">
           <div className=" flex items-center gap-2">
-            <h2 className="text-2xl">Sources</h2>
+            <h2 className="text-2xl">Training Documents</h2>
 
             <TooltipProvider>
               <Tooltip>
@@ -52,10 +52,10 @@ export default function SourcesScreen({ data }) {
                 </TooltipTrigger>
                 <TooltipContent className="md:max-w-[60vw]">
                   <p className="text-slate-500">
-                    By uploading your unique sources, you provide the AI with
+                    By uploading your unique documents, you provide Novo with
                     the specific context it needs to deliver smarter, more
                     personalized suggestions, fine-tuned to your individual
-                    needs. You can add website or Youtube links, and even upload
+                    needs. You can add website or YouTube links, and even upload
                     files!
                   </p>
                 </TooltipContent>
@@ -75,7 +75,7 @@ export default function SourcesScreen({ data }) {
                 height: "15rem",
               }}
             />
-            <p className=" text-center font-sans text-2xl">No sources found</p>
+            <p className=" text-center font-sans text-2xl">No documents found</p>
           </div>
         )}
       </div>
