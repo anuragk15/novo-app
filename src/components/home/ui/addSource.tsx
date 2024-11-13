@@ -128,7 +128,7 @@ export default function AddSource({
             </p>
           </div>
           <div className="space-y-2">
-            <Label>Souce name</Label>
+            <Label>Name</Label>
             <Input
               maxLength={90}
               value={name}
@@ -200,7 +200,10 @@ export default function AddSource({
               disabled={isAddingSource || isAddingSourceFile}
               onClick={() => onSubmitFn()}
             >
-              <Spinner size="small" className=" text-white mr-2" /> Upload
+              {isAddingSource || isAddingSourceFile ? (
+                <Spinner size="small" className=" text-white mr-2" />
+              ) : null}{" "}
+              Upload
             </Button>
           </div>
         </div>

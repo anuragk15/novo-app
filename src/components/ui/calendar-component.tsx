@@ -105,7 +105,7 @@ const Calendar = ({ showControls = false }) => {
   };
 
   return (
-    <div className="max-w-sm mx-auto pb-2  rounded-lg  ">
+    <div className="max-w-sm mx-auto pb-2 px-2 rounded-lg  ">
       {renderHeader()}
       {renderDays()}
       {renderCells()}

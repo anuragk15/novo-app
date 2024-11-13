@@ -47,15 +47,15 @@ export default function SettingsOverview({ data }) {
     });
   }
   return (
-    <div className="flex justify-center flex-col w-[85vw]  pl-2 pb-2 overflow-scroll h-screen bg-slate-100">
-      <div className="flex flex-col gap-4 items-start border shadow-sm rounded-lg mr-2 p-8 min-h-[98vh]  bg-white">
+    <div className="flex justify-center flex-col w-[85vw]  pl-2 pb-2 overflow-scroll min-h-screen bg-slate-100">
+      <div className="flex flex-col gap-4 items-start border shadow-sm rounded-lg mr-2 p-8 min-h-[98vh] h-full  bg-white">
         <div className="flex justify-between w-full items-center">
           <div className=" flex items-center gap-2">
             <h2 className="text-2xl">Project info</h2>
           </div>
         </div>
         {data?.project ? (
-          <div className="w-full space-y-4">
+          <div className="w-full space-y-4 h-full">
             <div className="flex flex-col gap-4 max-w-fit ">
               <div className="flex flex-col gap-2">
                 <label className="text-slate-500">Project name</label>

@@ -1,4 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { deleteSource } from "@/api/functions/sources";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
@@ -11,6 +23,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
+import { Spinner } from "@/components/ui/spinner";
 import {
   Table,
   TableBody,
@@ -19,19 +32,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
 import { useToast } from "@/components/ui/use-toast";
-import { formatDate } from "@/lib/utils";
+import { capitalizeFirstCharacter, formatDate } from "@/lib/utils";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   ColumnDef,
@@ -45,9 +47,8 @@ import {
   useReactTable,
   VisibilityState,
 } from "@tanstack/react-table";
-import { ChevronDown } from "lucide-react";
+import { CheckIcon, ChevronDown, Trash, X } from "lucide-react";
 import { useState } from "react";
-import { deleteSource } from "@/api/functions/sources";
 import { useParams } from "react-router-dom";
 type Source = {
   id: string;
@@ -58,7 +59,19 @@ type Source = {
   projectId: string;
 };
 
-export function SourcesTable({ sources }: { sources: Source[] }) {
+export function SourcesTable({
+  sources,
+  showSearch = true,
+  showHeaders = true,
+  showPagination = true,
+  showSelection = true,
+}: {
+  sources: Source[];
+  showSearch?: boolean;
+  showPagination?: boolean;
+  showSelection?: boolean;
+  showHeaders?: boolean;
+}) {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [showDetails, setShowDetails] = useState<Source | null>(null);
@@ -128,17 +141,56 @@ export function SourcesTable({ sources }: { sources: Source[] }) {
       accessorKey: "type",
       header: ({ column }) => {
         return (
-          <Button
-            variant="ghost"
+          <div
+            className="cursor-pointer hover:text-slate-900"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Type
-          </Button>
+          </div>
         );
       },
       cell: ({ row }) => (
-        <div className="lowercase">{row.getValue("type")}</div>
+        <div>{capitalizeFirstCharacter(row.getValue("type"))}</div>
       ),
+    },
+    {
+      accessorKey: "status",
+      header: ({ column }) => {
+        return (
+          <div
+            className="cursor-pointer hover:text-slate-900"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Status
+          </div>
+        );
+      },
+      cell: ({ row }) => {
+        const v: string = row.getValue("status");
+
+        if (v == "processed") {
+          return (
+            <div className="p-2 py-2 flex gap-1 items-center max-w-fit text-xs text-green-600 rounded-lg bg-green-200">
+              <CheckIcon className="h-4 w-4" />
+              {capitalizeFirstCharacter(v)}
+            </div>
+          );
+        } else if (v == "processing") {
+          return (
+            <div className="p-2 py-2 flex gap-1 items-center max-w-fit text-xs text-yellow-600 rounded-lg bg-yellow-200">
+              <Spinner className="h-4 w-4 text-yellow-600" />
+              {capitalizeFirstCharacter(v)}
+            </div>
+          );
+        } else if (v == "failed") {
+          return (
+            <div className="p-2 py-2 flex gap-1 items-center max-w-fit text-xs text-red-600 rounded-lg bg-red-200">
+              <X className="h-4 w-4 text-red-600" />
+              {capitalizeFirstCharacter(v)}
+            </div>
+          );
+        } else return <div>{capitalizeFirstCharacter(v)}</div>;
+      },
     },
     {
       accessorKey: "createdAt",
@@ -208,7 +260,7 @@ export function SourcesTable({ sources }: { sources: Source[] }) {
   ];
   const table = useReactTable<Source>({
     data: sources,
-    columns,
+    columns: showSelection ? columns : columns.slice(1),
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
@@ -254,44 +306,69 @@ export function SourcesTable({ sources }: { sources: Source[] }) {
           </div>
         </DialogContent>
       </Dialog>
-      <div className="flex items-center justify-between py-4 w-full">
-        <Input
-          placeholder="Search..."
-          onChange={(event) =>
-            table.getColumn("title")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm focus-visible:border focus-visible:border-slate-50"
-        />
+      {showSearch ? (
+        <div className="flex items-center justify-between py-4 w-full">
+          <Input
+            placeholder="Search..."
+            onChange={(event) =>
+              table.getColumn("title")?.setFilterValue(event.target.value)
+            }
+            className="max-w-sm focus-visible:border focus-visible:border-slate-50"
+          />
 
-        {Object.entries(rowSelection)?.length > 0 ? (
-          <Button
-            onClick={() => performDelete(Object.keys(rowSelection))}
-            variant="outline"
-            className="flex items-center gap-2 hover:bg-red-600 hover:text-white"
-          >
-            <p>Delete</p>
-          </Button>
-        ) : null}
-      </div>
+          {Object.entries(rowSelection)?.length > 0 ? (
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button
+                  variant="outline"
+                  className=" flex items-center gap-1 justify-center"
+                >
+                  <Trash size={14} className="p-0 m-0" /> <p>Delete</p>
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This action cannot be undone. This will permanently delete
+                    this training document and remove it from our servers.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={() => performDelete(Object.keys(rowSelection))}
+                    className="bg-red-500 text-white hover:bg-red-700"
+                  >
+                    Delete
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          ) : null}
+        </div>
+      ) : null}
       <Table>
-        <TableHeader>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header) => {
-                return (
-                  <TableHead key={header.id}>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                  </TableHead>
-                );
-              })}
-            </TableRow>
-          ))}
-        </TableHeader>
+        {showHeaders ? (
+          <TableHeader>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => {
+                  return (
+                    <TableHead key={header.id}>
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                    </TableHead>
+                  );
+                })}
+              </TableRow>
+            ))}
+          </TableHeader>
+        ) : null}
         <TableBody>
           {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => (
@@ -315,6 +392,26 @@ export function SourcesTable({ sources }: { sources: Source[] }) {
           )}
         </TableBody>
       </Table>
+      {showPagination ? (
+        <div className="space-x-2 flex w-full ">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}
+          >
+            Previous
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}
+          >
+            Next
+          </Button>
+        </div>
+      ) : null}
     </>
   );
 }

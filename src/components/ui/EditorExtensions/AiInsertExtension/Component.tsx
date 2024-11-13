@@ -105,7 +105,7 @@ export default function Component(props) {
               transition={{
                 ease: [0, 0.5, 0.8, 0.5],
                 duration: 4,
-                repeat: 10,
+                repeat: 20,
               }}
             />
             <Sparkles size={18} />

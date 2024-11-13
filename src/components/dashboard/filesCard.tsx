@@ -16,6 +16,7 @@ import { Button } from "../ui/button";
 import { useToast } from "../ui/use-toast";
 import { Label } from "@radix-ui/react-label";
 import { Input } from "../ui/input";
+import { AnimatedGroup } from "../ui/animated-group";
 export default function FilesCard({ files }) {
   const { projectId } = useParams();
 
@@ -121,11 +122,11 @@ export default function FilesCard({ files }) {
         </div>
         <p className="text-xl font-sans font-medium">Recent Changes</p>
       </div>
-      <div className="grid  grid-cols-1 h-full  md:grid-cols-2 gap-2">
+      <AnimatedGroup className="grid  grid-cols-1 h-full  md:grid-cols-2 gap-2">
         {files.slice(0, 4).map((item) => (
           <RecentFileItem key={item.id} item={item} />
         ))}
-      </div>
+      </AnimatedGroup>
     </div>
   );
 }

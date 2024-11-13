@@ -6,6 +6,7 @@ export const URLs = {
   USER_CREATE: "/users/create",
 
   // Prompts
+  PROMPTS_REFINE_CONTENT: "/prompts/refine",
   PROMPTS_SUMMARISE: "/prompts/summarise",
   PROMPTS_WRITE_NEXT: "/prompts/next-content",
   PROMPT_INSERT_CONTENT: "/prompts/insert-content",
@@ -52,6 +53,8 @@ export const URLs = {
   PROJECTS_COLLAB_CHANGE_ACCESS: "/projects/change/collaborator/access",
   PROJECTS_RESPOND_INVITE: "/projects/invite/respond",
   PROJECT_UPDATE: "/projects/update",
+  PROJECT_ONBOARD: "/projects/onboarding",
+  PROJECT_ONBOARD_COMPETITORS: "/projects/competitor/add",
   PROJECTS_ADD_TAG: "/documents/add/tag",
   PROJECTS_GET_TAGS: "/documents/tags",
   PROJECTS_REMOVE_COLLAB: "/projects/remove/collaborator",

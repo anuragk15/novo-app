@@ -15,6 +15,7 @@ export default function SourceHome() {
       return res?.data;
     },
   });
+  console.log(data)
   return (
     <div className="flex  bg-slate-100 w-full">
       <div className="hidden md:block">

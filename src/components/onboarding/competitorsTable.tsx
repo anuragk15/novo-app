@@ -24,30 +24,30 @@ import {
 } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
 
-const data: Competitors[] = [
-  {
-    id: 1,
-    name: "Webflow",
-    size: "Large",
-    link: "https://webflow.com",
-  },
-  {
-    id: 2,
-    name: "Wix",
-    size: "Medium",
-    link: "https://wix.com",
-  },
-  {
-    id: 3,
-    name: "Carrd",
-    size: "Small",
-    link: "https://carrd.com",
-  },
-];
+// const data: Competitors[] = [
+//   {
+//     id: 1,
+//     name: "Webflow",
+//     size: "Large",
+//     link: "https://webflow.com",
+//   },
+//   {
+//     id: 2,
+//     name: "Wix",
+//     size: "Medium",
+//     link: "https://wix.com",
+//   },
+//   {
+//     id: 3,
+//     name: "Carrd",
+//     size: "Small",
+//     link: "https://carrd.com",
+//   },
+// ];
 
 export type Competitors = {
   id: number;
-  link: string;
+  url: string;
   size: string;
   name: string;
 };
@@ -57,12 +57,13 @@ export const columns: ColumnDef<Competitors>[] = [
     id: "select",
     header: ({ table }) => (
       <Checkbox
+        defaultChecked={true}
         checked={
           table.getIsAllPageRowsSelected()
             ? true
             : table.getIsSomePageRowsSelected()
             ? "indeterminate"
-            : false
+            : true
         }
         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
         aria-label="Select all"
@@ -70,6 +71,7 @@ export const columns: ColumnDef<Competitors>[] = [
     ),
     cell: ({ row }) => (
       <Checkbox
+        defaultChecked={true}
         checked={row.getIsSelected()}
         onCheckedChange={(value) => row.toggleSelected(!!value)}
         aria-label="Select row"
@@ -87,15 +89,25 @@ export const columns: ColumnDef<Competitors>[] = [
   },
   {
     accessorKey: "size",
-    header: () => <div className="text-center hidden md:block">Audience Size</div>,
+    header: () => (
+      <div className="text-center hidden md:block">Audience Size</div>
+    ),
     cell: ({ row }) => {
       const v: string = row.getValue("size");
 
-      return <div className={cn("text-center hidden md:block font-sans p-2 bg-slate-100 max-w-fit mx-auto border rounded-lg")}>{v}</div>;
+      return (
+        <div
+          className={cn(
+            "text-center hidden md:block font-sans p-2 bg-slate-100 max-w-fit mx-auto border rounded-lg"
+          )}
+        >
+          {v}
+        </div>
+      );
     },
   },
   {
-    accessorKey: "link",
+    accessorKey: "url",
     header: () => <div className="text-right">Website</div>,
     cell: ({ row }) => {
       return (
@@ -103,7 +115,7 @@ export const columns: ColumnDef<Competitors>[] = [
           <Button
             variant="ghost"
             onClick={() => {
-              window.open(row.getValue("link"), "_blank");
+              window.open(row.getValue("url"), "_blank");
             }}
           >
             Visit
@@ -114,14 +126,25 @@ export const columns: ColumnDef<Competitors>[] = [
   },
 ];
 
-export function CompetitorsTable() {
+export function CompetitorsTable({
+  data,
+  setCompetitors,
+}: {
+  data: Competitors[];
+  setCompetitors: (data) => void;
+}) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
-  const [rowSelection, setRowSelection] = React.useState({});
+  const [rowSelection, setRowSelection] = React.useState(
+    data.reduce((acc, obj) => {
+      acc[obj.id] = true;
+      return acc;
+    }, {})
+  );
 
   const table = useReactTable({
     data,
@@ -134,6 +157,7 @@ export function CompetitorsTable() {
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
+
     state: {
       sorting,
       columnFilters,
@@ -141,6 +165,16 @@ export function CompetitorsTable() {
       rowSelection,
     },
   });
+
+  React.useEffect(() => {
+    console.log(rowSelection);
+    const t = table.getFilteredSelectedRowModel().rows.map((row) => {
+      return row.original.url;
+    });
+
+    console.log(t);
+    setCompetitors(t);
+  }, [rowSelection]);
 
   return (
     <div className="w-full">
@@ -194,11 +228,28 @@ export function CompetitorsTable() {
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
-        <div className="flex-1 text-sm text-muted-foreground">
-          {table.getFilteredSelectedRowModel().rows.length} of{" "}
-          {table.getFilteredRowModel().rows.length} row(s) selected.
-        </div>
+      {/* <div className="space-x-2">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => table.previousPage()}
+          disabled={!table.getCanPreviousPage()}
+        >
+          Previous
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => table.nextPage()}
+          disabled={!table.getCanNextPage()}
+        >
+          Next
+        </Button>
+      </div> */}
+
+      <div className="flex items-center w-full justify-end space-x-2 py-4 text-sm text-muted-foreground">
+        {table.getFilteredSelectedRowModel().rows.length} of{" "}
+        {table.getFilteredRowModel().rows.length} row(s) selected.
       </div>
     </div>
   );

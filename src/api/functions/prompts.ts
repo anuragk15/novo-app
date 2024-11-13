@@ -1,17 +1,23 @@
 import { axiosClient } from "@/lib/axios";
 import { URLs } from "../URLs";
 
-export const promptsSummarise = async ({
+export const refineContent = async ({
   projectId,
   content,
+  prompt,
+  tone,
 }: {
   projectId: string;
   content: string;
+  prompt: string;
+  tone?: string;
 }) => {
   const response = await axiosClient
-    .post(URLs.PROMPTS_SUMMARISE, {
+    .post(URLs.PROMPTS_REFINE_CONTENT, {
       projectId,
       content,
+      prompt,
+      tone: tone,
     })
     .catch((error) => {
       throw error;
@@ -153,82 +159,6 @@ export const promptsWriteNext = async ({
     });
   return response.data;
 };
-
-export const promptsFixGrammar = async ({
-  projectId,
-  content,
-}: {
-  projectId: string;
-  content: string;
-}) => {
-  const response = await axiosClient
-    .post(URLs.PROMPTS_FIX_GRAMMAR, {
-      projectId,
-      content,
-    })
-    .catch((error) => {
-      throw error;
-    });
-  return response.data;
-};
-
-export const promptsSimplify = async ({
-  projectId,
-  content,
-}: {
-  projectId: string;
-  content: string;
-}) => {
-  const response = await axiosClient
-    .post(URLs.PROMPTS_SIMPLIFY, {
-      projectId,
-      content,
-    })
-    .catch((error) => {
-      throw error;
-    });
-  return response.data;
-};
-
-export const promptsExpand = async ({
-  projectId,
-  content,
-}: {
-  projectId: string;
-  content: string;
-}) => {
-  const response = await axiosClient
-    .post(URLs.PROMPTS_EXPAND, {
-      projectId,
-      content,
-    })
-    .catch((error) => {
-      throw error;
-    });
-  return response.data;
-};
-
-export const promptsChangeTone = async ({
-  projectId,
-  content,
-  tone,
-}: {
-  projectId: string;
-  tone: string;
-  content: string;
-}) => {
-  const response = await axiosClient
-    .post(URLs.PROMPTS_CHANGE_TONE, {
-      projectId,
-      content,
-      tone,
-    })
-    .catch((error) => {
-      throw error;
-    });
-  return response.data;
-};
-
 export const promptsCustomPrompt = async ({
   projectId,
   content,
@@ -349,19 +279,19 @@ export const runPrompts = async ({
 }) => {
   switch (type) {
     case "summarise":
-      return promptsSummarise({ projectId, content });
+      return refineContent({ projectId, content, prompt: type });
     case "write-next":
       return promptsWriteNext({ projectId, content, topic: customUserPrompt });
     case "fix-grammar":
-      return promptsFixGrammar({ projectId, content });
+      return refineContent({ projectId, content, prompt: type });
     case "generate-alt-titles":
       return promptsCopilotAlternativeTitles({ projectId, documentId });
     case "simplify":
-      return promptsSimplify({ projectId, content });
+      return refineContent({ projectId, content, prompt: type });
     case "expand":
-      return promptsExpand({ projectId, content });
+      return refineContent({ projectId, content, prompt: type });
     case "change-tone":
-      return promptsChangeTone({ projectId, content, tone });
+      return refineContent({ projectId, content, prompt: type, tone: tone });
     case "custom-prompt":
       return promptsCustomPrompt({
         projectId,
