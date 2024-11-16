@@ -76,8 +76,11 @@ export function MultipleSelector({
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[230px] md:w-[730px] p-0">
-        <Command>
+      <PopoverContent
+        style={{ width: "var(--radix-popover-trigger-width)" }}
+        //className="w-[230px] md:w-[730px] p-0"
+      >
+        <Command className="w-full">
           <CommandInput placeholder={placeholder} />
           <CommandEmpty>{noItemsFoundPlaceholder}</CommandEmpty>
           <CommandGroup>

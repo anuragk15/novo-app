@@ -172,11 +172,19 @@ export const updateProject = async ({
   name,
   targetAudience,
   brandVoice,
+  keywords,
+  contentTypes,
+  industryFocus,
+  tonePreference,
 }: {
   projectId: string;
   name?: string;
   targetAudience?: string;
   brandVoice?: string;
+  keywords?: string;
+  contentTypes?: string;
+  industryFocus?: string;
+  tonePreference?: string;
 }) => {
   const response = await axiosClient
     .post(URLs.PROJECT_UPDATE, {
@@ -184,6 +192,10 @@ export const updateProject = async ({
       name: name,
       targetAudience: targetAudience,
       brandVoice: brandVoice,
+      keywords: keywords,
+      contentTypes: contentTypes,
+      industryFocus: industryFocus,
+      tonePreference: tonePreference,
     })
     .catch((error) => {
       throw error;

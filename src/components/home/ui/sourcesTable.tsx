@@ -61,6 +61,7 @@ type Source = {
 
 export function SourcesTable({
   sources,
+  pageSize = 10,
   showSearch = true,
   showHeaders = true,
   showPagination = true,
@@ -68,6 +69,7 @@ export function SourcesTable({
 }: {
   sources: Source[];
   showSearch?: boolean;
+  pageSize?: number;
   showPagination?: boolean;
   showSelection?: boolean;
   showHeaders?: boolean;
@@ -274,6 +276,12 @@ export function SourcesTable({
       // You can choose parameter. In this example I used uniqueId
       return parent ? [parent.id, row.id].join(".") : row.id;
     },
+    initialState: {
+      pagination: {
+        pageIndex: 0,
+        pageSize: pageSize,
+      },
+    },
     state: {
       sorting,
       columnFilters,
@@ -392,7 +400,7 @@ export function SourcesTable({
           )}
         </TableBody>
       </Table>
-      {showPagination ? (
+      {showPagination && sources.length > pageSize ? (
         <div className="space-x-2 flex w-full ">
           <Button
             variant="outline"

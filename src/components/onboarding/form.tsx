@@ -19,6 +19,8 @@ import {
   onboardProjectCompetitors,
   updateProject,
 } from "@/api/functions/projects";
+import LoadingOnboardingText from "./loadingText";
+import { targetAudienceList } from "@/lib/constants";
 
 const dummyRecommendations = [
   {
@@ -113,66 +115,7 @@ interface Props {
   setStep: (step: number) => void;
 }
 
-const targetAudienceList = [
-  { label: "Developers" },
-  { label: "Students" },
-  { label: "Designers" },
-  { label: "Founders" },
-  { label: "Marketers" },
-  { label: "Entrepreneurs" },
-  { label: "Product Managers" },
-  { label: "Investors" },
-  { label: "Freelancers" },
-  { label: "Educators" },
-  { label: "Researchers" },
-  { label: "Consultants" },
-  { label: "HR Professionals" },
-  { label: "Content Creators" },
-  { label: "Small Business Owners" },
-  { label: "Corporate Executives" },
-  { label: "Healthcare Professionals" },
-  { label: "Engineers" },
-  { label: "Sales Professionals" },
-  { label: "Accountants" },
-  { label: "Financial Analysts" },
-  { label: "Lawyers" },
-  { label: "Nonprofit Leaders" },
-  { label: "Public Relations Specialists" },
-  { label: "Customer Support Agents" },
-  { label: "IT Administrators" },
-  { label: "Data Scientists" },
-  { label: "UX/UI Designers" },
-  { label: "Digital Nomads" },
-  { label: "Parents" },
-  { label: "Young Professionals" },
-  { label: "Environmental Advocates" },
-  { label: "Public Policy Makers" },
-  { label: "Supply Chain Managers" },
-  { label: "Real Estate Agents" },
-  { label: "Operations Managers" },
-  { label: "Government Officials" },
-  { label: "Journalists" },
-  { label: "Venture Capitalists" },
-  { label: "Artists" },
-  { label: "Musicians" },
-  { label: "Chefs" },
-  { label: "Athletes" },
-  { label: "Fitness Coaches" },
-  { label: "Gamers" },
-  { label: "Photographers" },
-  { label: "Videographers" },
-  { label: "Writers" },
-  { label: "Podcasters" },
-  { label: "Influencers" },
-  { label: "Travelers" },
-  { label: "Indie Hackers & Makers" },
-  { label: "Interns" },
-  { label: "Mental Health Professionals" },
-  { label: "Software Architects" },
-  { label: "Compliance Officers" },
-  { label: "Logistics Managers" },
-  { label: "Social Workers" },
-];
+
 
 export default function OnboardingForm({ step, setStep }: Props) {
   const [website, setWebsite] = useState("");
@@ -346,42 +289,48 @@ const Step0 = ({ onSubmit, website, setWebsite, isPending }) => {
           }}
         />
       ) : null}
-      <div className="md:space-y-4">
-        <div className="space-y-1">
-          <h1 className=" text-lg  md:text-2xl font-semibold font-sans">
-            Let’s Start by Getting to Know You
-          </h1>
-          <p className="text-slate-600">
-            To help us understand your business, please provide your website
-            link. <br /> You can also share documentation link or any other
-            resource that will help us understand your business better.
-          </p>
-        </div>
-        <div className="flex flex-col gap-2 ">
-          <div className=" flex items-center justify-between">
-            <Label>Website link</Label>
-            <p className="text-xs text-slate-500">
-              Only HTTPS URLs are supported.
-            </p>
+      {isPending ? (
+        <LoadingOnboardingText />
+      ) : (
+        <>
+          <div className="md:space-y-4">
+            <div className="space-y-1">
+              <h1 className=" text-lg  md:text-2xl font-semibold font-sans">
+                Let’s Start by Getting to Know You
+              </h1>
+              <p className="text-slate-600">
+                To help us understand your business, please provide your website
+                link. <br /> You can also share documentation link or any other
+                resource that will help us understand your business better.
+              </p>
+            </div>
+            <div className="flex flex-col gap-2 ">
+              <div className=" flex items-center justify-between">
+                <Label>Website link</Label>
+                <p className="text-xs text-slate-500">
+                  Only HTTPS URLs are supported.
+                </p>
+              </div>
+              <Input
+                onKeyDown={(e) => {
+                  if (e.code === "Enter") {
+                    onSubmit();
+                  }
+                }}
+                value={website}
+                onChange={(e) => setWebsite(e.target.value)}
+                className="  bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 font-sans "
+                placeholder="company.xyz"
+              />
+            </div>
           </div>
-          <Input
-            onKeyDown={(e) => {
-              if (e.code === "Enter") {
-                onSubmit();
-              }
-            }}
-            value={website}
-            onChange={(e) => setWebsite(e.target.value)}
-            className="  bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 font-sans "
-            placeholder="company.xyz"
-          />
-        </div>
-      </div>
-      <div className=" flex justify-end md:mt-20">
-        <Button disabled={isPending} className="px-8 " onClick={onSubmit}>
-          Next
-        </Button>
-      </div>
+          <div className=" flex justify-end md:mt-20">
+            <Button disabled={isPending} className="px-8 " onClick={onSubmit}>
+              Next
+            </Button>
+          </div>
+        </>
+      )}
     </div>
   );
 };

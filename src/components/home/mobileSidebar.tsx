@@ -13,8 +13,10 @@ import { useQuery } from "@tanstack/react-query";
 import {
   Bot,
   ChevronLeft,
+  Flame,
   Home,
   LayoutTemplate,
+  Library,
   Menu,
   Settings,
   Users2,
@@ -60,7 +62,7 @@ export default function MobileSideBar({ projectId }) {
                   <DropdownMenuTrigger>
                     <Menu />
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent className="bg-white border mr-2 rounded-lg">
+                  <DropdownMenuContent className="bg-white border mr-2 rounded-lg z-50">
                     <DropdownMenuLabel>
                       <Link
                         to={"/project/" + projectId}
@@ -78,19 +80,33 @@ export default function MobileSideBar({ projectId }) {
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem>
-                      {" "}
                       <Link
-                        to={`/project/${projectId}/sources`}
+                        to={`/project/${projectId}/ideas`}
                         className={cn(
                           " flex items-center gap-2 p-2 font-sans font-light rounded-md",
                           {
                             "bg-slate-200 font-normal":
-                              pathname.split("/").at(-1) === "sources",
+                              pathname.split("/").at(-1) === "ideas",
                           }
                         )}
                       >
-                        <Bot size={16} />
-                        Sources
+                        <Flame size={16} />
+                        Inspiration
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <Link
+                        to={`/project/${projectId}/knowledge-base`}
+                        className={cn(
+                          " flex items-center gap-2 p-2 font-sans font-light rounded-md",
+                          {
+                            "bg-slate-200 font-normal":
+                              pathname.split("/").at(-1) === "knowledge-base",
+                          }
+                        )}
+                      >
+                        <Library size={16} />
+                        Knowledge Hub
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem>

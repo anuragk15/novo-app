@@ -35,7 +35,7 @@ export default function TemplateCard({
     );
   };
   return (
-    <div className="relative h-full ">
+    <div className="relative h-full group ">
       <div
         onClick={() => {
           if (bookmarkId == null) {
@@ -62,7 +62,10 @@ export default function TemplateCard({
             });
           }
         }}
-        className="p-2 bg-slate-100 rounded-full absolute top-2 right-2 z-50"
+        className={cn(
+          "p-2 bg-slate-100 rounded-full absolute top-2 right-2 z-50 group-hover:opacity-100 opacity-0 transition-all duration-300",
+          bookmarkId && "opacity-100"
+        )}
       >
         <Bookmark
           className=" cursor-pointer "

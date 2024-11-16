@@ -143,13 +143,13 @@ export default function TeamsScreen() {
         <Sidebar projectId={projectId} />
       </div>
       {isLoading || isProjectLoading ? (
-        <div className="flex flex-col w-[85vw] justify-center  pl-2 pb-2 overflow-scroll h-screen bg-white">
+        <div className="flex flex-col w-full justify-center  pl-2 pb-2 overflow-scroll h-screen bg-white">
           <Spinner />
         </div>
       ) : (
-        <div>
+        <div className="w-full md:min-w-[85vw]">
           <MobileSideBar projectId={projectId} />
-          <div className="flex flex-col w-full md:w-[85vw] md:border-l md:border-2  gap-10 p-8 overflow-scroll h-screen bg-white">
+          <div className="flex flex-col w-full md:w-full min-w-[85vw]  gap-10 p-8 overflow-scroll h-screen bg-white">
             <div className="flex justify-between items-center">
               <div>
                 <h1 className=" text-2xl">Manage collaborators</h1>
@@ -285,7 +285,7 @@ export default function TeamsScreen() {
               </TableHeader>
               <TableBody>
                 {data.map((item, i) => (
-                  <TableRow key={i} >
+                  <TableRow key={i}>
                     <TableCell className="font-medium text-slate-600">
                       {i + 1}
                     </TableCell>
@@ -295,12 +295,12 @@ export default function TeamsScreen() {
                       <p
                         className={cn(
                           " p-2 text-xs  max-w-fit text-center rounded-xl",
-                          item?.accepted == true
+                          item?.acceptedOn
                             ? "text-green-700 bg-green-100"
                             : "text-yellow-700 bg-yellow-100"
                         )}
                       >
-                        {item?.accepted == true ? "Accepted" : "Pending"}
+                        {item?.acceptedOn ? "Accepted" : "Pending"}
                       </p>
                     </TableCell>
                     <TableCell>

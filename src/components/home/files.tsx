@@ -28,7 +28,7 @@ export default function HomeScreen({ data, projectId }) {
     return <EmptyHomescreen projectId={projectId} />;
   }
   return (
-    <div className=" flex-col w-[85vw] pl-2 pb-2 overflow-scroll h-screen bg-slate-100">
+    <div className=" flex-col w-full flex md:min-w-[85vw] pl-2 pb-2 overflow-scroll h-screen bg-slate-100">
       <SearchBar
         placeholder={"Search documents..."}
         value={searchQuery}

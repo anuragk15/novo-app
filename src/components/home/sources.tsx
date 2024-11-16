@@ -14,7 +14,7 @@ export default function SourcesScreen({ data }) {
 
 
   return (
-    <div className=" flex-col w-full md:w-[85vw] pl-2 pb-2 overflow-scroll h-screen bg-slate-100">
+    <div className=" flex-col w-full md:min-w-[85vw] pl-2 pb-2 overflow-scroll h-screen bg-slate-100">
       <div className="flex flex-col gap-4 items-start border shadow-sm rounded-lg mt-2 mr-2 p-8 min-h-[98vh] bg-white">
         <div className="flex justify-between w-full items-center">
           <div className=" flex items-center gap-2">

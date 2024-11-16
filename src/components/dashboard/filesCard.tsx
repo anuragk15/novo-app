@@ -1,10 +1,8 @@
-import { formatDate } from "@/lib/utils";
-import { Clock } from "lucide-react";
-import { Link, useParams } from "react-router-dom";
-import TagsDropdown from "../home/ui/tags";
-import { useState } from "react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { addDocumentTag, getDocumentTags } from "@/api/functions/documents";
+import {
+  addDocumentTag,
+  getDocuments,
+  getDocumentTags,
+} from "@/api/functions/documents";
 import {
   Dialog,
   DialogContent,
@@ -12,12 +10,28 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Button } from "../ui/button";
-import { useToast } from "../ui/use-toast";
+import { cn, formatDate } from "@/lib/utils";
 import { Label } from "@radix-ui/react-label";
-import { Input } from "../ui/input";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Clock, Rocket } from "lucide-react";
+import { useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import TagsDropdown from "../home/ui/tags";
 import { AnimatedGroup } from "../ui/animated-group";
-export default function FilesCard({ files }) {
+import { Button } from "../ui/button";
+import { CreateNewDocumentPopup } from "../ui/createNewDocumentPopup";
+import { Input } from "../ui/input";
+import { useToast } from "../ui/use-toast";
+import Loader from "../ui/loader";
+import { BorderTrail } from "../ui/border-trail";
+export default function FilesCard() {
+  const { data: files, isLoading: filesLoading } = useQuery({
+    queryKey: ["get", "documents"],
+    queryFn: async () => {
+      const res = await getDocuments({ projectId });
+      return res?.data;
+    },
+  });
   const { projectId } = useParams();
 
   const { toast } = useToast();
@@ -96,7 +110,9 @@ export default function FilesCard({ files }) {
             onClick={(e) => e.preventDefault()}
             className="flex items-center justify-between"
           >
-            {isLoading ? <div></div> : (
+            {isLoading ? (
+              <div></div>
+            ) : (
               <TagsDropdown
                 addNewTag={setIsOpen}
                 appliedTags={item.tags}
@@ -116,17 +132,52 @@ export default function FilesCard({ files }) {
   };
   return (
     <div className="  flex flex-col gap-4 items-start border  h-full w-full rounded-lg p-4 bg-white">
-      <div className="flex w-full items-center gap-2 justify-start">
-        <div className="bg-slate-100 rounded-full p-2 ">
-          <Clock size={24} className="text-slate-600" />
+      <BorderTrail
+        className={cn(
+          "bg-gradient-to-l from-black-300 via-black-500 to-black-300 transition-opacity duration-300 dark:from-green-700/30 dark:via-white-500 dark:to-white-700/30 opacity-0",
+          filesLoading && "opacity-100"
+        )}
+        size={200}
+        transition={{
+          ease: [0, 0.5, 0.8, 0.5],
+          duration: 4,
+          repeat: 20,
+        }}
+      />
+      {files?.length == 0 ? null : (
+        <div className="flex w-full items-center gap-2 justify-start">
+          <div className="bg-slate-100 rounded-full p-2 ">
+            <Clock size={24} className="text-slate-600" />
+          </div>
+          <p className="text-xl font-sans font-medium">Recent Changes</p>
         </div>
-        <p className="text-xl font-sans font-medium">Recent Changes</p>
-      </div>
-      <AnimatedGroup className="grid  grid-cols-1 h-full  md:grid-cols-2 gap-2">
-        {files.slice(0, 4).map((item) => (
-          <RecentFileItem key={item.id} item={item} />
-        ))}
-      </AnimatedGroup>
+      )}
+      {filesLoading ? (
+        <div className="flex h-full w-full flex-col justify-center items-center">
+          <Loader />
+        </div>
+      ) : files?.length > 0 ? (
+        <AnimatedGroup className="grid  grid-cols-1 h-full  md:grid-cols-2 gap-2">
+          {files.slice(0, 4).map((item) => (
+            <RecentFileItem key={item.id} item={item} />
+          ))}
+        </AnimatedGroup>
+      ) : (
+        <div className="flex h-full w-full flex-col justify-center items-center">
+          <p className="text-slate-500 text-center">
+            Create your first file to get started
+          </p>
+          <CreateNewDocumentPopup
+            defaultOption="TEMPLATE"
+            trigger={
+              <Button className="mt-4 flex items-center gap-2">
+                <Rocket size={16} />
+                Start with a template
+              </Button>
+            }
+          />
+        </div>
+      )}
     </div>
   );
 }

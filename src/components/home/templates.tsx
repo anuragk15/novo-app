@@ -1,10 +1,8 @@
-import { useEffect, useState } from "react";
-import { Button } from "../ui/button";
-import TemplateCard from "../ui/templateCard";
-import DynamicForm from "../ui/formTemplate";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { CreateNewDocumentPopup } from "../ui/createNewDocumentPopup";
 import { useDebounce } from "@/hooks/useDebounce";
+import { useEffect, useState } from "react";
+import DynamicForm from "../ui/formTemplate";
+import TemplateCard from "../ui/templateCard";
 import SearchBar from "./ui/search";
 export default function TemplatesScreen({ data }) {
   const [selectedTemplate, setSelectedTemplate] = useState(null);
@@ -31,7 +29,20 @@ export default function TemplatesScreen({ data }) {
       );
     }
     if (debouncedInputValue === "") {
-      setTemplates(data);
+      if (data && data?.length > 0) {
+        const t = [...data];
+        t.sort((a, b) => {
+          if (a.bookmarkId && !b.bookmarkId) {
+            return -1;
+          } else if (!a.bookmarkId && b.bookmarkId) {
+            return 1;
+          } else {
+            return 0;
+          }
+        });
+
+        setTemplates(t);
+      }
     }
   }, [debouncedInputValue, searchQuery, data]);
 
@@ -49,7 +60,7 @@ export default function TemplatesScreen({ data }) {
           />
         </DialogContent>
       </Dialog>
-      <div className=" flex-col w-full md:w-[85vw] pl-2 pb-2 overflow-scroll h-screen bg-slate-100">
+      <div className=" flex-col w-full md:min-w-[85vw] pl-2 pb-2 overflow-scroll h-screen bg-slate-100">
         <SearchBar
           placeholder={"Search templates"}
           value={searchQuery}
@@ -63,15 +74,10 @@ export default function TemplatesScreen({ data }) {
                 Your favourite templates to help you get started.
               </p>
             </div>
-            <CreateNewDocumentPopup
-              trigger={
-                <Button className="font-mono">Use other templates</Button>
-              }
-            />
           </div>
 
           {templates?.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-3">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
               {templates.map((item, i) => (
                 <TemplateCard
                   key={item.id}

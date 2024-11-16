@@ -29,6 +29,8 @@ import { useEffect } from "react";
 import OnboardingProjectScreen from "./screens/onboarding/project";
 import FilesScreen from "@/screens/home/files";
 import DashboardHome from "./screens/home/dashboard";
+import IdeasScreen from "./screens/home/ideas";
+import CustomiseIdeasScreen from "./screens/home/ideas-customise";
 // import LiveDocumentEditorScreen from "./pages/editor/live";
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
@@ -62,6 +64,10 @@ const router = createBrowserRouter([
             <DashboardHome />
           </div>
         ),
+      },
+      {
+        path: "/project/:projectId/ideas",
+        element: <IdeasScreen />,
       },
       {
         path: "/project/:projectId/files",
@@ -98,6 +104,10 @@ const router = createBrowserRouter([
             <TeamsScreen />
           </div>
         ),
+      },
+      {
+        path: "/project/:projectId/customise-ideas",
+        element: <CustomiseIdeasScreen />,
       },
       {
         path: "/project/:projectId/settings",

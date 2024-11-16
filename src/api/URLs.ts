@@ -31,6 +31,9 @@ export const URLs = {
   SOURCES_ADD_FILe: "/sources/add/file",
   SOURCES_DELETE: "/sources/delete/",
 
+  //Recommendations
+  RECOMMENDATIONS_GET: "/recommendations",
+
   //Templates
   TEMPLATES_GET: "/templates",
   TEMPLATES_GET_BOOKMARKS: "/templates/bookmarks",

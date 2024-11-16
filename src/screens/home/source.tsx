@@ -22,11 +22,11 @@ export default function SourceHome() {
         <Sidebar projectId={projectId} />
       </div>
       {isLoading ? (
-        <div className="flex flex-col w-[85vw] justify-center  pl-2 pb-2 overflow-scroll h-screen bg-white">
+        <div className="flex flex-col w-full md:min-w-[85vw] justify-center  pl-2 pb-2 overflow-scroll h-screen bg-white">
           <Spinner />
         </div>
       ) : (
-        <div className="w-full md:w-[85vw]">
+        <div className="w-full md:min-w-[85vw]">
           <MobileSideBar projectId={projectId} />
           <SourcesScreen data={data} />
         </div>
