@@ -131,7 +131,7 @@ export default function FilesCard() {
     );
   };
   return (
-    <div className="  flex flex-col gap-4 items-start border  h-full w-full rounded-lg p-4 bg-white">
+    <div className=" relative flex flex-col gap-4 items-start border  h-full w-full rounded-lg p-4 bg-white">
       <BorderTrail
         className={cn(
           "bg-gradient-to-l from-black-300 via-black-500 to-black-300 transition-opacity duration-300 dark:from-green-700/30 dark:via-white-500 dark:to-white-700/30 opacity-0",

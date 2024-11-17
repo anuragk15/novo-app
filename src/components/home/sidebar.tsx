@@ -14,6 +14,12 @@ import {
   Users2,
 } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export default function Sidebar({ projectId }) {
   const location = useLocation();
@@ -29,6 +35,29 @@ export default function Sidebar({ projectId }) {
     staleTime: Infinity,
   });
   //console.log(data);
+
+  const LinkWithTooltip = ({ to, icon, label, className }) => {
+    const content = (
+      <Link to={to} className={className}>
+        {icon}
+        {!isCollapsed && label}
+      </Link>
+    );
+
+    return isCollapsed ? (
+      <TooltipProvider delayDuration={0}>
+        <Tooltip>
+          <TooltipTrigger asChild>{content}</TooltipTrigger>
+          <TooltipContent side="right" className="bg-white border shadow-sm">
+            <p>{label}</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+    ) : (
+      content
+    );
+  };
+
   return (
     <div
       className={cn(
@@ -45,7 +74,7 @@ export default function Sidebar({ projectId }) {
               <div>
                 <div
                   onClick={() => navigate("/")}
-                  className="flex max-w-fit px-2 items-center hover:bg-slate-100 py-2 cursor-pointer rounded-lg"
+                  className="flex max-w-fit  items-center  py-2 cursor-pointer rounded-lg"
                 >
                   <ChevronLeft size={16} />
                   {!isCollapsed && <p className="text-sm">Back</p>}
@@ -71,89 +100,83 @@ export default function Sidebar({ projectId }) {
 
           <div className="flex flex-col justify-between">
             <div className="flex flex-col gap-2 p-2">
-              <Link
+              <LinkWithTooltip
                 to={"/project/" + projectId}
+                icon={<Home size={16} />}
+                label="Home"
                 className={cn(
-                  "hover:bg-slate-200 flex items-center gap-2 p-2 font-sans font-normal rounded-md",
+                  "hover:bg-slate-100 flex items-center gap-2 p-2 font-sans font-normal rounded-md",
                   {
-                    "bg-slate-200": pathname.split("/").at(-1) === projectId,
+                    "bg-slate-200/60": pathname.split("/").at(-1) === projectId,
                     "justify-center": isCollapsed,
                   }
                 )}
-              >
-                <Home size={16} />
-                {!isCollapsed && "Home"}
-              </Link>
-              <Link
+              />
+              <LinkWithTooltip
                 to={"/project/" + projectId + "/files"}
+                icon={<FileBox size={16} />}
+                label="Files"
                 className={cn(
-                  "hover:bg-slate-200 flex items-center gap-2 p-2 font-sans font-normal rounded-md",
+                  "hover:bg-slate-100 flex items-center gap-2 p-2 font-sans font-normal rounded-md",
                   {
-                    "bg-slate-200 font-normal":
+                    "bg-slate-200/60 font-normal":
                       pathname.split("/").at(-1) === "files",
                     "justify-center": isCollapsed,
                   }
                 )}
-              >
-                <FileBox size={16} />
-                {!isCollapsed && "Files"}
-              </Link>
-              <Link
+              />
+              <LinkWithTooltip
                 to={"/project/" + projectId + "/ideas"}
+                icon={<Flame size={16} />}
+                label="Inspiration"
                 className={cn(
-                  "hover:bg-slate-200 flex items-center gap-2 p-2 font-sans font-normal rounded-md",
+                  "hover:bg-slate-100 flex items-center gap-2 p-2 font-sans font-normal rounded-md",
                   {
-                    "bg-slate-200 font-normal":
+                    "bg-slate-200/60 font-normal":
                       pathname.split("/").at(-1) === "ideas",
                     "justify-center": isCollapsed,
                   }
                 )}
-              >
-                <Flame size={16} />
-                {!isCollapsed && "Inspiration"}
-              </Link>
-              <Link
+              />
+              <LinkWithTooltip
                 to={`/project/${projectId}/knowledge-base`}
+                icon={<Library size={16} />}
+                label="Knowledge Hub"
                 className={cn(
-                  "hover:bg-slate-200 flex items-center gap-2 p-2 font-sans font-normal rounded-md",
+                  "hover:bg-slate-100 flex items-center gap-2 p-2 font-sans font-normal rounded-md",
                   {
-                    "bg-slate-200 font-normal":
+                    "bg-slate-200/60 font-normal":
                       pathname.split("/").at(-1) === "knowledge-base",
                     "justify-center": isCollapsed,
                   }
                 )}
-              >
-                <Library size={16} />
-                {!isCollapsed && "Knowledge Hub"}
-              </Link>
-              <Link
+              />
+              <LinkWithTooltip
                 to={`/project/${projectId}/templates`}
+                icon={<LayoutTemplate size={16} />}
+                label="Templates"
                 className={cn(
-                  "hover:bg-slate-200 flex items-center gap-2 p-2 font-sans font-normal rounded-md",
+                  "hover:bg-slate-100 flex items-center gap-2 p-2 font-sans font-normal rounded-md",
                   {
-                    "bg-slate-200 font-normal":
+                    "bg-slate-200/60 font-normal":
                       pathname.split("/").at(-1) === "templates",
                     "justify-center": isCollapsed,
                   }
                 )}
-              >
-                <LayoutTemplate size={16} />
-                {!isCollapsed && "Templates"}
-              </Link>
-              <Link
+              />
+              <LinkWithTooltip
                 to={`/project/${projectId}/team`}
+                icon={<Users2 size={16} />}
+                label="Team"
                 className={cn(
-                  "hover:bg-slate-200 flex items-center gap-2 p-2 font-sans font-normal rounded-md",
+                  "hover:bg-slate-100 flex items-center gap-2 p-2 font-sans font-normal rounded-md",
                   {
-                    "bg-slate-200 font-normal":
+                    "bg-slate-200/60 font-normal":
                       pathname.split("/").at(-1) === "team",
                     "justify-center": isCollapsed,
                   }
                 )}
-              >
-                <Users2 size={16} />
-                {!isCollapsed && "Team"}
-              </Link>
+              />
             </div>
           </div>
         </div>
@@ -163,37 +186,29 @@ export default function Sidebar({ projectId }) {
             isCollapsed ? "justify-center" : "justify-between"
           )}
         >
-          {/* <DropdownMenu>
-            <DropdownMenuTrigger>
-              <Gauge className="text-slate-600 cursor-pointer hover:text-black" />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <div className="bg-white ml-5 p-5 border rounded-xl shadow-sm">
-                <p>
-                  AI Usage: {data?.usage?.apiCalls}/{data?.usage?.maxApiCalls}
-                </p>
-                <p>
-                  Documents Created: {data?.usage?.documentsCreated}/
-                  {data?.usage?.maxDocuments}
-                </p>
-                <p>
-                  Collaborators: {data?.usage?.invitesCreated}/
-                  {data?.usage?.maxInvites}
-                </p>
-                <p>
-                  Sources: {data?.usage?.sourcesCreated}/
-                  {data?.usage?.maxSources}
-                </p>
-              </div>
-            </DropdownMenuContent>
-          </DropdownMenu> */}
-
-          <Settings
-            onClick={() => {
-              navigate(`/project/${projectId}/settings`);
-            }}
-            className="text-slate-600 hover:text-black transition-transform cursor-pointer hover:rotate-180 hover:text-black"
-          />
+          {isCollapsed ? (
+            <TooltipProvider delayDuration={0}>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Settings
+                    onClick={() => navigate(`/project/${projectId}/settings`)}
+                    className="text-slate-600 transition-transform cursor-pointer hover:rotate-180 hover:text-black"
+                  />
+                </TooltipTrigger>
+                <TooltipContent
+                  side="right"
+                  className="bg-white border shadow-sm"
+                >
+                  <p>Settings</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          ) : (
+            <Settings
+              onClick={() => navigate(`/project/${projectId}/settings`)}
+              className="text-slate-600 transition-transform cursor-pointer hover:rotate-180 hover:text-black"
+            />
+          )}
         </div>
       </div>
     </div>

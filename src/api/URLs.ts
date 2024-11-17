@@ -66,6 +66,14 @@ export const URLs = {
   DOCUMENTS_GET: "/documents",
   DOCUMENTS_GET_BY_ID: "/documents/id",
 
+  // Notion
+  NOTION_PAGES_GET: "/notion/pages",
+  NOTION_PAGES_CONNECT: "/notion/connect",
+  NOTION_PAGES_DISCONNECT: "/notion/disconnect",
+  NOTION_PAGES_IMPORT: "/notion/page-to-source",
+  NOTION_AUTH_URL:
+    "https://api.notion.com/v1/oauth/authorize?client_id=141d872b-594c-8038-a680-0037e5b2c087&response_type=code&owner=user&redirect_uri=https%3A%2F%2F3e75-103-249-38-244.ngrok-free.app%2Fadd%2Fnotion",
+  //https://api.notion.com/v1/oauth/authorize?client_id=141d872b-594c-8038-a680-0037e5b2c087&response_type=code&owner=user&redirect_uri=https%3A%2F%2Fwrite.withnovo.com%2Fadd%2Fnotion
   DOCUMENTS_UPDATE: "/documents/update",
   DOCUMENTS_DELETE: "/documents/id",
   DOCUMENTS_SEARCH: "/documents/search",

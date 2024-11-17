@@ -9,7 +9,7 @@ import { updateProject } from "@/api/functions/projects";
 
 export default function SettingsOverview({ data }) {
   const { toast } = useToast();
-  const [projectName, setProjectName] = useState(data?.project.name);
+  const [projectName, setProjectName] = useState(data?.project?.name);
   const endDate = data?.usage?.endDate
     ? new Date(data?.usage?.endDate)
     : new Date();

@@ -31,6 +31,8 @@ import FilesScreen from "@/screens/home/files";
 import DashboardHome from "./screens/home/dashboard";
 import IdeasScreen from "./screens/home/ideas";
 import CustomiseIdeasScreen from "./screens/home/ideas-customise";
+import IntegrationsScreen from "./screens/home/settings/integrations";
+import ConnectNotionSreen from "./screens/misc/connect-notion";
 // import LiveDocumentEditorScreen from "./pages/editor/live";
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
@@ -118,6 +120,14 @@ const router = createBrowserRouter([
         ),
       },
       {
+        path: "/project/:projectId/settings/integrations",
+        element: (
+          <div>
+            <IntegrationsScreen />
+          </div>
+        ),
+      },
+      {
         path: "/project/:projectId/settings/billing",
         element: (
           <div>
@@ -125,14 +135,13 @@ const router = createBrowserRouter([
           </div>
         ),
       },
-
       {
         path: "/document/editor/:projectId/:id",
-        element: (
-          <div>
-            <DocumentEditorScreen />
-          </div>
-        ),
+        element: <DocumentEditorScreen />,
+      },
+      {
+        path: "/add/notion",
+        element: <ConnectNotionSreen />,
       },
     ],
   },

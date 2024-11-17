@@ -60,7 +60,7 @@ export default function RecommendationCard() {
 
           <p className="text-xl font-sans font-medium">Inspiration</p>
         </div>
-        <div>
+        <div className="hidden md:block">
           <Button
             onClick={() => navigate(`/project/${projectId}/ideas`)}
             variant="link"

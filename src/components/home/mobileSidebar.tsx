@@ -11,7 +11,6 @@ import {
 } from "@radix-ui/react-dropdown-menu";
 import { useQuery } from "@tanstack/react-query";
 import {
-  Bot,
   ChevronLeft,
   Flame,
   Home,
@@ -19,7 +18,7 @@ import {
   Library,
   Menu,
   Settings,
-  Users2,
+  Users2
 } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { DropdownMenuTrigger } from "../ui/dropdown-menu";

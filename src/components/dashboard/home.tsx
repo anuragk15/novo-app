@@ -2,11 +2,11 @@ import { useUser } from "@clerk/clerk-react";
 // import EmptyHomescreen from "../home/ui/emptyHomeScreen";
 import { Plus, Wand2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import Calendar from "../ui/calendar-component";
 import { CreateNewDocumentPopup } from "../ui/createNewDocumentPopup";
 import FilesCard from "./filesCard";
-import UsageCard from "./knowledgeCard";
+import KnowledgeCard from "./knowledgeCard";
 import RecommendationCard from "./recommendationCard";
+import { UsageCard } from "./usageCard";
 
 export default function DashboardHomeContents({ projectId }) {
   const { user } = useUser();
@@ -54,14 +54,14 @@ export default function DashboardHomeContents({ projectId }) {
           </div>
           <div className="  md:col-span-1">
             <div className="bg-white border flex items-center rounded-lg h-full">
-              <Calendar showControls={false} />
+              <UsageCard />
             </div>
           </div>
           <div className="  md:col-span-2">
             <FilesCard />
           </div>
           <div className="  md:col-span-2">
-            <UsageCard />
+            <KnowledgeCard />
           </div>
         </div>
       </div>

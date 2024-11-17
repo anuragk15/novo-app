@@ -9,7 +9,7 @@ import { SourcesTable } from "../home/ui/sourcesTable";
 import Loader from "../ui/loader";
 import AddSource from "../home/ui/addSource";
 
-export default function UsageCard() {
+export default function KnowledgeCard() {
   const { projectId } = useParams();
 
   const { data, isLoading } = useQuery({

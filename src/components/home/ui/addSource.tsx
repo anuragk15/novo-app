@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { addSource, addSourceFile } from "@/api/functions/sources";
+import { importFromNotion } from "@/api/functions/notion";
 import {
   Tooltip,
   TooltipContent,
@@ -67,6 +68,29 @@ export default function AddSource({
         setUrl("");
       },
     });
+
+  const { mutateAsync: importNotionFn, isPending: isImportingNotion } =
+    useMutation({
+      mutationKey: ["import", "notion"],
+      mutationFn: importFromNotion,
+      onError: (error) => {
+        console.error(error);
+        toast({
+          // @ts-ignore
+          title: error.response.data.message,
+          variant: "destructive",
+        });
+      },
+      onSuccess: () => {
+        toast({
+          title: "Notion page imported successfully",
+        });
+        queryClient.invalidateQueries({ queryKey: ["get", "sources"] });
+        setName("");
+        setUrl("");
+      },
+    });
+
   const [file, setFile] = useState<null | File>(null);
   const [url, setUrl] = useState("");
   const [name, setName] = useState("");
@@ -86,6 +110,14 @@ export default function AddSource({
         description: "You need to provide a document to upload.",
         variant: "destructive",
       });
+      return;
+    }
+    if (url && url.includes("https://notion.so")) {
+      toast({
+        title: "Importing from Notion",
+        description: "Please wait while we import your Notion page.",
+      });
+      await importNotionFn({ projectId, pageUrl: url, name });
       return;
     }
     if (file && file.size > MAX_FILE_SIZE) {
@@ -137,13 +169,17 @@ export default function AddSource({
             />
           </div>
           <div className="space-y-2">
-            <Label>Add website link</Label>
+            <Label>Add website or Notion link</Label>
             <Input
               disabled={file != null}
               value={url}
               onChange={(e) => setUrl(e.target.value)}
-              placeholder="https://xyz.com/docs/feature-1"
+              placeholder="https://xyz.com/docs/feature-1 or https://notion.so/..."
             />
+            <p className="text-xs text-slate-500">
+              For Notion pages, make sure they are publicly accessible or
+              connected through integration
+            </p>
           </div>
           <div className="flex gap-2 items-center">
             <Label>Or upload a file</Label>
@@ -197,10 +233,12 @@ export default function AddSource({
           </div>
           <div className=" flex justify-end">
             <Button
-              disabled={isAddingSource || isAddingSourceFile}
+              disabled={
+                isAddingSource || isAddingSourceFile || isImportingNotion
+              }
               onClick={() => onSubmitFn()}
             >
-              {isAddingSource || isAddingSourceFile ? (
+              {isAddingSource || isAddingSourceFile || isImportingNotion ? (
                 <Spinner size="small" className=" text-white mr-2" />
               ) : null}{" "}
               Upload

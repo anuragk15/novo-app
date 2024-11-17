@@ -16,7 +16,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import DynamicForm from "./formTemplate";
 import { Input } from "./input";
-import { Spinner } from "./spinner";
+import Loader from "./loader";
 import TemplateCard from "./templateCard";
 
 export function CreateNewDocumentPopup({
@@ -209,7 +209,9 @@ const SelectTemplate = ({ toggleHeader }) => {
         </div>
       </div>
       {isLoading ? (
-        <Spinner />
+        <div className="flex justify-center items-center h-[65vh]">
+         <Loader />
+        </div>
       ) : (
         <div className="grid gap-y-2 grid-cols-2 md:grid-cols-3 py-4 overflow-scroll h-[65vh]">
           {data?.length > 0
