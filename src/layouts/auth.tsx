@@ -14,7 +14,7 @@ export default function AuthLayout() {
   const { setUser } = useUserStore();
   const navigate = useNavigate();
   const posthog = usePostHog();
- 
+
   const { data, isLoading } = useQuery({
     queryKey: ["get", "user"],
     queryFn: async () => {
@@ -38,9 +38,8 @@ export default function AuthLayout() {
       try {
         Crisp.user.setEmail(data?.data?.email);
         Crisp.user.setNickname(data?.data?.username);
-      
       } catch (e) {
-        //console.error("CRISP ERROR", e);
+        console.error("CRISP ERROR", e);
       }
 
       posthog.identify(

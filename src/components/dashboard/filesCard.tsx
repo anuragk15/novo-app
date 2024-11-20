@@ -157,7 +157,7 @@ export default function FilesCard() {
           <Loader />
         </div>
       ) : files?.length > 0 ? (
-        <AnimatedGroup className="grid  grid-cols-1 h-full  md:grid-cols-2 gap-2">
+        <AnimatedGroup className={`grid grid-cols-1 ${files.length < 3 ? 'h-[50%]' : 'h-full'} md:grid-cols-2 gap-2`}>
           {files.slice(0, 4).map((item) => (
             <RecentFileItem key={item.id} item={item} />
           ))}

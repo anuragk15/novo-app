@@ -1,4 +1,8 @@
-import { getRecommendations } from "@/api/functions/recommendations";
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+import {
+  acceptRecommendation,
+  getRecommendations,
+} from "@/api/functions/recommendations";
 import {
   Dialog,
   DialogClose,
@@ -11,7 +15,7 @@ import {
 } from "@/components/ui/animated-dialog";
 import { Recommendation } from "@/lib/types";
 import { cn, generateColorsFromInitial } from "@/lib/utils";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { Flame, PlusIcon } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -19,6 +23,7 @@ import { AnimatedGroup } from "../ui/animated-group";
 import { BorderTrail } from "../ui/border-trail";
 import { Button } from "../ui/button";
 import Loader from "../ui/loader";
+import { useToast } from "../ui/use-toast";
 
 export default function RecommendationCard() {
   const { projectId } = useParams();
@@ -71,7 +76,7 @@ export default function RecommendationCard() {
       </div>
       {isLoading ? (
         <div className="flex h-full w-full flex-col justify-center items-center">
-         <Loader />
+          <Loader />
         </div>
       ) : (
         <AnimatedGroup className="grid grid-cols-1 h-full flex-col w-full gap-2 md:grid-cols-2 lg:grid-cols-4">
@@ -85,7 +90,29 @@ export default function RecommendationCard() {
 }
 export const SingleIdea = ({ item }: { item: Recommendation }) => {
   const funnelColors = generateColorsFromInitial(item.marketingFunnel);
+  const { projectId } = useParams();
+  const navigate = useNavigate();
+  const { toast } = useToast();
+  const { mutateAsync, isPending } = useMutation({
+    mutationFn: async () => {
+      const document = await acceptRecommendation({
+        projectId,
+        recommendationId: item.id,
+      });
 
+      if (document?.documentId) {
+        navigate(`/document/editor/${projectId}/${document?.documentId}`);
+      }
+    },
+    onError: (error) => {
+      toast({
+        title: "Something went wrong",
+        //@ts-ignore
+        description: error?.response?.data?.message,
+      });
+      console.error(error);
+    },
+  });
   return (
     <Dialog
       transition={{
@@ -130,8 +157,15 @@ export const SingleIdea = ({ item }: { item: Recommendation }) => {
           style={{
             borderRadius: "24px",
           }}
-          className="pointer-events-auto relative flex h-auto w-full flex-col overflow-hidden border border-zinc-950/10 bg-white dark:border-zinc-50/10 dark:bg-zinc-900 sm:w-[500px]"
+          className=" pointer-events-auto relative flex h-auto w-full flex-col overflow-hidden border border-zinc-950/10 bg-white dark:border-zinc-50/10 dark:bg-zinc-900 sm:w-[500px]"
         >
+          <BorderTrail
+            className={cn(
+              "bg-gradient-to-l from-black-300 via-black-500 to-black-300 transition-opacity duration-300 dark:from-green-700/30 dark:via-white-500 dark:to-white-700/30 opacity-0",
+              isPending && "opacity-100"
+            )}
+            size={200}
+          />
           <div className="p-6">
             <DialogTitle className="text-2xl text-zinc-950 dark:text-zinc-50 pr-4">
               {item.title}
@@ -173,7 +207,9 @@ export const SingleIdea = ({ item }: { item: Recommendation }) => {
               {item.description}
 
               <div className="mt-20 flex items-end justify-end">
-                <Button>Generate</Button>
+                <Button disabled={isPending} onClick={() => mutateAsync()}>
+                  {isPending ? "Generating..." : "Generate"}
+                </Button>
               </div>
             </DialogDescription>
           </div>

@@ -1,4 +1,10 @@
 import { getProjectById } from "@/api/functions/projects";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import { useSidebarStore } from "@/store/sidebar";
 import { useQuery } from "@tanstack/react-query";
@@ -10,16 +16,9 @@ import {
   Home,
   LayoutTemplate,
   Library,
-  Settings,
-  Users2,
+  Users2
 } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 
 export default function Sidebar({ projectId }) {
   const location = useLocation();
@@ -179,36 +178,6 @@ export default function Sidebar({ projectId }) {
               />
             </div>
           </div>
-        </div>
-        <div
-          className={cn(
-            "flex pb-4 px-2",
-            isCollapsed ? "justify-center" : "justify-between"
-          )}
-        >
-          {isCollapsed ? (
-            <TooltipProvider delayDuration={0}>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Settings
-                    onClick={() => navigate(`/project/${projectId}/settings`)}
-                    className="text-slate-600 transition-transform cursor-pointer hover:rotate-180 hover:text-black"
-                  />
-                </TooltipTrigger>
-                <TooltipContent
-                  side="right"
-                  className="bg-white border shadow-sm"
-                >
-                  <p>Settings</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          ) : (
-            <Settings
-              onClick={() => navigate(`/project/${projectId}/settings`)}
-              className="text-slate-600 transition-transform cursor-pointer hover:rotate-180 hover:text-black"
-            />
-          )}
         </div>
       </div>
     </div>

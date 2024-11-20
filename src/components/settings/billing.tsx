@@ -96,12 +96,12 @@ export default function SettingsBilling({ data, projectId }) {
             <div className="w-full ">
               <div className=" text-2xl">Upgrade plan</div>
               <div className="  flex  my-10 justify-between max-w-5xl mx-auto md:flex-row flex-col gap-2 ">
-                <div className=" border p-5 flex flex-col justify-between  md:gap-8 rounded-lg shadow-lg border-slate-200">
+                <div className=" border p-5 flex-1 flex flex-col justify-between  md:gap-8 rounded-lg shadow-lg border-slate-200">
                   <div className="flex justify-between ">
                     <div>
                       <p className="text-3xl font-sans">Hobby</p>
                       <p className="text-slate-500 font-medium">
-                        Great for individuals & small teams.
+                        Great for professionals.
                       </p>
                     </div>
                     <div className="flex items-center">
@@ -117,19 +117,21 @@ export default function SettingsBilling({ data, projectId }) {
                   <div>
                     <p className="text-2xl">Features</p>
                     <div className="space-y-2 py-5">
-                      {/* <div className="flex gap-2 items-center">
-          <div className="p-1 bg-slate-900 rounded-full">
-            <Check size={16} className="text-white" />
-          </div>
-
-          <p className=" font-medium font-sans">7 days free trial</p>
-        </div> */}
+                      <div className="flex gap-2 items-center">
+                        <div className="p-1 bg-slate-900 rounded-full">
+                          <Check size={16} className="text-white" />
+                        </div>
+                        <p className=" font-medium font-sans">
+                          100+ content ideas
+                        </p>
+                      </div>
                       <div className="flex gap-2 items-center">
                         <div className="p-1 bg-slate-900 rounded-full">
                           <Check size={16} className="text-white" />
                         </div>
                         <p className=" font-regular font-sans">
-                          {planLimits.hobby.apiCalls} AI-assisted operations
+                          {planLimits.hobby.contentGeneration} content
+                          generation
                         </p>
                       </div>
                       <div className="flex gap-2 items-center">
@@ -145,7 +147,7 @@ export default function SettingsBilling({ data, projectId }) {
                           <Check size={16} className="text-white" />
                         </div>
                         <p className=" font-regular font-sans">
-                          {planLimits.hobby.sourcesCreated} knowledge sources
+                          {planLimits.hobby.sourcesCreated} training documents
                         </p>
                       </div>
                       <div className="flex gap-2 items-center">
@@ -165,7 +167,7 @@ export default function SettingsBilling({ data, projectId }) {
                     Continue
                   </Button>
                 </div>
-                <div className=" border p-5 flex flex-col justify-between md:gap-8 rounded-lg shadow-lg border-slate-200">
+                <div className=" border p-5 flex-1 flex flex-col justify-between md:gap-8 rounded-lg shadow-lg border-slate-200">
                   <div className="flex justify-between gap-10 ">
                     <div>
                       <p className="text-3xl font-sans">Pro</p>
@@ -191,7 +193,15 @@ export default function SettingsBilling({ data, projectId }) {
                           <Check size={16} className="text-white" />
                         </div>
                         <p className=" font-medium font-sans">
-                          {planLimits.pro.apiCalls} AI-assisted operations
+                          100+ content ideas
+                        </p>
+                      </div>
+                      <div className="flex gap-2 items-center">
+                        <div className="p-1 bg-slate-900 rounded-full">
+                          <Check size={16} className="text-white" />
+                        </div>
+                        <p className=" font-medium font-sans">
+                          {planLimits.pro.contentGeneration} content generation
                         </p>
                       </div>
                       <div className="flex gap-2 items-center">
@@ -207,7 +217,7 @@ export default function SettingsBilling({ data, projectId }) {
                           <Check size={16} className="text-white" />
                         </div>
                         <p className=" font-medium font-sans">
-                          {planLimits.pro.sourcesCreated} knowledge sources
+                          {planLimits.pro.sourcesCreated} training documents
                         </p>
                       </div>
                       <div className="flex gap-2 items-center">

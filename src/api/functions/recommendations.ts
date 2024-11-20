@@ -17,3 +17,20 @@ export const getRecommendations = async ({
     });
   return response.data;
 };
+export const acceptRecommendation = async ({
+  projectId,
+  recommendationId,
+}: {
+  projectId: string;
+  recommendationId: string;
+}) => {
+  const response = await axiosClient
+    .post(URLs.RECOMMENDATIONS_ACCEPT, {
+      projectId,
+      recommendationId,
+    })
+    .catch((error) => {
+      throw error;
+    });
+  return response.data;
+};

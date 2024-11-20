@@ -57,7 +57,14 @@ export default function IntegrationsScreen() {
   const handleConnect = async (integration: string) => {
     try {
       if (integration === "Notion") {
-        window.open(`${URLs.NOTION_AUTH_URL}&state=${projectId}`, "_blank");
+        if (import.meta.env.PROD) {
+          window.open(
+            `${URLs.NOTION_PROD_AUTH_URL}&state=${projectId}`,
+            "_blank"
+          );
+        } else {
+          window.open(`${URLs.NOTION_DEV_AUTH_URL}&state=${projectId}`, "_blank");
+        }
         toast({
           title: "Connecting to " + integration,
           description: "Please wait while we connect your account...",

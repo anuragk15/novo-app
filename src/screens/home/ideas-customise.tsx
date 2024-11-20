@@ -72,7 +72,7 @@ export default function CustomiseIdeasScreen() {
         keywords: settings.keywords,
         contentTypes: settings.contentTypes.join(","),
         industryFocus: settings.industryFocus.join(","),
-        tonePreference: settings.tonePreference,
+        marketingFunnel: settings.tonePreference,
       };
       await mutateAsync({
         projectId,

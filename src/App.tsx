@@ -166,7 +166,7 @@ const queryClient = new QueryClient();
 
 function App() {
   useEffect(() => {
-    Crisp.configure("41debc16-d37d-4000-b537-d606bd561b74");
+    Crisp.configure("41debc16-d37d-4000-b537-d606bd561b74", {});
   }, []);
   return (
     <ClerkProvider

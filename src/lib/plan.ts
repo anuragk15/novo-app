@@ -1,17 +1,19 @@
 export const planLimits = {
   hobby: {
-    price: 32,
-    apiCalls: 1000,
+    price: 19,
+    apiCalls: 100,
     sourcesCreated: 70,
-    documentsCreated: 1000,
-    invitesCreated: 5,
+    documentsCreated: 25,
+    contentGeneration: 20,
+    invitesCreated: 1,
   },
   pro: {
-    price: 59,
+    price: 49,
     apiCalls: 3000,
-    sourcesCreated: 150,
-    documentsCreated: 1500,
-    invitesCreated: 50,
+    sourcesCreated: 200,
+    contentGeneration: 75,
+    documentsCreated: 100,
+    invitesCreated: 25,
   },
 };
 

@@ -103,7 +103,10 @@ export default function SettingsOverview({ data }) {
             </div>
             <Separator />
             {data?.usage == null ? (
-              <div>No plans seem to be active right now. Contact team admin to buy a plan!</div>
+              <div>
+                No plans seem to be active right now. Contact team admin to buy
+                a plan!
+              </div>
             ) : (
               <div>
                 <div className="flex items-center justify-between ">
@@ -114,17 +117,8 @@ export default function SettingsOverview({ data }) {
                 </div>
                 <div className="flex flex-col gap-2">
                   <div className="flex flex-col gap-2">
-                    <label className="text-slate-500">
-                      Total AI usage (
-                      {(
-                        (data?.usage?.apiCalls / data?.usage?.maxApiCalls) *
-                        100
-                      ).toFixed(1)}
-                      %)
-                    </label>
-                    <p>
-                      {data?.usage?.apiCalls}/{data?.usage?.maxApiCalls}
-                    </p>
+                    <label className="text-slate-500">Total AI usage</label>
+                    <p>{data?.usage?.apiCalls}</p>
                   </div>
                   <div className="flex flex-col gap-2">
                     <label className="text-slate-500">
@@ -140,7 +134,23 @@ export default function SettingsOverview({ data }) {
                       {data?.usage?.sourcesCreated}/{data?.usage?.maxSources}
                     </p>
                   </div>
-
+                  <div className="flex flex-col gap-2">
+                    <label className="text-slate-500">
+                      Content generation (
+                      {(
+                        ((data?.usage?.contentGenerated +
+                          data?.usage?.contentAccepted) /
+                          data?.usage?.maxContentGeneration) *
+                        100
+                      ).toFixed(1)}
+                      %)
+                    </label>
+                    <p>
+                      {data?.usage?.contentGenerated +
+                        data?.usage?.contentAccepted}
+                      /{data?.usage?.maxContentGeneration}
+                    </p>
+                  </div>
                   <div className="flex flex-col gap-2">
                     <label className="text-slate-500">
                       Total documents (
