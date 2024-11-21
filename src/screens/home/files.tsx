@@ -30,7 +30,7 @@ export default function FilesScreen() {
       ) : (
         <div className="w-full md:min-w-[85vw]">
           <MobileSideBar projectId={projectId} />
-          <HomeScreen data={data} projectId={projectId} />
+          <HomeScreen data={data} />
         </div>
       )}
     </div>

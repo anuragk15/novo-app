@@ -7,7 +7,7 @@ import EmptyHomescreen from "./ui/emptyHomeScreen";
 import { FilesTable } from "./ui/filesTable";
 import SearchBar from "./ui/search";
 
-export default function HomeScreen({ data, projectId }) {
+export default function HomeScreen({ data }) {
   const [documents, setDocuments] = useState(data || []);
   const [searchQuery, setSearchQuery] = useState("");
   const debouncedInputValue = useDebounce(searchQuery, 200); // 500ms debounce delay
@@ -25,7 +25,7 @@ export default function HomeScreen({ data, projectId }) {
     }
   }, [debouncedInputValue, searchQuery, data]);
   if (data?.length === 0) {
-    return <EmptyHomescreen projectId={projectId} />;
+    return <EmptyHomescreen />;
   }
   return (
     <div className=" flex-col w-full flex md:min-w-[85vw] pl-2 pb-2 overflow-scroll h-screen bg-slate-100">
