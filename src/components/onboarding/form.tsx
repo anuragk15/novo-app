@@ -13,7 +13,7 @@ import { SingleIdea } from "../dashboard/recommendationCard";
 import { ArrowRight } from "lucide-react";
 import { BorderTrail } from "../ui/border-trail";
 import { cn } from "@/lib/utils";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   onboardProject,
   onboardProjectCompetitors,
@@ -167,11 +167,12 @@ export default function OnboardingForm({ step, setStep }: Props) {
         setBrandVoice={setBrandVoice}
         brandVoice={brandVoice}
         onNext={() => {
+          console.log(targetAudience);
           updateProjectFn({
             projectId,
             targetAudience: targetAudience
-              .join(",")
-              .map((e: string) => e.trim()),
+              .map((e: string) => e.trim())
+              .join(","),
             brandVoice,
           });
           setStep(step + 1);
@@ -300,7 +301,7 @@ const Step2 = ({
   brandVoice,
   onNext,
 }) => {
-  console.log(targetAudience);
+  
   return (
     <div className=" flex flex-col justify-center gap-10 h-full">
       <div className="md:space-y-4">
@@ -356,6 +357,7 @@ const Step2 = ({
 
 const Step3 = ({ projectId, ideas }) => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient()
   return (
     <div className=" flex flex-col justify-center gap-10 h-full">
       <div className="md:space-y-6">
@@ -383,7 +385,13 @@ const Step3 = ({ projectId, ideas }) => {
         <Button
           variant="link"
           className="px-8"
-          onClick={() => navigate("/project/" + projectId)}
+          onClick={() => {
+            queryClient.invalidateQueries({
+              queryKey: ["get", "project", projectId],
+            }).then(() => {
+              navigate("/project/" + projectId);
+            });
+          }}
         >
           Take me to dashboard <ArrowRight size={16} className="mx-2" />
         </Button>

@@ -12,13 +12,14 @@ export default function DashboardHome() {
   const navigate = useNavigate();
   const { data, isLoading } = useQuery({
     queryKey: ["get", "project", projectId],
-    queryFn: () => getProjectById({ projectId }),
+    queryFn: async () =>
+      await getProjectById({ projectId }).then((res) => res.data),
   });
   const [skipOnboarding, setSkipOnboarding] = useState(false);
 
   useEffect(() => {
     if (data) {
-      if (!data?.onboardedOn) {
+      if (!data?.project?.onboardedOn) {
         navigate(`/project/${projectId}/onboarding`);
       } else {
         setSkipOnboarding(true);
@@ -28,7 +29,7 @@ export default function DashboardHome() {
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <Spinner size='large' />
+        <Spinner size="large" />
       </div>
     );
   }
