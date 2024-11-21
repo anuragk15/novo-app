@@ -9,7 +9,7 @@ import { updateProject } from "@/api/functions/projects";
 
 export default function SettingsOverview({ data }) {
   const { toast } = useToast();
-  const [projectName, setProjectName] = useState(data?.project.name);
+  const [projectName, setProjectName] = useState(data?.project?.name);
   const endDate = data?.usage?.endDate
     ? new Date(data?.usage?.endDate)
     : new Date();
@@ -47,15 +47,15 @@ export default function SettingsOverview({ data }) {
     });
   }
   return (
-    <div className="flex justify-center flex-col w-[85vw]  pl-2 pb-2 overflow-scroll h-screen bg-slate-100">
-      <div className="flex flex-col gap-4 items-start border shadow-sm rounded-lg mr-2 p-8 min-h-[98vh]  bg-white">
+    <div className="flex justify-center flex-col w-[85vw]  pl-2 pb-2 overflow-scroll min-h-screen bg-slate-100">
+      <div className="flex flex-col gap-4 items-start border shadow-sm rounded-lg mr-2 p-8 min-h-[98vh] h-full  bg-white">
         <div className="flex justify-between w-full items-center">
           <div className=" flex items-center gap-2">
             <h2 className="text-2xl">Project info</h2>
           </div>
         </div>
         {data?.project ? (
-          <div className="w-full space-y-4">
+          <div className="w-full space-y-4 h-full">
             <div className="flex flex-col gap-4 max-w-fit ">
               <div className="flex flex-col gap-2">
                 <label className="text-slate-500">Project name</label>
@@ -103,7 +103,10 @@ export default function SettingsOverview({ data }) {
             </div>
             <Separator />
             {data?.usage == null ? (
-              <div>No plans seem to be active right now. Contact team admin to buy a plan!</div>
+              <div>
+                No plans seem to be active right now. Contact team admin to buy
+                a plan!
+              </div>
             ) : (
               <div>
                 <div className="flex items-center justify-between ">
@@ -114,17 +117,8 @@ export default function SettingsOverview({ data }) {
                 </div>
                 <div className="flex flex-col gap-2">
                   <div className="flex flex-col gap-2">
-                    <label className="text-slate-500">
-                      Total AI usage (
-                      {(
-                        (data?.usage?.apiCalls / data?.usage?.maxApiCalls) *
-                        100
-                      ).toFixed(1)}
-                      %)
-                    </label>
-                    <p>
-                      {data?.usage?.apiCalls}/{data?.usage?.maxApiCalls}
-                    </p>
+                    <label className="text-slate-500">Total AI usage</label>
+                    <p>{data?.usage?.apiCalls}</p>
                   </div>
                   <div className="flex flex-col gap-2">
                     <label className="text-slate-500">
@@ -140,7 +134,23 @@ export default function SettingsOverview({ data }) {
                       {data?.usage?.sourcesCreated}/{data?.usage?.maxSources}
                     </p>
                   </div>
-
+                  <div className="flex flex-col gap-2">
+                    <label className="text-slate-500">
+                      Content generation (
+                      {(
+                        ((data?.usage?.contentGenerated +
+                          data?.usage?.contentAccepted) /
+                          data?.usage?.maxContentGeneration) *
+                        100
+                      ).toFixed(1)}
+                      %)
+                    </label>
+                    <p>
+                      {data?.usage?.contentGenerated +
+                        data?.usage?.contentAccepted}
+                      /{data?.usage?.maxContentGeneration}
+                    </p>
+                  </div>
                   <div className="flex flex-col gap-2">
                     <label className="text-slate-500">
                       Total documents (

@@ -17,7 +17,7 @@ export default function EditorFn({
 }) {
   const { projectId } = useParams();
   return (
-    <div className="">
+    <div >
       <FloatingButtons
         name={name}
         saving={saving}
@@ -27,7 +27,7 @@ export default function EditorFn({
 
       <EditorContent
         onSelectCapture={() => alert("seled")}
-        className="rounded-lg bg-white min-h-[90vh] md:min-w-[800px] max-w-[960px]  mx-auto "
+        className="rounded-lg bg-white min-h-[90vh]  md:min-w-[800px] max-w-[960px]  mx-auto "
         editor={editor}
       />
 

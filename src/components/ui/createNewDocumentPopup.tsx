@@ -1,3 +1,4 @@
+import { getTemplates } from "@/api/functions/templates";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -7,20 +8,27 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { useDebounce } from "@/hooks/useDebounce";
+import { cn } from "@/lib/utils";
+import { useQuery } from "@tanstack/react-query";
 import { Plus, Search } from "lucide-react";
 import { useEffect, useState } from "react";
-import TemplateCard from "./templateCard";
-import { cn } from "@/lib/utils";
-import { Input } from "./input";
-import { useQuery } from "@tanstack/react-query";
-import { getTemplates } from "@/api/functions/templates";
-import { Spinner } from "./spinner";
-import { useDebounce } from "@/hooks/useDebounce";
-import DynamicForm from "./formTemplate";
 import { useNavigate, useParams } from "react-router-dom";
+import DynamicForm from "./formTemplate";
+import { Input } from "./input";
+import Loader from "./loader";
+import TemplateCard from "./templateCard";
 
-export function CreateNewDocumentPopup({ trigger }: { trigger?: JSX.Element }) {
-  const [option, setOption] = useState<null | "TEMPLATE" | "BLANK">(null);
+export function CreateNewDocumentPopup({
+  trigger,
+  defaultOption,
+}: {
+  trigger?: JSX.Element;
+  defaultOption?: "TEMPLATE" | "BLANK";
+}) {
+  const [option, setOption] = useState<null | "TEMPLATE" | "BLANK">(
+    defaultOption
+  );
   const [showTitle, setShowTitle] = useState(true);
   return (
     <Dialog
@@ -67,7 +75,6 @@ export function CreateNewDocumentPopup({ trigger }: { trigger?: JSX.Element }) {
 }
 
 const ChooseOption = ({ setOption }) => {
-  const [selected, setSelected] = useState<"BLANK" | "TEMPLATE" | null>(null);
   const navigate = useNavigate();
   const { projectId } = useParams();
   return (
@@ -75,17 +82,17 @@ const ChooseOption = ({ setOption }) => {
       <div className="flex  md:flex-row   flex-col gap-4 flex-1 items-center w-full h-full justify-center">
         <div
           className={cn(
-            "group cursor-pointer w-full hover:bg-slate-50 hover:border-solid h-full  flex-1  md:min-h-60 md:w-[20vw] p-2 md:p-10 rounded-xl border-dashed border-2 flex gap-4 flex-col justify-center ",
-            selected == "BLANK" && "border-slate-800 border-solid"
+            "group cursor-pointer w-full hover:bg-slate-50 hover:border-solid h-full  flex-1  md:min-h-60 md:w-[20vw] p-2 md:p-10 rounded-xl border-dashed border-2 flex gap-4 flex-col justify-center "
           )}
-          onClick={() => setSelected("BLANK")}
+          onClick={() => {
+            navigate(`/document/editor/${projectId}/new`);
+          }}
         >
           <p className="flex justify-center">
             <Plus
               size={34}
               className={cn(
-                "text-center group-hover:text-slate-950 text-slate-500",
-                selected == "BLANK" && "text-slate-800"
+                "text-center group-hover:text-slate-950 text-slate-500"
               )}
             />
           </p>
@@ -96,15 +103,13 @@ const ChooseOption = ({ setOption }) => {
         </div>
         <div
           className={cn(
-            "group cursor-pointer w-full hover:bg-slate-50  hover:border-solid h-full flex-1   md:min-h-60 md:w-[20vw] p-2 md:p-10 rounded-xl border-dashed border-2 flex gap-4 flex-col justify-center ",
-            selected == "TEMPLATE" && "border-slate-800 border-solid"
+            "group cursor-pointer w-full hover:bg-slate-50  hover:border-solid h-full flex-1   md:min-h-60 md:w-[20vw] p-2 md:p-10 rounded-xl border-dashed border-2 flex gap-4 flex-col justify-center "
           )}
-          onClick={() => setSelected("TEMPLATE")}
+          onClick={() => setOption("TEMPLATE")}
         >
           <p
             className={cn(
-              "text-4xl text-center group-hover:text-slate-950 text-slate-500",
-              selected == "TEMPLATE" && "text-slate-800"
+              "text-4xl text-center group-hover:text-slate-950 text-slate-500"
             )}
           >
             #
@@ -115,16 +120,6 @@ const ChooseOption = ({ setOption }) => {
           </p>
         </div>
       </div>
-      <Button
-        disabled={selected == null}
-        onClick={() => {
-          if (selected == "BLANK") {
-            navigate(`/document/editor/${projectId}/new`);
-          } else setOption(selected);
-        }}
-      >
-        Continue
-      </Button>
     </div>
   );
 };
@@ -214,7 +209,9 @@ const SelectTemplate = ({ toggleHeader }) => {
         </div>
       </div>
       {isLoading ? (
-        <Spinner />
+        <div className="flex justify-center items-center h-[65vh]">
+         <Loader />
+        </div>
       ) : (
         <div className="grid gap-y-2 grid-cols-2 md:grid-cols-3 py-4 overflow-scroll h-[65vh]">
           {data?.length > 0

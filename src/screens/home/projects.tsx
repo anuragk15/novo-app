@@ -14,6 +14,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import LoadingState from "@/components/ui/loadingState";
 import ProjectCard from "@/components/ui/projectCard";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
 import OnboardingWrapper from "@/wrappers/onboarding";
@@ -30,12 +36,6 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 export default function ProjectsScreen() {
   const [name, setName] = useState("");
 
@@ -74,7 +74,7 @@ export default function ProjectsScreen() {
     }
   }, [error, projects, isLoading]);
   ////console.log(projects);
-  if (isLoading || isRefetching) {
+  if (isLoading) {
     return <LoadingState />;
   }
 
@@ -93,82 +93,89 @@ export default function ProjectsScreen() {
           <div className=" px-5 md:px-10 space-y-4 max-w-[1280px] mx-auto">
             <AcceptInviteUI />
           </div>
-          <div className=" px-5 md:px-10 space-y-4 max-w-[1280px] mx-auto">
-            <div className=" flex sm:flex-row flex-col-reverse  items-center justify-between">
-              <h2 className="text-2xl font-sans">Your projects</h2>
-              <div className=" flex items-center gap-4">
-                {projects?.length != 0 && (
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger>
-                        <Button onClick={async () => refetch()} variant="ghost">
-                          <RefreshCcw size={16} />
+          {isRefetching ? (
+            <LoadingState />
+          ) : (
+            <div className=" px-5 md:px-10 space-y-4 max-w-[1280px] mx-auto">
+              <div className=" flex sm:flex-row flex-col-reverse  items-center justify-between">
+                <h2 className="text-2xl font-sans">Your projects</h2>
+                <div className=" flex items-center gap-4">
+                  {projects?.length != 0 && (
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger>
+                          <Button
+                            onClick={async () => refetch()}
+                            variant="ghost"
+                          >
+                            <RefreshCcw size={16} />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent className="md:max-w-[60vw]">
+                          Refresh projects
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  )}
+                  {projects?.length != 0 && (
+                    <CreateProjectPopup
+                      trigger={
+                        <Button className="flex gap-1">
+                          <Plus size={18} />
+                          <p>New project</p>
                         </Button>
-                      </TooltipTrigger>
-                      <TooltipContent className="md:max-w-[60vw]">
-                        Refresh projects
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                )}
-                {projects?.length != 0 && (
-                  <CreateProjectPopup
-                    trigger={
-                      <Button className="flex gap-1">
-                        <Plus size={18} />
-                        <p>New project</p>
-                      </Button>
-                    }
-                  />
-                )}
+                      }
+                    />
+                  )}
+                </div>
               </div>
-            </div>
-            <div className="flex justify-center md:justify-start flex-wrap gap-4 w-full">
-              {projects &&
-                projects?.length > 0 &&
-                projects.map((project) => (
-                  <ProjectCard
-                    key={project?.projects?.id}
-                    role={
-                      project?.collaborators?.accessLevel == "admin"
-                        ? "Admin"
-                        : project?.collaborators?.accessLevel == "manager"
-                        ? "Manager"
-                        : project?.collaborators?.accessLevel == "read"
-                        ? "Viewer"
-                        : "Editor"
-                    }
-                    name={project?.projects?.name}
-                    id={project?.projects?.id}
-                    createdOn={new Date(project?.projects?.createdAt)}
-                  />
-                ))}
-              {/* <ProjectCard name="Project 1" id="1" createdOn={new Date()} />
+              <div className="flex justify-center md:justify-start flex-wrap gap-4 w-full">
+                {projects &&
+                  projects?.length > 0 &&
+                  projects.map((project) => (
+                    <ProjectCard
+                      key={project?.projects?.id}
+                      role={
+                        project?.collaborators?.accessLevel == "admin"
+                          ? "Admin"
+                          : project?.collaborators?.accessLevel == "manager"
+                          ? "Manager"
+                          : project?.collaborators?.accessLevel == "read"
+                          ? "Viewer"
+                          : "Editor"
+                      }
+                      name={project?.projects?.name}
+                      id={project?.projects?.id}
+                      createdOn={new Date(project?.projects?.createdAt)}
+                    />
+                  ))}
+                {/* <ProjectCard name="Project 1" id="1" createdOn={new Date()} />
               <ProjectCard name="Anurag" id="2" createdOn={new Date()} /> */}
-              {/* <div className="group  py-4 px-4 bg-white flex flex-col justify-center items-center gap-4 rounded-lg hover:bg-slate-100 cursor-pointer border min-w-[20vw]">
+                {/* <div className="group  py-4 px-4 bg-white flex flex-col justify-center items-center gap-4 rounded-lg hover:bg-slate-100 cursor-pointer border min-w-[20vw]">
                 <div className=" p-4 border group-hover:border-black rounded-full border-dashed">
                   <Plus className=" text-slate-500 group-hover:text-black" />
                 </div>
               </div> */}
-            </div>
-            {projects?.length == 0 && (
-              <div className="flex h-full  min-h-[60vh] justify-center items-center ">
-                <CreateProjectPopup
-                  trigger={
-                    <div className=" space-y-4 border cursor-pointer p-20 group justify-center flex flex-col items-center hover:border-black rounded-xl border-dashed">
-                      <Plus
-                        size={64}
-                        className=" text-slate-700 group-hover:text-black"
-                      />
-                      <h1 className=" text-2xl font-sans">
-                        Create your first project
-                      </h1>
-                    </div>
-                  }
-                />
               </div>
-            )}
-          </div>
+              {projects?.length == 0 && (
+                <div className="flex h-full  min-h-[60vh] justify-center items-center ">
+                  <CreateProjectPopup
+                    trigger={
+                      <div className=" space-y-4 border cursor-pointer p-20 group justify-center flex flex-col items-center hover:border-black rounded-xl border-dashed">
+                        <Plus
+                          size={64}
+                          className=" text-slate-700 group-hover:text-black"
+                        />
+                        <h1 className=" text-2xl font-sans">
+                          Create your first project
+                        </h1>
+                      </div>
+                    }
+                  />
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </OnboardingWrapper>

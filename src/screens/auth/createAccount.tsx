@@ -13,7 +13,7 @@ export default function CreateAccountScreen() {
     mutationKey: ["create", "account"],
     async mutationFn() {
       const user = await createUser();
-      return user.data;
+      return user;
     },
   });
 
@@ -25,8 +25,8 @@ export default function CreateAccountScreen() {
     } else {
       mutateAsync().then((user) => {
         posthog.capture("user_signed_up");
-        setUser(user);
-        navigation("/projects?onboarding=true");
+        setUser(user?.data);
+        navigation(`/project/${user?.projectId}/onboarding`);
       });
     }
   }, [user]);

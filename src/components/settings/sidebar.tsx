@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { ChevronLeft, LayoutList, Wallet } from "lucide-react";
+import { ChevronLeft, LayoutList, LinkIcon, Wallet } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
 export default function SettingsSidebar({ projectId }) {
@@ -14,7 +14,7 @@ export default function SettingsSidebar({ projectId }) {
           <div className="p-4">
             <div>
               <div
-                onClick={() => navigate("/")}
+                onClick={() => navigate("/project/" + projectId)}
                 className="flex items-center hover:bg-slate-200 py-2 cursor-pointer rounded-lg px-1"
               >
                 <ChevronLeft size={16} />
@@ -28,7 +28,7 @@ export default function SettingsSidebar({ projectId }) {
               <Link
                 to={"/project/" + projectId + "/settings"}
                 className={cn(
-                  "hover:bg-slate-200 flex items-center gap-2 p-2 font-sans font-light rounded-md",
+                  "hover:bg-slate-200 flex items-center gap-2 p-2 font-sans  rounded-md",
                   {
                     "bg-slate-200 font-normal":
                       pathname.split("/").at(-1) === "settings",
@@ -41,7 +41,7 @@ export default function SettingsSidebar({ projectId }) {
               <Link
                 to={`/project/${projectId}/settings/billing`}
                 className={cn(
-                  "hover:bg-slate-200 flex items-center gap-2 p-2 font-sans font-light rounded-md",
+                  "hover:bg-slate-200 flex items-center gap-2 p-2 font-sans  rounded-md",
                   {
                     "bg-slate-200 font-normal":
                       pathname.split("/").at(-1) === "billing",
@@ -50,6 +50,19 @@ export default function SettingsSidebar({ projectId }) {
               >
                 <Wallet size={16} />
                 Billing
+              </Link>
+              <Link
+                to={`/project/${projectId}/settings/integrations`}
+                className={cn(
+                  "hover:bg-slate-200 flex items-center gap-2 p-2 font-sans  rounded-md",
+                  {
+                    "bg-slate-200 font-normal":
+                      pathname.split("/").at(-1) === "integrations",
+                  }
+                )}
+              >
+                <LinkIcon size={16} />
+                Integrations
               </Link>
             </div>
           </div>

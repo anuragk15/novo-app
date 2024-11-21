@@ -64,14 +64,15 @@ export const deleteSource = async ({
   sourceId,
   projectId,
 }: {
-  sourceId: string;
+  sourceId: string[];
   projectId: string;
 }) => {
+
   const response = await axiosClient
     .delete(URLs.SOURCES_DELETE + sourceId, {
-      params: {
+      data: {
         projectId,
-        sourceId,
+        sourceId: sourceId,
       },
     })
     .catch((error) => {

@@ -8,7 +8,6 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import "@/App.css";
-import DashboardHome from "@/screens/home/dashboard";
 import { Crisp } from "crisp-sdk-web";
 
 // For Geist Mono
@@ -27,6 +26,13 @@ import TemplatesHome from "@/screens/home/template";
 import ErrorScreen from "@/screens/misc/Error";
 import { PHProvider } from "@/wrappers/posthog";
 import { useEffect } from "react";
+import OnboardingProjectScreen from "./screens/onboarding/project";
+import FilesScreen from "@/screens/home/files";
+import DashboardHome from "./screens/home/dashboard";
+import IdeasScreen from "./screens/home/ideas";
+import CustomiseIdeasScreen from "./screens/home/ideas-customise";
+import IntegrationsScreen from "./screens/home/settings/integrations";
+import ConnectNotionSreen from "./screens/misc/connect-notion";
 // import LiveDocumentEditorScreen from "./pages/editor/live";
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
@@ -61,9 +67,24 @@ const router = createBrowserRouter([
           </div>
         ),
       },
-
       {
-        path: "/project/:projectId/sources",
+        path: "/project/:projectId/ideas",
+        element: <IdeasScreen />,
+      },
+      {
+        path: "/project/:projectId/files",
+        element: (
+          <div>
+            <FilesScreen />
+          </div>
+        ),
+      },
+      {
+        path: "/project/:projectId/onboarding",
+        element: <OnboardingProjectScreen />,
+      },
+      {
+        path: "/project/:projectId/knowledge-base",
         element: (
           <div>
             <SourceHome />
@@ -87,10 +108,22 @@ const router = createBrowserRouter([
         ),
       },
       {
+        path: "/project/:projectId/customise-ideas",
+        element: <CustomiseIdeasScreen />,
+      },
+      {
         path: "/project/:projectId/settings",
         element: (
           <div>
             <SettingsOverviewScreen />
+          </div>
+        ),
+      },
+      {
+        path: "/project/:projectId/settings/integrations",
+        element: (
+          <div>
+            <IntegrationsScreen />
           </div>
         ),
       },
@@ -102,14 +135,13 @@ const router = createBrowserRouter([
           </div>
         ),
       },
-
       {
         path: "/document/editor/:projectId/:id",
-        element: (
-          <div>
-            <DocumentEditorScreen />
-          </div>
-        ),
+        element: <DocumentEditorScreen />,
+      },
+      {
+        path: "/add/notion",
+        element: <ConnectNotionSreen />,
       },
     ],
   },
@@ -134,7 +166,7 @@ const queryClient = new QueryClient();
 
 function App() {
   useEffect(() => {
-    Crisp.configure("41debc16-d37d-4000-b537-d606bd561b74");
+    Crisp.configure("41debc16-d37d-4000-b537-d606bd561b74", {});
   }, []);
   return (
     <ClerkProvider

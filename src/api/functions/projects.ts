@@ -170,14 +170,68 @@ export const respondInvite = async ({
 export const updateProject = async ({
   projectId,
   name,
+  targetAudience,
+  brandVoice,
+  keywords,
+  contentTypes,
+  industryFocus,
+  tonePreference,
 }: {
   projectId: string;
-  name: string;
+  name?: string;
+  targetAudience?: string;
+  brandVoice?: string;
+  keywords?: string;
+  contentTypes?: string;
+  industryFocus?: string;
+  tonePreference?: string;
 }) => {
   const response = await axiosClient
     .post(URLs.PROJECT_UPDATE, {
       projectId,
-      name,
+      name: name,
+      targetAudience: targetAudience,
+      brandVoice: brandVoice,
+      keywords: keywords,
+      contentTypes: contentTypes,
+      industryFocus: industryFocus,
+      tonePreference: tonePreference,
+    })
+    .catch((error) => {
+      throw error;
+    });
+  return response?.data;
+};
+
+export const onboardProject = async ({
+  projectId,
+  websiteUrl,
+}: {
+  projectId: string;
+  websiteUrl: string;
+}) => {
+  const response = await axiosClient
+    .post(URLs.PROJECT_ONBOARD, {
+      projectId,
+      url: websiteUrl,
+    })
+    .catch((error) => {
+      throw error;
+    });
+  return response?.data;
+};
+
+export const onboardProjectCompetitors = async ({
+  projectId,
+  competitors,
+}: {
+  projectId: string;
+  competitors: string[];
+}) => {
+  const response = await axiosClient
+    .post(URLs.PROJECT_ONBOARD_COMPETITORS, {
+      projectId,
+      competitors: competitors,
     })
     .catch((error) => {
       throw error;

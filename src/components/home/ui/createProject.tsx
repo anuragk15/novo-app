@@ -110,12 +110,12 @@ export const CreateProjectUI = ({
         />
       </div>
       <div className="  flex md:flex-row flex-col gap-2 ">
-        <div className=" border p-5 flex flex-col justify-between  md:gap-8 rounded-lg shadow-lg border-slate-200">
+        <div className=" flex-1 border p-5 flex flex-col justify-between  md:gap-8 rounded-lg shadow-lg border-slate-200">
           <div className="flex justify-between ">
             <div>
               <p className="text-3xl font-sans">Hobby</p>
               <p className="text-slate-500 font-medium">
-                Great for individuals & small teams.
+                Great for professionals.
               </p>
             </div>
             <div className="flex items-center">
@@ -143,7 +143,7 @@ export const CreateProjectUI = ({
                   <Check size={16} className="text-white" />
                 </div>
                 <p className=" font-regular font-sans">
-                  {planLimits.hobby.apiCalls} AI-assisted operations
+                  {planLimits.hobby.contentGeneration} content generation
                 </p>
               </div>
               <div className="flex gap-2 items-center">
@@ -159,7 +159,7 @@ export const CreateProjectUI = ({
                   <Check size={16} className="text-white" />
                 </div>
                 <p className=" font-regular font-sans">
-                  {planLimits.hobby.sourcesCreated} knowledge sources
+                  {planLimits.hobby.sourcesCreated} training documents
                 </p>
               </div>
               <div className="flex gap-2 items-center">
@@ -179,7 +179,7 @@ export const CreateProjectUI = ({
             Continue
           </Button>
         </div>
-        <div className=" border p-5 flex flex-col justify-between md:gap-8 rounded-lg shadow-lg border-slate-200">
+        <div className=" flex-1 border p-5 flex flex-col justify-between md:gap-8 rounded-lg shadow-lg border-slate-200">
           <div className="flex justify-between gap-10 ">
             <div>
               <p className="text-3xl font-sans">Pro</p>

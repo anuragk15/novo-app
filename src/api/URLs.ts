@@ -6,6 +6,7 @@ export const URLs = {
   USER_CREATE: "/users/create",
 
   // Prompts
+  PROMPTS_REFINE_CONTENT: "/prompts/refine",
   PROMPTS_SUMMARISE: "/prompts/summarise",
   PROMPTS_WRITE_NEXT: "/prompts/next-content",
   PROMPT_INSERT_CONTENT: "/prompts/insert-content",
@@ -30,6 +31,9 @@ export const URLs = {
   SOURCES_ADD_FILe: "/sources/add/file",
   SOURCES_DELETE: "/sources/delete/",
 
+  //Recommendations
+  RECOMMENDATIONS_GET: "/recommendations",
+  RECOMMENDATIONS_ACCEPT: "/recommendations/accept",
   //Templates
   TEMPLATES_GET: "/templates",
   TEMPLATES_GET_BOOKMARKS: "/templates/bookmarks",
@@ -52,6 +56,8 @@ export const URLs = {
   PROJECTS_COLLAB_CHANGE_ACCESS: "/projects/change/collaborator/access",
   PROJECTS_RESPOND_INVITE: "/projects/invite/respond",
   PROJECT_UPDATE: "/projects/update",
+  PROJECT_ONBOARD: "/projects/onboarding",
+  PROJECT_ONBOARD_COMPETITORS: "/projects/competitor/add",
   PROJECTS_ADD_TAG: "/documents/add/tag",
   PROJECTS_GET_TAGS: "/documents/tags",
   PROJECTS_REMOVE_COLLAB: "/projects/remove/collaborator",
@@ -60,6 +66,15 @@ export const URLs = {
   DOCUMENTS_GET: "/documents",
   DOCUMENTS_GET_BY_ID: "/documents/id",
 
+  // Notion
+  NOTION_PAGES_GET: "/notion/pages",
+  NOTION_PAGES_CONNECT: "/notion/connect",
+  NOTION_PAGES_DISCONNECT: "/notion/disconnect",
+  NOTION_PAGES_IMPORT: "/notion/page-to-source",
+  NOTION_DEV_AUTH_URL:
+    "https://api.notion.com/v1/oauth/authorize?client_id=141d872b-594c-8038-a680-0037e5b2c087&response_type=code&owner=user&redirect_uri=https%3A%2F%2F3e75-103-249-38-244.ngrok-free.app%2Fadd%2Fnotion",
+  NOTION_PROD_AUTH_URL:
+    "https://api.notion.com/v1/oauth/authorize?client_id=141d872b-594c-8038-a680-0037e5b2c087&response_type=code&owner=user&redirect_uri=https%3A%2F%2Fwrite.withnovo.com%2Fadd%2Fnotion",
   DOCUMENTS_UPDATE: "/documents/update",
   DOCUMENTS_DELETE: "/documents/id",
   DOCUMENTS_SEARCH: "/documents/search",

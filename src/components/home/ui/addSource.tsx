@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { addSource, addSourceFile } from "@/api/functions/sources";
+import { importFromNotion } from "@/api/functions/notion";
 import {
   Tooltip,
   TooltipContent,
@@ -7,7 +8,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
-import { useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { CloudUpload, Info } from "lucide-react";
 import { useRef, useState } from "react";
 import { Button } from "../../ui/button";
@@ -15,6 +16,7 @@ import { Dialog, DialogContent, DialogTrigger } from "../../ui/dialog";
 import { Input } from "../../ui/input";
 import { Label } from "../../ui/label";
 import { useToast } from "../../ui/use-toast";
+import { Spinner } from "@/components/ui/spinner";
 export default function AddSource({
   projectId,
   children,
@@ -23,6 +25,72 @@ export default function AddSource({
   children?: React.ReactNode;
 }) {
   const { toast } = useToast();
+  const { mutateAsync, isPending: isAddingSource } = useMutation({
+    mutationKey: ["add", "source"],
+    mutationFn: addSource,
+    onError: (error) => {
+      console.error(error);
+      toast({
+        // @ts-ignore
+        title: error.response.data.message,
+        variant: "destructive",
+      });
+    },
+    onSuccess: () => {
+      toast({
+        title: "Source added successfully",
+      });
+      queryClient.invalidateQueries({ queryKey: ["get", "sources"] });
+      setName("");
+      setUrl("");
+    },
+  });
+
+  const { mutateAsync: uploadFileFn, isPending: isAddingSourceFile } =
+    useMutation({
+      mutationKey: ["add", "source"],
+      mutationFn: addSourceFile,
+      onError: (error) => {
+        console.error(error);
+        toast({
+          // @ts-ignore
+          title: error.response.data.message,
+          variant: "destructive",
+        });
+      },
+      onSuccess: () => {
+        toast({
+          title: "Source added successfully",
+        });
+        queryClient.invalidateQueries({ queryKey: ["get", "sources"] });
+        setName("");
+
+        setUrl("");
+      },
+    });
+
+  const { mutateAsync: importNotionFn, isPending: isImportingNotion } =
+    useMutation({
+      mutationKey: ["import", "notion"],
+      mutationFn: importFromNotion,
+      onError: (error) => {
+        console.error(error);
+        toast({
+          // @ts-ignore
+          title: error.response.data.message,
+          variant: "destructive",
+        });
+      },
+      onSuccess: () => {
+        toast({
+          title: "Notion page imported successfully",
+        });
+        queryClient.invalidateQueries({ queryKey: ["get", "sources"] });
+        setName("");
+        setUrl("");
+      },
+    });
+
   const [file, setFile] = useState<null | File>(null);
   const [url, setUrl] = useState("");
   const [name, setName] = useState("");
@@ -44,6 +112,14 @@ export default function AddSource({
       });
       return;
     }
+    if (url && url.includes("https://notion.so")) {
+      toast({
+        title: "Importing from Notion",
+        description: "Please wait while we import your Notion page.",
+      });
+      await importNotionFn({ projectId, pageUrl: url, name });
+      return;
+    }
     if (file && file.size > MAX_FILE_SIZE) {
       toast({
         title: "File size too large",
@@ -58,82 +134,52 @@ export default function AddSource({
         title: "Uploading file",
         description: "Please wait while we upload your file.",
       });
-      const res = await addSourceFile({ file, name: name, projectId });
-      // //console.log(res);
-      if (res) {
-        toast({
-          title: "File uploaded successfully",
-          description: "Your file has been uploaded successfully.",
-        });
-        queryClient.invalidateQueries({ queryKey: ["get", "sources"] });
-        setFile(null);
-      } else {
-        toast({
-          title: "Failed to upload file",
-          description: "There was an error uploading the file.",
-          variant: "destructive",
-        });
-      }
+      await uploadFileFn({ file, name: name, projectId });
     } else {
       //upload url
       toast({
         title: "Uploading URL",
         description: "Please wait while we upload your URL.",
       });
-      const res = await addSource({ url, name: name, projectId });
-      // //console.log(res);
-      if (res) {
-        toast({
-          title: "URL uploaded successfully",
-          description: "Your URL has been uploaded successfully.",
-        });
-        queryClient.invalidateQueries({ queryKey: ["get", "sources"] });
-
-        setUrl("");
-      } else {
-        toast({
-          title: "Failed to upload URL",
-          description: "There was an error uploading the URL.",
-          variant: "destructive",
-        });
-      }
+      await mutateAsync({ url, name: name, projectId });
     }
   };
+
   return (
     <Dialog>
       <DialogTrigger asChild>
-        {children ? (
-          children
-        ) : (
-          <Button className="font-mono">Add source</Button>
-        )}
+        {children ? children : <Button className="font-mono">Add</Button>}
       </DialogTrigger>
       <DialogContent className="bg-white">
         <div className=" space-y-4">
           <div>
-            <h2 className="text-lg font-medium">Add source</h2>
+            <h2 className="text-lg font-medium">Add Training Document</h2>
             <p className="text-slate-500 text-sm">
               Novo will use these websites/documents to give accurate
               suggestions.
             </p>
           </div>
           <div className="space-y-2">
-            <Label>Souce name</Label>
+            <Label>Name</Label>
             <Input
               maxLength={90}
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="PRD of Tap to pay feature"
+              placeholder="Name of the document"
             />
           </div>
           <div className="space-y-2">
-            <Label>Add website link</Label>
+            <Label>Add website or Notion link</Label>
             <Input
               disabled={file != null}
               value={url}
               onChange={(e) => setUrl(e.target.value)}
-              placeholder="https://xyz.com/docs/feature-1"
+              placeholder="https://xyz.com/docs/feature-1 or https://notion.so/..."
             />
+            <p className="text-xs text-slate-500">
+              For Notion pages, make sure they are publicly accessible or
+              connected through integration
+            </p>
           </div>
           <div className="flex gap-2 items-center">
             <Label>Or upload a file</Label>
@@ -186,7 +232,17 @@ export default function AddSource({
             />
           </div>
           <div className=" flex justify-end">
-            <Button onClick={() => onSubmitFn()}>Upload</Button>
+            <Button
+              disabled={
+                isAddingSource || isAddingSourceFile || isImportingNotion
+              }
+              onClick={() => onSubmitFn()}
+            >
+              {isAddingSource || isAddingSourceFile || isImportingNotion ? (
+                <Spinner size="small" className=" text-white mr-2" />
+              ) : null}{" "}
+              Upload
+            </Button>
           </div>
         </div>
       </DialogContent>

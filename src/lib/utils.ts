@@ -57,7 +57,7 @@ export function generateColorsFromInitial(str: string) {
   // Define a map for each letter with a background and corresponding text color
   const colorMap = {
     A: { background: "#FFE0D6", text: "#FF5733" },
-    B: { background: "#D6FFD6", text: "#33FF57" },
+    B: { background: "#D6FFD6", text: "#20bd3d" },
     C: { background: "#D6D6FF", text: "#5733FF" },
     D: { background: "#FFF4D6", text: "#FFC300" },
     E: { background: "#E9F7D6", text: "#DAF7A6" },
