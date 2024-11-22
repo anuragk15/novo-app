@@ -8,11 +8,11 @@ export const planLimits = {
     invitesCreated: 1,
   },
   pro: {
-    price: 49,
+    price: 69,
     apiCalls: 3000,
     sourcesCreated: 200,
-    contentGeneration: 75,
-    documentsCreated: 100,
+    contentGeneration: 100,
+    documentsCreated: 120,
     invitesCreated: 25,
   },
 };
