@@ -3,6 +3,9 @@ import { useEffect, useState } from "react";
 import "ldrs/cardio";
 import "ldrs/superballs";
 import "ldrs/quantum";
+import "ldrs/hatch";
+
+// Default values shown
 
 // Default values shown
 
@@ -21,6 +24,15 @@ declare global {
         color?: string;
       };
       "l-superballs": React.DetailedHTMLProps<
+        React.HTMLAttributes<HTMLElement>,
+        HTMLElement
+      > & {
+        size?: number | string;
+        stroke?: string;
+        speed?: string;
+        color?: string;
+      };
+      "l-hatch": React.DetailedHTMLProps<
         React.HTMLAttributes<HTMLElement>,
         HTMLElement
       > & {
@@ -54,7 +66,7 @@ export default function LoadingOnboardingText() {
   ];
 
   useEffect(() => {
-    const intervalTime = textIndex === 0 ? 2000 : 3500; // 2 seconds for the first, 3 seconds for the rest
+    const intervalTime = textIndex === 0 ? 2000 : 6000; // 2 seconds for the first, 6 seconds for the rest
 
     const interval = setInterval(() => {
       if (textIndex < texts.length - 1) {
@@ -66,19 +78,18 @@ export default function LoadingOnboardingText() {
     }
     // Cleanup interval on component unmount
     return () => clearInterval(interval);
-   
   }, [texts.length, textIndex]);
 
   return (
     <div className="w-full h-full flex gap-8 flex-col justify-center items-center">
       {textIndex == 0 ? (
-        <l-cardio size={100} stroke="4" speed="2" color="black"></l-cardio>
+        <l-cardio size={100} stroke="4" speed="1.5" color="black"></l-cardio>
       ) : textIndex == 1 ? (
         <l-superballs size="70" speed="2" color="black"></l-superballs>
       ) : textIndex == 2 ? (
-        <l-superballs size="70" speed="2" color="black"></l-superballs>
+        <l-hatch  size="60" speed="6" color="black"></l-hatch>
       ) : (
-        <l-quantum size="60" speed="2" color="black"></l-quantum>
+        <l-quantum size="60" speed="4" color="black"></l-quantum>
       )}
 
       <p className=" italic text-xl">{texts[textIndex]}</p>

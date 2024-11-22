@@ -5,7 +5,7 @@ export const planLimits = {
     sourcesCreated: 70,
     documentsCreated: 25,
     contentGeneration: 20,
-    invitesCreated: 1,
+    invitesCreated: 0,
   },
   pro: {
     price: 69,
