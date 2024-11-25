@@ -57,6 +57,7 @@ type Source = {
   type: string;
   createdAt: string;
   projectId: string;
+  message?: string;
 };
 
 export function SourcesTable({
@@ -308,6 +309,7 @@ export function SourcesTable({
           <div className="space-y-4">
             <p>Name: {showDetails?.title}</p>
             <p>Source: {showDetails?.url}</p>
+            <p>Message: {showDetails?.message}</p>
             <p>
               Created at: {new Date(showDetails?.createdAt).toLocaleString()}
             </p>

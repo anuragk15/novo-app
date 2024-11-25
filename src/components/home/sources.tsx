@@ -4,14 +4,14 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { BadgeInfo } from "lucide-react";
+import { BadgeInfo, RefreshCcw } from "lucide-react";
 import { useParams } from "react-router-dom";
 import AddSource from "./ui/addSource";
 import { SourcesTable } from "./ui/sourcesTable";
+import { Spinner } from "../ui/spinner";
 
-export default function SourcesScreen({ data }) {
+export default function SourcesScreen({ data, refetch, isRefetching }) {
   const { projectId } = useParams();
-
 
   return (
     <div className=" flex-col w-full md:min-w-[85vw] pl-2 pb-2 overflow-scroll h-screen bg-slate-100">
@@ -37,9 +37,20 @@ export default function SourcesScreen({ data }) {
               </Tooltip>
             </TooltipProvider>
           </div>
-          <AddSource projectId={projectId} />
+          <div className="flex items-center gap-4">
+            <RefreshCcw
+              size={16}
+              onClick={() => !isRefetching && refetch()}
+              className="cursor-pointer"
+            />
+            <AddSource projectId={projectId} />
+          </div>
         </div>
-        {data?.length > 0 ? (
+        {isRefetching ? (
+          <div className="flex h-[90vh] w-full flex-col  justify-center items-center ">
+            <Spinner />
+          </div>
+        ) : data?.length > 0 ? (
           <SourcesTable sources={data} />
         ) : (
           <div className="flex h-[90vh] w-full flex-col  justify-center items-center ">

@@ -8,14 +8,14 @@ import { useParams } from "react-router-dom";
 
 export default function SourceHome() {
   const { projectId } = useParams(); // Extract the projectId from the URL
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, refetch, isRefetching } = useQuery({
     queryKey: ["get", "sources"],
     queryFn: async () => {
       const res = await getSources({ projectId });
       return res?.data;
     },
   });
-  console.log(data)
+  console.log(data);
   return (
     <div className="flex  bg-slate-100 w-full">
       <div className="hidden md:block">
@@ -28,7 +28,11 @@ export default function SourceHome() {
       ) : (
         <div className="w-full md:min-w-[85vw]">
           <MobileSideBar projectId={projectId} />
-          <SourcesScreen data={data} />
+          <SourcesScreen
+            data={data}
+            refetch={refetch}
+            isRefetching={isRefetching}
+          />
         </div>
       )}
     </div>
