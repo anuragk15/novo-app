@@ -1,60 +1,17 @@
 /* eslint-disable @typescript-eslint/no-namespace */
 import { useEffect, useState } from "react";
-import "ldrs/cardio";
-import "ldrs/superballs";
-import "ldrs/quantum";
-import "ldrs/hatch";
-
-// Default values shown
-
-// Default values shown
-
-// Default values shown
-
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      "l-cardio": React.DetailedHTMLProps<
-        React.HTMLAttributes<HTMLElement>,
-        HTMLElement
-      > & {
-        size?: number | string;
-        stroke?: string;
-        speed?: string;
-        color?: string;
-      };
-      "l-superballs": React.DetailedHTMLProps<
-        React.HTMLAttributes<HTMLElement>,
-        HTMLElement
-      > & {
-        size?: number | string;
-        stroke?: string;
-        speed?: string;
-        color?: string;
-      };
-      "l-hatch": React.DetailedHTMLProps<
-        React.HTMLAttributes<HTMLElement>,
-        HTMLElement
-      > & {
-        size?: number | string;
-        stroke?: string;
-        speed?: string;
-        color?: string;
-      };
-      "l-quantum": React.DetailedHTMLProps<
-        React.HTMLAttributes<HTMLElement>,
-        HTMLElement
-      > & {
-        size?: number | string;
-        stroke?: string;
-        speed?: string;
-        color?: string;
-      };
-    }
-  }
-}
-
-// Default values shown
+// import "ldrs/cardio";
+// import "ldrs/superballs";
+// import "ldrs/quantum";
+// import "ldrs/hatch";
+import { hatch } from "ldrs";
+hatch.register();
+import { quantum } from "ldrs";
+quantum.register();
+import { superballs } from "ldrs";
+superballs.register();
+import { cardio } from "ldrs";
+cardio.register();
 
 export default function LoadingOnboardingText() {
   const [textIndex, setTextIndex] = useState(0);
@@ -87,7 +44,7 @@ export default function LoadingOnboardingText() {
       ) : textIndex == 1 ? (
         <l-superballs size="70" speed="2" color="black"></l-superballs>
       ) : textIndex == 2 ? (
-        <l-hatch  size="60" speed="6" color="black"></l-hatch>
+        <l-hatch size="60" speed="6" color="black"></l-hatch>
       ) : (
         <l-quantum size="60" speed="4" color="black"></l-quantum>
       )}

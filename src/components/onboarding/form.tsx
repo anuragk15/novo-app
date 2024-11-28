@@ -31,13 +31,18 @@ export default function OnboardingForm({ step, setStep }: Props) {
   const [website, setWebsite] = useState("");
   const { projectId } = useParams();
   const { toast } = useToast();
-
+  const queryClient = useQueryClient();
   const [targetAudience, setTargetAudience] = useState<any>([]);
   const [brandVoice, setBrandVoice] = useState<string>("");
   const [competitors, setCompetitors] = useState<string[]>([]);
   const { data, isPending, mutateAsync } = useMutation({
     mutationKey: ["onboard", "project", projectId],
     mutationFn: onboardProject,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["get", "project", projectId],
+      });
+    },
     onError: (error) => {
       console.error(error);
       toast({
@@ -116,7 +121,6 @@ export default function OnboardingForm({ step, setStep }: Props) {
     if (url) {
       await mutateAsync({ projectId, websiteUrl: url })
         .then((res) => {
-          console.log(res);
           setTargetAudience(res.targetAudience.split(","));
 
           setBrandVoice(res.brandVoice);
@@ -167,7 +171,6 @@ export default function OnboardingForm({ step, setStep }: Props) {
         setBrandVoice={setBrandVoice}
         brandVoice={brandVoice}
         onNext={() => {
-          console.log(targetAudience);
           updateProjectFn({
             projectId,
             targetAudience: targetAudience
@@ -301,7 +304,6 @@ const Step2 = ({
   brandVoice,
   onNext,
 }) => {
-  
   return (
     <div className=" flex flex-col justify-center gap-10 h-full">
       <div className="md:space-y-4">
@@ -357,7 +359,7 @@ const Step2 = ({
 
 const Step3 = ({ projectId, ideas }) => {
   const navigate = useNavigate();
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
   return (
     <div className=" flex flex-col justify-center gap-10 h-full">
       <div className="md:space-y-6">
@@ -386,11 +388,13 @@ const Step3 = ({ projectId, ideas }) => {
           variant="link"
           className="px-8"
           onClick={() => {
-            queryClient.invalidateQueries({
-              queryKey: ["get", "project", projectId],
-            }).then(() => {
-              navigate("/project/" + projectId);
-            });
+            queryClient
+              .invalidateQueries({
+                queryKey: ["get", "project", projectId],
+              })
+              .then(() => {
+                navigate("/project/" + projectId);
+              });
           }}
         >
           Take me to dashboard <ArrowRight size={16} className="mx-2" />

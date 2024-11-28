@@ -189,30 +189,44 @@ const Navbar = ({ name, setName }) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [searchParams, setSearchParams] = useSearchParams();
   const { toast } = useToast();
-
+  console.log(user);
   return (
     <>
       <Dialog open={showDialog} onOpenChange={setShowDialog}>
         <DialogContent>
           <div>
-            <div className="flex justify-between">
+            <div className="flex flex-col gap-4">
+              <div>
+                {user?.imageUrl && (
+                  <img
+                    className="rounded-full max-h-[100px] max-w-[100px]"
+                    src={user?.imageUrl}
+                  />
+                )}
+              </div>
               <div className="space-y-4">
-                <h1 className="text-2xl">Profile</h1>
-                <div>
-                  <Label className="text-md text-slate-500">User name</Label>
-                  <div
-                    onClick={() => {
-                      navigator.clipboard.writeText(user?.username);
-                      toast({
-                        title: "Username copied",
-                        description: "Username copied to clipboard",
-                      });
-                    }}
-                    className=" border p-2 rounded-lg bg-slate-100 text-slate-700 cursor-pointer"
-                  >
-                    {user?.username}
-                  </div>
-                </div>
+                {user?.fullName && (
+                  <>
+                    <h1 className="text-2xl">Profile</h1>
+                    <div>
+                      <Label className="text-md text-slate-500">
+                        User name
+                      </Label>
+                      <div
+                        onClick={() => {
+                          navigator.clipboard.writeText(user?.fullName);
+                          toast({
+                            title: "Username copied",
+                            description: "Username copied to clipboard",
+                          });
+                        }}
+                        className=" border p-2 rounded-lg bg-slate-100 text-slate-700 cursor-pointer"
+                      >
+                        {user?.fullName}
+                      </div>
+                    </div>
+                  </>
+                )}
                 <div>
                   <Label className="text-md text-slate-500">Email</Label>
                   <div
@@ -234,9 +248,6 @@ const Navbar = ({ name, setName }) => {
                       : "Loading"}
                   </div>
                 </div>
-              </div>
-              <div>
-                <img className="rounded-full" src={user?.imageUrl} />
               </div>
             </div>
           </div>
