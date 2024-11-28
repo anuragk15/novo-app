@@ -17,7 +17,7 @@ export default function OnboardingProjectScreen() {
     <div className="min-h-screen w-full flex items-center justify-center bg-slate-100 py-10">
       <div
         className={cn(
-          "min-h-[90vh] max-w-4xl border shadow-sm rounded-xl mx-auto flex justify-center  bg-white  ",
+          "min-h-[75vh] max-w-4xl border shadow-sm rounded-xl mx-auto flex justify-center  bg-white  ",
           step == 3 && "min-h-fit max-w-5xl"
         )}
       >

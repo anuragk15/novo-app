@@ -62,7 +62,7 @@ type Source = {
 
 export function SourcesTable({
   sources,
-  pageSize = 10,
+  pageSize = 15,
   showSearch = true,
   showHeaders = true,
   showPagination = true,
