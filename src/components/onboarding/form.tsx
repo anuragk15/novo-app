@@ -359,7 +359,6 @@ const Step2 = ({
 
 const Step3 = ({ projectId, ideas }) => {
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
   return (
     <div className=" flex flex-col justify-center gap-10 h-full">
       <div className="md:space-y-6">
@@ -388,13 +387,7 @@ const Step3 = ({ projectId, ideas }) => {
           variant="link"
           className="px-8"
           onClick={() => {
-            queryClient
-              .invalidateQueries({
-                queryKey: ["get", "project", projectId],
-              })
-              .then(() => {
-                navigate("/project/" + projectId);
-              });
+            navigate("/project/" + projectId);
           }}
         >
           Take me to dashboard <ArrowRight size={16} className="mx-2" />
