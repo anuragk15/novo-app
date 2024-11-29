@@ -8,7 +8,7 @@ export const planLimits = {
     invitesCreated: 0,
   },
   pro: {
-    price: 69,
+    price: 59,
     apiCalls: 3000,
     sourcesCreated: 200,
     contentGeneration: 100,
