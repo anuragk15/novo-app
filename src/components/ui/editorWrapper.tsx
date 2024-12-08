@@ -17,7 +17,7 @@ export default function EditorFn({
 }) {
   const { projectId } = useParams();
   return (
-    <div >
+    <div className=" ">
       <FloatingButtons
         name={name}
         saving={saving}

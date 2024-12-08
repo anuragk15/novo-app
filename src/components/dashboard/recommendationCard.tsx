@@ -104,6 +104,11 @@ export const SingleIdea = ({ item }: { item: Recommendation }) => {
         navigate(`/document/editor/${projectId}/${document?.documentId}`);
       }
     },
+    onSuccess: () => {
+      toast({
+        title: "Successfully generated content!",
+      });
+    },
     onError: (error) => {
       toast({
         title: "Something went wrong",

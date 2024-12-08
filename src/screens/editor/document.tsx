@@ -193,18 +193,19 @@ export default function DocumentEditorScreen() {
   useEffect(() => {
     ////console.log(data);
     if (data) {
+      document.body.style.overflow = 'auto'; // tackling the scroll issue
       editor.commands.setContent(data?.content?.content || "");
       setTitle(data?.content?.title || "");
     }
-  }, [data, editor]);
+  }, [data, editor, isLoading]);
 
   if (isLoading && !isNew) {
     return <LoadingState />;
   }
   return (
-    <div className=" bg-white">
+    <div className=" bg-white overflow-scroll ">
       <div className=" flex flex-col  ">
-        <div className="flex ">
+        <div className=" ">
           <SidePanel editor={editor} document={data} />
           <div className="bg-white flex-1 py-5 md:py-20 flex justify-center">
             <EditorFn name={docTitle} saving={isPending} editor={editor} />
