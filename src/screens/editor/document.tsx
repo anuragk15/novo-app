@@ -203,11 +203,11 @@ export default function DocumentEditorScreen() {
     return <LoadingState />;
   }
   return (
-    <div className=" bg-white overflow-scroll ">
-      <div className=" flex flex-col  ">
-        <div className=" ">
+    <div className=" bg-white ">
+      <div className=" flex flex-col ">
+        <div className="flex ">
           <SidePanel editor={editor} document={data} />
-          <div className="bg-white flex-1 py-5 md:py-20 flex justify-center">
+          <div className="bg-white py-5 md:py-20 w-full flex justify-center ">
             <EditorFn name={docTitle} saving={isPending} editor={editor} />
           </div>
           <SideChat defaultMessages={data?.content?.copilot?.messages} />

@@ -26,7 +26,6 @@ export default function EditorFn({
       />
 
       <EditorContent
-        onSelectCapture={() => alert("seled")}
         className="rounded-lg bg-white min-h-[90vh]  md:min-w-[800px] max-w-[960px]  mx-auto "
         editor={editor}
       />
